@@ -12,7 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Gestacad" target="1.5" />
+      <module name="Gestacad" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
