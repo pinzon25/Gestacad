@@ -12,6 +12,8 @@ PRIMARY KEY(id_familia)
 );
 
 
+
+
 CREATE TABLE cicles(
 id_cicle INTEGER AUTO_INCREMENT,
 id_familia INTEGER NOT NULL,
@@ -40,7 +42,7 @@ sexe VARCHAR(1) CHECK (sexe LIKE'H' OR sexe LIKE 'D'),
 telefon INTEGER(9),
 pro_correu_electronic VARCHAR(50) NOT NULL,
 informe INTEGER,
-administrador BOOLEAN DEFAULT false,
+administrador BOOLEAN DEFAULT false, #el professor es sempre administrador.
 PRIMARY KEY(id_professor)
 );
 
@@ -56,6 +58,7 @@ telefon INTEGER(9),
 correu_electronic_al VARCHAR(50) NOT NULL,
 id_grup INTEGER NOT NULL,
 PRIMARY KEY(id_alumne)
+#Afegir camp de deleted, es a dir que ja no esta a la base de dades.
 );
 
 
@@ -77,9 +80,13 @@ FOREIGN KEY(id_alumne_assignatura) REFERENCES alumne(id_alumne),
 PRIMARY KEY(id_assignatura_cursada,id_alumne_assignatura)
 );
 
+#Afegir taula notes(Ha de tenir camp numeric i camp comentari)
+#afegir taula ufs
+
+
 CREATE TABLE informe( #Modificat diagrama, un professor pot tenir o no varis informes.
 id_informe INTEGER AUTO_INCREMENT,
-assumpte VARCHAR(30) NOT NULL,
+assumpte VARCHAR(30) NOT NULL, #sustituir nom per "Comentari"
 id_professor_informe INTEGER NOT NULL,
 id_alumne_informe INTEGER NOT NULL,
 FOREIGN KEY(id_professor_informe) REFERENCES professor(id_professor),
@@ -90,6 +97,7 @@ PRIMARY KEY(id_informe)
 CREATE TABLE assignatures_impartides(
 id_professor_docent INTEGER,
 id_assignatura_impartida INTEGER,
+#afegir el curs al que imparteix les classes el professor.
 FOREIGN KEY(id_professor_docent) REFERENCES professor(id_professor),
 FOREIGN KEY(id_assignatura_impartida) REFERENCES assignatures(id_assignatura),
 PRIMARY KEY(id_professor_docent,id_assignatura_impartida)
@@ -105,6 +113,7 @@ FOREIGN KEY(id_alumne_mail) REFERENCES alumne(id_alumne),
 PRIMARY KEY(id_correu)
 );
 
+#Renombrar per moduls_cicles
 CREATE TABLE assignatures_cicle( #Relacio entre cicles i assignatures.
 id_cicles INTEGER,
 id_assignatures INTEGER,
@@ -112,6 +121,7 @@ FOREIGN KEY(id_cicles) REFERENCES cicles(id_cicle),
 FOREIGN KEY(id_assignatures) REFERENCES assignatures(id_assignatura),
 PRIMARY KEY(id_cicles,id_assignatures)
 );
+
 
 INSERT INTO families VALUES(null,"Informatica"); #1
 INSERT INTO families VALUES(null,"Esports"); #2
@@ -172,3 +182,16 @@ INSERT INTO assignatures_cicle VALUES(1,1);
 INSERT INTO assignatures_cicle VALUES(1,2);
 INSERT INTO assignatures_cicle VALUES(3,3);
 select * from assignatures_cicle;
+
+
+DESCRIBE families;
+DESCRIBE cicles;
+DESCRIBE grups;
+DESCRIBE professor;
+DESCRIBE alumne;
+DESCRIBE assignatures;
+DESCRIBE assignatures_cursades;
+DESCRIBE informe;
+DESCRIBE assignatures_impartides;
+DESCRIBE correu;
+DESCRIBE assignatures_cicle;

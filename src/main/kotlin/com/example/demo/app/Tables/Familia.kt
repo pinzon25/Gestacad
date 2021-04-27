@@ -1,4 +1,4 @@
-package com.example.demo.app
+package com.example.demo.app.Tables
 
 import org.ktorm.schema.Table
 import org.ktorm.schema.int
