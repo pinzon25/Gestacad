@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="Ap_cicles" prefHeight="517.0" prefWidth="769.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TextField fx:id="Tf_familia_cicle" layoutX="382.0" layoutY="195.0" />
+      <TextField fx:id="Tf_nom_cicle" layoutX="382.0" layoutY="270.0" />
+      <Label layoutX="265.0" layoutY="199.0" text="Familia disciplinaria:" />
+      <Label layoutX="290.0" layoutY="274.0" text="Nom cicle:" />
+   </children>
+</AnchorPane>
