@@ -11,8 +11,9 @@ import org.ktorm.schema.varchar
 }*/
 
 object Familia : Table<Nothing>("families") {
-    val id_familia = int("id_familia").primaryKey()
-    val nom_familia = varchar("nom_familia")//Objecte de tipus taula, en el que tenim els dos camps que composen la taula a la BBDD..
+    val id = int("id").primaryKey()
+    val nom = varchar("nom")
+    val descripcio = varchar("descripcio")
 }
 
 /*
