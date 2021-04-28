@@ -27,8 +27,9 @@ class principal: View(){
 fun agregaFamilia(){
     val c = Connexio().database
     c!!.insert(Familia){
-        set(it.id_familia,0)
-        set(it.nom_familia,"Automocio")
+        set(it.id,0)
+        set(it.nom,"Automocio")
+        set(it.descripcio,"Disciplina de la branca d'automocio")
     }
     println("S'ha procedit a afegir la familia automocio.")
 }
