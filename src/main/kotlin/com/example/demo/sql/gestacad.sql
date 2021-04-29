@@ -97,16 +97,25 @@ CREATE TABLE notes (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     id_alumne INTEGER NOT NULL,
     id_uf INTEGER NOT NULL,
+    puntuacio FLOAT NOT NULL,
     pes DOUBLE DEFAULT 100.0,
-    descripcio VARCHAR(128)
+    descripcio VARCHAR(128),
+    FOREIGN KEY (id_alumne) REFERENCES alumnes(id),
+    FOREIGN KEY (id_uf) REFERENCES ufs(id)
 );
-/*ESBORRADES LES TAULES INFORME I CORREU, JA QUE ELS CORREUS S'EMMAGATZEMARAN EN UN DIRECTORI O CARPETA.*/
 
+CREATE TABLE alumne_grup(
+id_grup INTEGER NOT NULL,
+id_alumne INTEGER NOT NULL,
+FOREIGN KEY(id_grup) REFERENCES grups(id),
+FOREIGN KEY(id_alumne) REFERENCES alumnes(id),
+PRIMARY KEY(id_grup,id_alumne)
+);
 
 INSERT INTO families VALUES(null,"Informatica","Cicles relacionats amb les xarxes, desenvolupament de software i desenvolupament web."); #1
 INSERT INTO families VALUES(null,"Esports","Cicles relacionats amb l'activitat esportiva."); #2
 INSERT INTO families VALUES(null,"Marketing","Cicles relacionats amb la publicitat i venda de productes.");
-SELECT 
+SELECT
     *
 FROM
     families;
@@ -115,27 +124,27 @@ INSERT INTO cicles VALUES(null,1,"DAM","Cicle on s'imparteix la creacio de softw
 INSERT INTO cicles VALUES(null,1,"ASIX","Cicle on s'imparteix el coneixement de xarxes.");
 INSERT INTO cicles VALUES(null,2,"CFGS d'acondicionament fisic","Cicle on s'imparteix la preparacio fisica.");
 INSERT INTO cicles VALUES(null,3,"Marketing i publicitat","Cicle on s'imparteix el coneixement i venda de productes.");
-SELECT 
+SELECT
     *
 FROM
     cicles;
-    
+
 INSERT INTO moduls VALUES(null,1,"M03","Modul basic de codificacio.");
 INSERT INTO moduls VALUES(null,1,"M06","Tractament de BBDD.");
 INSERT INTO moduls VALUES(null,2,"MA2","Connexio de xarxes.");
 INSERT INTO moduls VALUES(null,3,"MPF1","Anatomia muscular.");
 INSERT INTO moduls VALUES(null,4,"MP2","Coneixement del producte.");
-SELECT 
+SELECT
     *
 FROM
-    moduls;  
-    
+    moduls;
+
 INSERT INTO ufs VALUES(null,1,"UF2: Recursivitat","Acces recursiu a metodes i el seu us.");
 INSERT INTO ufs VALUES(null,1,"UF4: Fonaments de POO","Fonaments de la programacio orientada a objectes.");
 INSERT INTO ufs VALUES(null,3,"UF1: Connexio de sistemes","Connexio de sistemes a traves de xarxa.");
 INSERT INTO ufs VALUES(null,4,"UF3: Tonificacio muscular","Metodologia de reforc muscular.");
 INSERT INTO ufs VALUES(null,5,"UF5: Analisis de producte","Coneixement dels aspectes principals d'un producte.");
-SELECT 
+SELECT
     *
 FROM
     ufs;
@@ -148,7 +157,7 @@ INSERT INTO grups VALUES(null,3,"1r AF","1r any del grau superior de Acondiciona
 INSERT INTO grups VALUES(null,3,"2n AF","2n any del grau superior de Acondicionament fisic.");
 INSERT INTO grups VALUES(null,4,"1r MP","1r any del grau superior de Marketing i publicitat.");
 INSERT INTO grups VALUES(null,4,"2n MP","2n any del grau superior de Marketing i publicitat.");
-SELECT 
+SELECT
     *
 FROM
     grups
@@ -158,16 +167,16 @@ INSERT INTO professors VALUES(null,"Professor 1","cognoms professor 1","11111111
 INSERT INTO professors VALUES(null,"Professor 2","cognoms professor 2","22222222A","2222-02-02",'H',932222222,"correuelectronic2@gmail.com","Professor amb grau de fisioterapia.");
 INSERT INTO professors VALUES(null,"Professor 3","cognoms professor 3","33333333A","3333-03-03",'D',933333333,"correuelectronic3@gmail.com","Professor amb grau d'enginyeria de xarxes.");
 INSERT INTO professors VALUES(null,"Professor 4","cognoms professor 4","44444444A","4444-04-04",'H',934444444,"correuelectronic4@gmail.com","Professor amb grau de Marketing.");
-SELECT 
+SELECT
     *
 FROM
     professors;
-    
+
 INSERT INTO assignatures_impartides VALUES(1,1);
 INSERT INTO assignatures_impartides VALUES(1,2);
 INSERT INTO assignatures_impartides VALUES(2,4);
 INSERT INTO assignatures_impartides VALUES(4,5);
-SELECT 
+SELECT
     *
 FROM
     assignatures_impartides;
@@ -177,81 +186,30 @@ INSERT INTO alumnes VALUES(null,"Pere","munoz ventura","22222222P","1992-04-01",
 INSERT INTO alumnes VALUES(null,"Laura","Lopez mendez","33333333X","1993-03-02",'D',931234444,"lauralopezmendez@gmail.com",false,"Alumne interessada en acondicionament fisic.");
 INSERT INTO alumnes VALUES(null,"Cristina","marcet artigas","44444444P","1997-01-08",'D',93465448,"cristinamarcetartigas@gmail.com",false,"Alumne interessada en marketing i publicitat.");
 INSERT INTO alumnes VALUES(null,"Antoni","subirana X","99879755A","1995-05-17",'H',934658880,"antonisubiranax@gmail.com",true,"Alumne expulsat del centre degut a faltes de respecte reiterades.");
-SELECT 
+SELECT
     *
 FROM
     alumnes;
-    
+
 INSERT INTO matricula VALUES(null,1,2,"2020/21");
 INSERT INTO matricula VALUES(null,1,1,"2020/21");
 INSERT INTO matricula VALUES(null,2,3,"2020/21");
 INSERT INTO matricula VALUES(null,3,4,"2020/21");
 INSERT INTO matricula VALUES(null,4,5,"2020/21");
-SELECT 
+SELECT
     *
 FROM
     matricula;
-    
-INSERT INTO notes VALUES(null,1,2,30.0,"L'alumne ha de reforcar els coneixements de la uf.");
-INSERT INTO notes VALUES(null,1,1,60.0,"L'alumne ha assolit bona part de la uf.");
-INSERT INTO notes VALUES(null,2,3,50.0,"L'alumne ha assolit els coneixements minims, pero pot millorar.");
-INSERT INTO notes VALUES(null,3,4,70.0,"L'alumne ha realitzat bona feina al llarg de la uf.");
-INSERT INTO notes VALUES(null,4,5,100.0,"L'alumne ha assolit per complet els coneixements de la uf.");
+
+INSERT INTO notes VALUES(null,1,2,4.0,30.0,"L'alumne ha de reforcar els coneixements de la uf.");
+INSERT INTO notes VALUES(null,1,1,7.0,60.0,"L'alumne ha assolit bona part de la uf.");
+INSERT INTO notes VALUES(null,2,3,5.0,50.0,"L'alumne ha assolit els coneixements minims, pero pot millorar.");
+INSERT INTO notes VALUES(null,3,4,8.0,70.0,"L'alumne ha realitzat bona feina al llarg de la uf.");
+INSERT INTO notes VALUES(null,4,5,10.0,100.0,"L'alumne ha assolit per complet els coneixements de la uf.");
 select * from notes;
 
-/*INSERT INTO assignatures VALUES(null,"M03");
-INSERT INTO assignatures VALUES(null,"M06");
-INSERT INTO assignatures VALUES(null,"MP4");
-SELECT 
-    *
-FROM
-    assignatures;
-
-INSERT INTO assignatures_cursades VALUES(1,1,4.3);
-INSERT INTO assignatures_cursades VALUES(1,3,5.2);
-SELECT 
-    *
-FROM
-    assignatures_cursades;
-
-INSERT INTO informe VALUES(null,"L'alumne ha faltat a classe.",1,3);
-INSERT INTO informe VALUES(null,"L'alumne ha menjat a classe.",4,1);
-SELECT 
-    *
-FROM
-    informe;
-
-INSERT INTO assignatures_impartides VALUES(1,1);
-INSERT INTO assignatures_impartides VALUES(1,2);
-INSERT INTO assignatures_impartides VALUES(4,3);
-SELECT 
-    *
-FROM
-    assignatures_impartides;
-
-INSERT INTO correu VALUES(null,1,1,"M'has d'entregar la practica pendent.");
-INSERT INTO correu VALUES(null,4,1,"Aviat et comunico la data de recuperacio.");
-SELECT 
-    *
-FROM
-    correu;
-
-INSERT INTO assignatures_cicle VALUES(1,1);
-INSERT INTO assignatures_cicle VALUES(1,2);
-INSERT INTO assignatures_cicle VALUES(3,3);
-SELECT 
-    *
-FROM
-    assignatures_cicle;
-*/
-
-DESCRIBE families;
-DESCRIBE cicles;
-DESCRIBE moduls;
-DESCRIBE ufs;
-DESCRIBE grups;
-DESCRIBE professors;
-DESCRIBE assignatures_impartides;
-DESCRIBE alumnes;
-DESCRIBE matricula;
-
+INSERT INTO alumne_grup VALUES(1,1);
+INSERT INTO alumne_grup VALUES(3,2);
+INSERT INTO alumne_grup VALUES(5,3);
+INSERT INTO alumne_grup VALUES(7,4);
+select * from alumne_grup;
