@@ -4,6 +4,6 @@ import javafx.scene.layout.AnchorPane
 import tornadofx.View
 
 class main: View() {
-    override val root: AnchorPane by fxml()
+    override val root: BorderPane by fxml()
 
 }
