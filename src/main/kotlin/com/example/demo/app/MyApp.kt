@@ -17,7 +17,7 @@ class MyApp: App(Workspace::class){
 
     }
     override fun onBeforeShow(view: UIComponent) {
-        workspace.dock<principal>() //En cas de que dongui error de compilador de kotlin, anar a Settings, compiler, kotlin compiler, i escollir la versio 1.8 de Target JVM version.
+        workspace.dock<main>() //En cas de que dongui error de compilador de kotlin, anar a Settings, compiler, kotlin compiler, i escollir la versio 1.8 de Target JVM version.
 
 
     }
