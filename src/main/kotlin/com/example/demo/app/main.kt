@@ -32,7 +32,7 @@ class main: View() {
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
-    var t:javafx.scene.control.TableView<Grups>?=null
+    val Tv_alumne2:javafx.scene.control.TableView<Grups> by fxid("grupsTableAlumnes2")
 
     //TABLECOLUMNS
     val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
@@ -59,8 +59,8 @@ class main: View() {
                     column("Nom", Grups::nomProperty)
                     column("Descripció", Grups::descripcioProperty)
                     isEditable = true
-                    prefHeight = 311.0
-                    prefWidth = 246.0
+                    prefHeight = 266.0
+                    prefWidth = 311.0
                     layoutX = 370.0
                     layoutY = 100.0
                // }
@@ -84,6 +84,23 @@ class main: View() {
                 layoutX = 530.0
                 layoutY = 100.0
             }
+            with(Tv_alumne2){
+                /*column("ID", Alumne::idProperty)
+                column("Nom", Alumne::nomProperty)
+                column("Cognoms", Alumne::cognomsProperty)
+                column("Dni", Alumne::dniProperty)
+                column("Data naixement", Alumne::datanaixementProperty)
+                column("sexe", Alumne::sexeProperty)
+                column("Telefon", Alumne::telefonProperty)
+                column("Email", Alumne::idProperty)
+                column("Descripció", Alumne::descripcioProperty)*/
+                isEditable = true
+                prefHeight = 311.0
+                prefWidth = 198.0
+                layoutX = 530.0
+                layoutY = 100.0
+            }
+
                 }
 
 
