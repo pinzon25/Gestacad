@@ -32,7 +32,7 @@ class main: View() {
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
-    val Tv_alumne2:javafx.scene.control.TableView<Grups> by fxid("grupsTableAlumnes2")
+    val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
 
     //TABLECOLUMNS
     val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
