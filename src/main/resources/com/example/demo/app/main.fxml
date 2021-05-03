@@ -8,8 +8,7 @@
 
 <!---->
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <TabPane prefHeight="400.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
@@ -18,20 +17,36 @@
                     <content>
                         <BorderPane>
                             <center>
-                                <HBox BorderPane.alignment="CENTER">
+                                <HBox prefHeight="311.0" prefWidth="758.0" BorderPane.alignment="CENTER">
                                     <children>
-                                        <TableView fx:id="grupsTableGrups">
+                                        <TableView fx:id="grupsTableGrups" prefHeight="311.0" prefWidth="266.0">
                                             <columns>
-                                                <TableColumn prefWidth="37.0" text="ID"/>
-                                                <TableColumn prefWidth="76.0" text="Nom"/>
-                                                <TableColumn prefWidth="135.0" text="Descripció"/>
+                                                <TableColumn prefWidth="37.0" text="ID" />
+                                                <TableColumn prefWidth="76.0" text="Nom" />
+                                                <TableColumn prefWidth="147.0" text="Descripció" />
                                             </columns>
                                         </TableView>
-                                        <VBox prefWidth="100.0"/>
-                                        <TableView fx:id="grupsTableAlumnes">
+                                        <VBox prefHeight="311.0" prefWidth="44.0" />
+                                        <TableView fx:id="grupsTableAlumnes" prefHeight="311.0" prefWidth="190.0">
                                             <columns>
-                                                <TableColumn editable="false" prefWidth="124.0" text="Nom"/>
-                                                <TableColumn editable="false" prefWidth="123.0" text="Cognom"/>
+                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" />
+                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" />
+                                            </columns>
+                                        </TableView>
+                                        <VBox alignment="BOTTOM_CENTER" prefHeight="311.0" prefWidth="97.0">
+                                             <children>
+                                                 <!--<VBox prefHeight="202.0" prefWidth="88.0" />-->
+                                                 <Button fx:id="grupsBtnAfegirAlumnes" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Afegir " textAlignment="CENTER" />
+                                                 <Button fx:id="grupsBtnTreureAlumnes" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Eliminar" textAlignment="CENTER">
+                                       <VBox.margin>
+                                          <Insets bottom="30.0" top="10.0" />
+                                       </VBox.margin></Button>
+                                             </children>
+                                        </VBox>
+                                        <TableView fx:id="grupsTableAlumnes2" prefHeight="311.0" prefWidth="198.0">
+                                            <columns>
+                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" />
+                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" />
                                             </columns>
                                         </TableView>
                                     </children>
@@ -42,39 +57,39 @@
                                     <children>
                                         <Label text="Grup">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="95.0"/>
+                                                <Insets left="95.0" />
                                             </HBox.margin>
                                         </Label>
-                                        <Label text="Alumnes">
+                                        <Label prefHeight="40.0" prefWidth="248.0" text="SELECCIÓ D'ALUMNAT">
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="295.0"/>
+                                                <Insets left="295.0" />
                                             </HBox.margin>
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
                             <left>
-                                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="14.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="15.0" BorderPane.alignment="CENTER" />
                             </right>
                         </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Grups"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Grups" />
                     </graphic>
                 </Tab>
                 <!--Alumnes-->
@@ -86,36 +101,36 @@
                                     <children>
                                         <TableView fx:id="alumnesTableAlumnes" prefHeight="311.0" prefWidth="631.0">
                                             <columns>
-                                                <TableColumn fx:id="table_alumnes" prefWidth="114.0" text="Nom"/>
-                                                <TableColumn prefWidth="113.0" text="Cognom"/>
-                                                <TableColumn prefWidth="91.0" text="Dni"/>
-                                                <TableColumn prefWidth="75.0" text="Naixement"/>
-                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe"/>
-                                                <TableColumn prefWidth="62.0" text="Telefon"/>
-                                                <TableColumn prefWidth="115.0" text="Mail"/>
+                                                <TableColumn fx:id="table_alumnes" prefWidth="114.0" text="Nom" />
+                                                <TableColumn prefWidth="113.0" text="Cognom" />
+                                                <TableColumn prefWidth="91.0" text="Dni" />
+                                                <TableColumn prefWidth="75.0" text="Naixement" />
+                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe" />
+                                                <TableColumn prefWidth="62.0" text="Telefon" />
+                                                <TableColumn prefWidth="115.0" text="Mail" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="133.0">
                                             <children>
-                                                <Label text="Busca per grup:"/>
+                                                <Label text="Busca per grup:" />
                                                 <ComboBox fx:id="alumnesCbGrupos" prefWidth="150.0">
                                                     <VBox.margin>
-                                                        <Insets top="3.0"/>
+                                                        <Insets top="3.0" />
                                                     </VBox.margin>
                                                 </ComboBox>
-                                                <Label prefHeight="50.0" prefWidth="28.0"/>
-                                                <Label text="Busca per nom:"/>
+                                                <Label prefHeight="50.0" prefWidth="28.0" />
+                                                <Label text="Busca per nom:" />
                                                 <TextField fx:id="alumnesTfNombre" promptText="Escriu el nom...">
                                                     <VBox.margin>
-                                                        <Insets top="3.0"/>
+                                                        <Insets top="3.0" />
                                                     </VBox.margin>
                                                 </TextField>
                                             </children>
                                             <HBox.margin>
-                                                <Insets/>
+                                                <Insets />
                                             </HBox.margin>
                                             <padding>
-                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                                             </padding>
                                         </VBox>
                                     </children>
@@ -126,28 +141,28 @@
                                     <children>
                                         <Label text="Alumnes">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="20.0"/>
+                                                <Insets left="20.0" />
                                             </HBox.margin>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
                             <left>
-                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
                             </right>
                         </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Alumnes"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Alumnes" />
                     </graphic>
                 </Tab>
                 <!--Professors-->
@@ -157,32 +172,31 @@
                             <center>
                                 <HBox BorderPane.alignment="CENTER">
                                     <children>
-                                        <TableView fx:id="professorsTableProfesores" prefHeight="311.0"
-                                                   prefWidth="631.0">
+                                        <TableView fx:id="professorsTableProfesores" prefHeight="311.0" prefWidth="631.0">
                                             <columns>
-                                                <TableColumn prefWidth="114.0" text="Nom"/>
-                                                <TableColumn prefWidth="113.0" text="Cognom"/>
-                                                <TableColumn prefWidth="91.0" text="Dni"/>
-                                                <TableColumn prefWidth="75.0" text="Naixement"/>
-                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe"/>
-                                                <TableColumn prefWidth="62.0" text="Telefon"/>
-                                                <TableColumn prefWidth="115.0" text="Mail"/>
+                                                <TableColumn prefWidth="114.0" text="Nom" />
+                                                <TableColumn prefWidth="113.0" text="Cognom" />
+                                                <TableColumn prefWidth="91.0" text="Dni" />
+                                                <TableColumn prefWidth="75.0" text="Naixement" />
+                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe" />
+                                                <TableColumn prefWidth="62.0" text="Telefon" />
+                                                <TableColumn prefWidth="115.0" text="Mail" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="133.0">
                                             <children>
-                                                <Label text="Busca per nom:"/>
+                                                <Label text="Busca per nom:" />
                                                 <TextField fx:id="professorsTfNombre" promptText="Escriu el nom...">
                                                     <VBox.margin>
-                                                        <Insets top="3.0"/>
+                                                        <Insets top="3.0" />
                                                     </VBox.margin>
                                                 </TextField>
                                             </children>
                                             <HBox.margin>
-                                                <Insets/>
+                                                <Insets />
                                             </HBox.margin>
                                             <padding>
-                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                                             </padding>
                                         </VBox>
                                     </children>
@@ -193,28 +207,28 @@
                                     <children>
                                         <Label text="Professors">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="20.0"/>
+                                                <Insets left="20.0" />
                                             </HBox.margin>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
                             <left>
-                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
                             </right>
                         </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Profesors"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Profesors" />
                     </graphic>
                 </Tab>
                 <!--Notes-->
@@ -226,98 +240,92 @@
                                     <children>
                                         <Label text="Notes">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="27.0"/>
+                                                <Insets left="27.0" />
                                             </HBox.margin>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
                             <left>
-                                <VBox prefHeight="311.0" prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefHeight="311.0" prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefHeight="311.0" prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </right>
                             <center>
                                 <HBox prefHeight="311.0" prefWidth="774.0" BorderPane.alignment="CENTER">
                                     <children>
                                         <TableView fx:id="notesTablaNotes" prefHeight="311.0" prefWidth="400.0">
                                             <columns>
-                                                <TableColumn editable="false" prefWidth="85.0" text="Nom"/>
-                                                <TableColumn editable="false" prefWidth="85.0" text="Cognom"/>
-                                                <TableColumn prefWidth="84.0" text="Avaluació"/>
-                                                <TableColumn prefWidth="50.0" text="Modul"/>
-                                                <TableColumn prefWidth="32.0" text="UF"/>
-                                                <TableColumn prefWidth="37.0" text="Nota"/>
-                                                <TableColumn prefWidth="25.0" text="\%"/>
+                                                <TableColumn editable="false" prefWidth="85.0" text="Nom" />
+                                                <TableColumn editable="false" prefWidth="85.0" text="Cognom" />
+                                                <TableColumn prefWidth="84.0" text="Avaluació" />
+                                                <TableColumn prefWidth="50.0" text="Modul" />
+                                                <TableColumn prefWidth="32.0" text="UF" />
+                                                <TableColumn prefWidth="37.0" text="Nota" />
+                                                <TableColumn prefWidth="25.0" text="\%" />
 
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="299.0">
                                             <padding>
-                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                                             </padding>
                                             <children>
                                                 <HBox>
                                                     <children>
                                                         <Label text="Seleccionar Grup:">
                                                             <HBox.margin>
-                                                                <Insets left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </Label>
                                                         <Label text="Seleccionar alumne:">
                                                             <HBox.margin>
-                                                                <Insets left="65.0" right="4.0" top="4.0"/>
+                                                                <Insets left="65.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </Label>
                                                     </children>
                                                 </HBox>
                                                 <HBox>
                                                     <children>
-                                                        <ComboBox fx:id="notesCbGrupos" prefWidth="150.0"
-                                                                  promptText="Grups...">
+                                                        <ComboBox fx:id="notesCbGrupos" prefWidth="150.0" promptText="Grups...">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </ComboBox>
-                                                        <ComboBox fx:id="notesCbAlumnes" disable="true"
-                                                                  prefWidth="150.0" promptText="Alumnes...">
+                                                        <ComboBox fx:id="notesCbAlumnes" disable="true" prefWidth="150.0" promptText="Alumnes...">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </ComboBox>
                                                     </children>
                                                 </HBox>
                                                 <Line endX="225.0" startX="-100.0">
                                                     <VBox.margin>
-                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                     </VBox.margin>
                                                 </Line>
-                                                <TextField fx:id="notesTfAlumneSeleccionat" editable="false"
-                                                           maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"
-                                                           promptText="Alumne seleccionat...">
+                                                <TextField fx:id="notesTfAlumneSeleccionat" editable="false" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Alumne seleccionat...">
                                                     <VBox.margin>
-                                                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                     </VBox.margin>
                                                 </TextField>
                                                 <HBox>
                                                     <children>
-                                                        <ComboBox fx:id="notesCbModul" disable="true" prefWidth="150.0"
-                                                                  promptText="Selecciona Modul...">
+                                                        <ComboBox fx:id="notesCbModul" disable="true" prefWidth="150.0" promptText="Selecciona Modul...">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </ComboBox>
-                                                        <ComboBox fx:id="notesCbUFS" disable="true" prefWidth="150.0"
-                                                                  promptText="Selecciona UF...">
+                                                        <ComboBox fx:id="notesCbUFS" disable="true" prefWidth="150.0" promptText="Selecciona UF...">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </ComboBox>
                                                     </children>
@@ -326,41 +334,39 @@
                                                     <children>
                                                         <Label prefWidth="150.0" text="Introdueix la nota: ">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </Label>
                                                         <TextField fx:id="notesTfNota" prefWidth="54.0">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </TextField>
                                                     </children>
                                                     <VBox.margin>
-                                                        <Insets top="15.0"/>
+                                                        <Insets top="15.0" />
                                                     </VBox.margin>
                                                 </HBox>
                                                 <HBox>
                                                     <children>
                                                         <Label prefWidth="150.0" text="Introdueix el percentatge: ">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </Label>
                                                         <TextField fx:id="notesTfPercentatge" prefWidth="54.0">
                                                             <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                             </HBox.margin>
                                                         </TextField>
                                                     </children>
                                                     <VBox.margin>
-                                                        <Insets top="15.0"/>
+                                                        <Insets top="15.0" />
                                                     </VBox.margin>
                                                 </HBox>
-                                                <Button fx:id="notesBtnAfegirNota" alignment="CENTER"
-                                                        contentDisplay="CENTER" mnemonicParsing="false"
-                                                        text="Afegir Nota" textAlignment="CENTER">
+                                                <Button fx:id="notesBtnAfegirNota" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Afegir Nota" textAlignment="CENTER">
                                                     <VBox.margin>
-                                                        <Insets left="4.0" right="4.0" top="53.0"/>
+                                                        <Insets left="4.0" right="4.0" top="53.0" />
                                                     </VBox.margin>
                                                 </Button>
                                             </children>
@@ -371,7 +377,7 @@
                         </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Notes"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Notes" />
                     </graphic>
                 </Tab>
                 <!--Matricules-->
@@ -383,95 +389,88 @@
                                     <children>
                                         <Label text="Matricules">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="20.0"/>
+                                                <Insets left="20.0" />
                                             </HBox.margin>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
                             <left>
-                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </right>
                             <center>
                                 <HBox>
-                                    <TableView fx:id="matriculesTablaMatricules" prefHeight="311.0" prefWidth="387.0"
-                                               BorderPane.alignment="CENTER">
+                                    <TableView fx:id="matriculesTablaMatricules" prefHeight="311.0" prefWidth="387.0" BorderPane.alignment="CENTER">
                                         <columns>
-                                            <TableColumn prefWidth="93.0" text="Nom"/>
-                                            <TableColumn prefWidth="100.0" text="Cognom"/>
-                                            <TableColumn prefWidth="56.0" text="Modul"/>
-                                            <TableColumn prefWidth="40.0" text="UF"/>
-                                            <TableColumn text="Curs"/>
+                                            <TableColumn prefWidth="93.0" text="Nom" />
+                                            <TableColumn prefWidth="100.0" text="Cognom" />
+                                            <TableColumn prefWidth="56.0" text="Modul" />
+                                            <TableColumn prefWidth="40.0" text="UF" />
+                                            <TableColumn text="Curs" />
                                         </columns>
                                     </TableView>
                                     <VBox prefHeight="311.0" prefWidth="390.0">
                                         <padding>
-                                            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
+                                            <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                                         </padding>
                                         <children>
                                             <HBox>
                                                 <children>
                                                     <Label text="Seleccionar Grup:">
                                                         <HBox.margin>
-                                                            <Insets left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </Label>
                                                     <Label text="Seleccionar alumne:">
                                                         <HBox.margin>
-                                                            <Insets left="65.0" right="4.0" top="4.0"/>
+                                                            <Insets left="65.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </Label>
                                                 </children>
                                             </HBox>
                                             <HBox>
                                                 <children>
-                                                    <ComboBox fx:id="matriculesCbGrupos" prefWidth="150.0"
-                                                              promptText="Grups...">
+                                                    <ComboBox fx:id="matriculesCbGrupos" prefWidth="150.0" promptText="Grups...">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </ComboBox>
-                                                    <ComboBox fx:id="matriculesCbAlumnes" disable="true"
-                                                              prefWidth="150.0" promptText="Alumnes...">
+                                                    <ComboBox fx:id="matriculesCbAlumnes" disable="true" prefWidth="150.0" promptText="Alumnes...">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </ComboBox>
                                                 </children>
                                             </HBox>
                                             <Line endX="175.0" startX="-100.0">
                                                 <VBox.margin>
-                                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                                 </VBox.margin>
                                             </Line>
-                                            <TextField fx:id="matriculesTfAlumneSeleccionat" editable="false"
-                                                       maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0"
-                                                       promptText="Alumne seleccionat...">
+                                            <TextField fx:id="matriculesTfAlumneSeleccionat" editable="false" maxWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" promptText="Alumne seleccionat...">
                                                 <VBox.margin>
-                                                    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                    <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                 </VBox.margin>
                                             </TextField>
                                             <HBox>
                                                 <children>
-                                                    <ComboBox fx:id="matriculesCbModul" disable="true" prefWidth="150.0"
-                                                              promptText="Selecciona Modul...">
+                                                    <ComboBox fx:id="matriculesCbModul" disable="true" prefWidth="150.0" promptText="Selecciona Modul...">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </ComboBox>
-                                                    <ComboBox fx:id="matriculesCbUFS" disable="true" prefWidth="150.0"
-                                                              promptText="Selecciona UF...">
+                                                    <ComboBox fx:id="matriculesCbUFS" disable="true" prefWidth="150.0" promptText="Selecciona UF...">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </ComboBox>
                                                 </children>
@@ -480,24 +479,22 @@
                                                 <children>
                                                     <Label prefWidth="150.0" text="Introdueix el curs: ">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </Label>
                                                     <TextField fx:id="matriculesTfCurs" prefWidth="150.0">
                                                         <HBox.margin>
-                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                                                            <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                                                         </HBox.margin>
                                                     </TextField>
                                                 </children>
                                                 <VBox.margin>
-                                                    <Insets top="15.0"/>
+                                                    <Insets top="15.0" />
                                                 </VBox.margin>
                                             </HBox>
-                                            <Button fx:id="matriculesBtnMatricular" alignment="CENTER"
-                                                    contentDisplay="CENTER" mnemonicParsing="false" text="Matricular"
-                                                    textAlignment="CENTER">
+                                            <Button fx:id="matriculesBtnMatricular" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Matricular" textAlignment="CENTER">
                                                 <VBox.margin>
-                                                    <Insets left="4.0" right="4.0" top="100.0"/>
+                                                    <Insets left="4.0" right="4.0" top="100.0" />
                                                 </VBox.margin>
                                             </Button>
                                         </children>
@@ -507,7 +504,7 @@
                         </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Matricules"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Matricules" />
                     </graphic>
                 </Tab>
                 <!--Asignatures-->
@@ -515,158 +512,369 @@
                     <content>
                         <BorderPane>
                             <left>
-                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </left>
                             <right>
-                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER"/>
+                                <VBox prefWidth="30.0" BorderPane.alignment="CENTER" />
                             </right>
                             <top>
                                 <HBox prefHeight="40.0" BorderPane.alignment="CENTER">
                                     <children>
                                         <Label text="Asignació de Moduls">
                                             <font>
-                                                <Font name="Arial Bold" size="20.0"/>
+                                                <Font name="Arial Bold" size="20.0" />
                                             </font>
                                             <padding>
-                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0"/>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
                                             </padding>
                                             <HBox.margin>
-                                                <Insets left="27.0"/>
+                                                <Insets left="27.0" />
                                             </HBox.margin>
                                         </Label>
                                     </children>
                                 </HBox>
                             </top>
-                            <center>
-                                <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                    <children>
-                                        <TableView fx:id="asignaturesTablaAsigna" prefHeight="311.0" prefWidth="292.0">
-                                            <columns>
-                                                <TableColumn prefWidth="95.0" text="Nom"/>
-                                                <TableColumn prefWidth="119.0" text="Cognom"/>
-                                                <TableColumn prefWidth="77.0" text="Modul"/>
-                                            </columns>
-                                        </TableView>
-                                        <VBox prefHeight="311.0" prefWidth="446.0">
-                                            <padding>
-                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0"/>
-                                            </padding>
-                                            <children>
-                                                <HBox>
-                                                    <children>
-                                                        <Label text="Seleccionar Professor:">
-                                                            <HBox.margin>
-                                                                <Insets left="4.0" right="4.0" top="4.0"/>
-                                                            </HBox.margin>
-                                                        </Label>
-                                                        <Label text="Seleccionar Modul:">
-                                                            <HBox.margin>
-                                                                <Insets left="40.0" right="4.0" top="4.0"/>
-                                                            </HBox.margin>
-                                                        </Label>
-                                                    </children>
-                                                </HBox>
-                                                <HBox>
-                                                    <children>
-                                                        <ComboBox fx:id="assignaturesCbProfessors" prefWidth="150.0"
-                                                                  promptText="Professors...">
-                                                            <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
-                                                            </HBox.margin>
-                                                        </ComboBox>
-                                                        <ComboBox fx:id="assignaturesCbModul" disable="true"
-                                                                  prefWidth="150.0" promptText="Moduls...">
-                                                            <HBox.margin>
-                                                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
-                                                            </HBox.margin>
-                                                        </ComboBox>
-                                                    </children>
-                                                </HBox>
+                     <center>
+                        <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <TableView fx:id="asignaturesTablaAsigna" prefHeight="311.0" prefWidth="292.0">
+                                <columns>
+                                    <TableColumn prefWidth="95.0" text="Nom" />
+                                    <TableColumn prefWidth="119.0" text="Cognom" />
+                                    <TableColumn prefWidth="77.0" text="Modul" />
+                                </columns>
+                              </TableView>
+                               <VBox prefHeight="311.0" prefWidth="446.0">
+                                   <padding>
+                                       <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                   </padding>
+                                   <children>
+                                       <HBox>
+                                           <children>
+                                               <Label text="Seleccionar Professor:">
+                                                   <HBox.margin>
+                                                       <Insets left="4.0" right="4.0" top="4.0" />
+                                                   </HBox.margin>
+                                               </Label>
+                                               <Label text="Seleccionar Modul:">
+                                                   <HBox.margin>
+                                                       <Insets left="40.0" right="4.0" top="4.0" />
+                                                   </HBox.margin>
+                                               </Label>
+                                           </children>
+                                       </HBox>
+                                       <HBox>
+                                           <children>
+                                               <ComboBox fx:id="assignaturesCbProfessors" prefWidth="150.0" promptText="Professors...">
+                                                   <HBox.margin>
+                                                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                                   </HBox.margin>
+                                               </ComboBox>
+                                               <ComboBox fx:id="assignaturesCbModul" disable="true" prefWidth="150.0" promptText="Moduls...">
+                                                   <HBox.margin>
+                                                       <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                                                   </HBox.margin>
+                                               </ComboBox>
+                                           </children>
+                                       </HBox>
 
-                                                <Button fx:id="assignaturesBtnAssignar" alignment="CENTER"
-                                                        contentDisplay="CENTER" mnemonicParsing="false"
-                                                        text="Assignar Modul" textAlignment="CENTER">
-                                                    <VBox.margin>
-                                                        <Insets left="4.0" right="4.0" top="225.0"/>
-                                                    </VBox.margin>
-                                                </Button>
-                                            </children>
-                                        </VBox>
-                                    </children>
-                                </HBox>
+                                       <Button fx:id="assignaturesBtnAssignar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Assignar Modul" textAlignment="CENTER">
+                                           <VBox.margin>
+                                               <Insets left="4.0" right="4.0" top="225.0" />
+                                           </VBox.margin>
+                                       </Button>
+                                   </children>
+                               </VBox>
+                           </children>
+                        </HBox>
 
-                            </center>
+                     </center>
                         </BorderPane>
 
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="77.0" text="Assignatures"/>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="77.0" text="Assignatures" />
                     </graphic>
                 </Tab>
                 <!--UFS-->
                 <Tab closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" /> -->
+                        <BorderPane>
+                            <center>
+                                <HBox BorderPane.alignment="CENTER">
+                                    <children>
+                                        <TableView fx:id="ufstableUFS" prefHeight="311.0" prefWidth="505.0">
+                                            <columns>
+                                                <TableColumn fx:id="table_ufs" prefWidth="114.0" text="Nom" />
+                                                <TableColumn prefWidth="303.0" text="Descripcio" />
+                                                <TableColumn prefWidth="87.0" text="Modul" />
+                                            </columns>
+                                        </TableView>
+                                        <VBox prefHeight="311.0" prefWidth="192.0">
+                                            <children>
+                                                <Label text="Filtra per modul:" />
+                                                <ComboBox fx:id="ufsCbGrupos" prefWidth="150.0">
+                                                    <VBox.margin>
+                                                        <Insets top="3.0" />
+                                                    </VBox.margin>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                                </ComboBox>
+                                                <Label prefHeight="50.0" prefWidth="28.0" />
+                                            </children>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                            <padding>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                            </padding>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </center>
+                            <top>
+                                <HBox prefHeight="40.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Label text="UFS">
+                                            <font>
+                                                <Font name="Arial Bold" size="20.0" />
+                                            </font>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
+                                            </padding>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </top>
+                            <left>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </left>
+                            <right>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </right>
+                        </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="UFS"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="UFS" />
                     </graphic>
                 </Tab>
                 <!--Moduls-->
                 <Tab closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+                        <BorderPane>
+                            <center>
+                                <HBox BorderPane.alignment="CENTER">
+                                    <children>
+                                        <TableView fx:id="modulstableMODULS" prefHeight="311.0" prefWidth="505.0">
+                                            <columns>
+                                                <TableColumn fx:id="table_moduls" prefWidth="114.0" text="Nom" />
+                                                <TableColumn prefWidth="303.0" text="Descripcio" />
+                                                <TableColumn prefWidth="87.0" text="Cicle" />
+                                            </columns>
+                                        </TableView>
+                                        <VBox prefHeight="311.0" prefWidth="192.0">
+                                            <children>
+                                                <Label text="Filtra per cicle;" />
+                                                <ComboBox fx:id="modulsCbGrupos" prefWidth="150.0">
+                                                    <VBox.margin>
+                                                        <Insets top="3.0" />
+                                                    </VBox.margin>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                </ComboBox>
+                                                <Label prefHeight="50.0" prefWidth="28.0" />
+                                            </children>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                            <padding>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                            </padding>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </center>
+                            <top>
+                                <HBox prefHeight="40.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Label text="MODULS">
+                                            <font>
+                                                <Font name="Arial Bold" size="20.0" />
+                                            </font>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
+                                            </padding>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </top>
+                            <left>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </left>
+                            <right>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </right>
+                        </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Moduls"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Moduls" />
                     </graphic>
                 </Tab>
                 <!--Cicles-->
                 <Tab closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+                        <BorderPane>
+                            <center>
+                                <HBox BorderPane.alignment="CENTER">
+                                    <children>
+                                        <TableView fx:id="ciclestableCICLES" prefHeight="311.0" prefWidth="505.0">
+                                            <columns>
+                                                <TableColumn fx:id="cicles_moduls" prefWidth="114.0" text="Nom" />
+                                                <TableColumn prefWidth="293.0" text="Descripcio" />
+                                                <TableColumn prefWidth="97.0" text="Familia" />
+                                            </columns>
+                                        </TableView>
+                                        <VBox prefHeight="311.0" prefWidth="192.0">
+                                            <children>
+                                                <Label text="Filtra per familia;" />
+                                                <ComboBox fx:id="ciclesCbGrupos" prefWidth="150.0">
+                                                    <VBox.margin>
+                                                        <Insets top="3.0" />
+                                                    </VBox.margin>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                                </ComboBox>
+                                                <Label prefHeight="50.0" prefWidth="28.0" />
+                                            </children>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                            <padding>
+                                                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+                                            </padding>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </center>
+                            <top>
+                                <HBox prefHeight="40.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Label text="CICLES">
+                                            <font>
+                                                <Font name="Arial Bold" size="20.0" />
+                                            </font>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
+                                            </padding>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </top>
+                            <left>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </left>
+                            <right>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </right>
+                        </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Cicles"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Cicles" />
                     </graphic>
                 </Tab>
                 <!--Families-->
                 <Tab closable="false">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+                        <BorderPane>
+                            <center>
+                                <HBox prefHeight="311.0" prefWidth="660.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <VBox prefHeight="311.0" prefWidth="21.0" />
+                                        <TableView fx:id="familiestableFAMILIES" prefHeight="311.0" prefWidth="589.0">
+                                            <columns>
+                                                <TableColumn fx:id="families_moduls" prefWidth="146.0" text="Nom" />
+                                                <TableColumn prefWidth="442.0" text="Descripcio" />
+                                            </columns>
+                                        </TableView>
+                                        <VBox prefHeight="311.0" prefWidth="86.0" />
+                                    </children>
+                                </HBox>
+                            </center>
+                            <top>
+                                <HBox prefHeight="40.0" BorderPane.alignment="CENTER">
+                                    <children>
+                                        <Label text="FAMILIES">
+                                            <font>
+                                                <Font name="Arial Bold" size="20.0" />
+                                            </font>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="12.0" />
+                                            </padding>
+                                            <HBox.margin>
+                                                <Insets left="20.0" />
+                                            </HBox.margin>
+                                        </Label>
+                                    </children>
+                                </HBox>
+                            </top>
+                            <left>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </left>
+                            <right>
+                                <VBox prefHeight="311.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+                            </right>
+                        </BorderPane>
                     </content>
                     <graphic>
-                        <Label alignment="CENTER" prefWidth="65.0" text="Families"/>
+                        <Label alignment="CENTER" prefWidth="65.0" text="Families" />
                     </graphic>
                 </Tab>
             </tabs>
 
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
         </TabPane>
     </center>
     <top>
         <ButtonBar BorderPane.alignment="CENTER">
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
             <padding>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>
         </ButtonBar>
     </top>
     <bottom>
-        <ButtonBar buttonOrder="assignaturesBtnAssignar" prefHeight="40.0" prefWidth="822.0"
-                   BorderPane.alignment="CENTER">
+        <ButtonBar buttonOrder="assignaturesBtnAssignar" prefHeight="40.0" prefWidth="822.0" BorderPane.alignment="CENTER">
             <buttons>
-                <Button fx:id="btn_close" mnemonicParsing="false" text="Close"/>
+                <Button fx:id="btn_close" mnemonicParsing="false" text="Close" />
             </buttons>
             <BorderPane.margin>
-                <Insets/>
+                <Insets />
             </BorderPane.margin>
             <padding>
-                <Insets bottom="10.0" left="725.0" right="10.0" top="10.0"/>
+                <Insets bottom="10.0" left="725.0" right="10.0" top="10.0" />
             </padding>
         </ButtonBar>
     </bottom>
