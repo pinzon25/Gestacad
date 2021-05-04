@@ -8,7 +8,7 @@ import tornadofx.ItemViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class Profesors (var id:Int, var nom:String, var cognoms:String, var dni:String, var data_naixement: Date, var sexe:String, var telefon:String, var email:String, var descripcio:String){
+data class Professor (var id:Int, var nom:String, var cognoms:String, var dni:String, var data_naixement: Date, var sexe:String, var telefon:String, var email:String, var descripcio:String){
     val idProperty = SimpleIntegerProperty(id)
     val nomProperty = SimpleStringProperty(nom)
     val cognomsProperty = SimpleStringProperty(cognoms)
@@ -19,14 +19,14 @@ data class Profesors (var id:Int, var nom:String, var cognoms:String, var dni:St
     val emailProperty = SimpleStringProperty(email)
     val descripcioProperty = SimpleStringProperty(descripcio)
 }
-class profesorModel(profesor:Profesors?): ItemViewModel<Profesors>(profesor){
-    val id = bind(Profesors::idProperty)
-    val nom = bind(Profesors::nomProperty)
-    val cognoms = bind(Profesors::cognomsProperty)
-    val dni = bind(Profesors::dniProperty)
-    val data_naixement = bind(Profesors::datanaixementProperty)
-    val sexe = bind(Profesors::sexeProperty)
-    val telefon = bind(Profesors::telefonProperty)
-    val email = bind(Profesors::emailProperty)
-    val descripcio = bind(Profesors::descripcioProperty)
+class profesorModel(profesor:Professor?): ItemViewModel<Professor>(profesor){
+    val id = bind(Professor::idProperty)
+    val nom = bind(Professor::nomProperty)
+    val cognoms = bind(Professor::cognomsProperty)
+    val dni = bind(Professor::dniProperty)
+    val data_naixement = bind(Professor::datanaixementProperty)
+    val sexe = bind(Professor::sexeProperty)
+    val telefon = bind(Professor::telefonProperty)
+    val email = bind(Professor::emailProperty)
+    val descripcio = bind(Professor::descripcioProperty)
 }
