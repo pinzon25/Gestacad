@@ -38,7 +38,7 @@ class Main: View() {
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
-    var llistatProfessor: MutableList<Alumne> = ArrayList()
+    //var llistatProfessor: MutableList<Alumne> = ArrayList()
     var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
     //Variables canviants i aillades.
@@ -51,7 +51,7 @@ class Main: View() {
         llistatAlumnes = alumnecontroler.obteAlumnes()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
-        var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
+        //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
 
             with(Tv_grups) {
@@ -88,7 +88,7 @@ class Main: View() {
             }
 
             with(Tv_alumne2){
-                Tv_alumne2.items = aS
+                //Tv_alumne2.items = aS
                 column("ID", Alumne::idProperty)
                 column("Nom", Alumne::nomProperty)
                 column("Cognoms", Alumne::cognomsProperty)
@@ -113,17 +113,28 @@ class Main: View() {
             Tv_alumne.onUserSelect {
                 alumneEscollit=Tv_alumne.selectedItem
                 println("Alumne escollit: " + alumneEscollit)
+                /*if(Bt_afegir.isPressed==true){
+                    alumnesSeleccionats.add(alumneEscollit!!)
+                    Tv_alumne2.items = aS
+                }*/
             }
 
             Bt_afegir.setOnMouseClicked {
                 println("Alumne a afegir: " + alumneEscollit)
                 alumnesSeleccionats.add(alumneEscollit!!)
                 //Tv_alumne2.items = aS
+                //afegeixAlumneGrup(alumneEscollit!!)
+                //println("Alumnes Seleccionats: " + alumnesSeleccionats)
+                var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
+                Tv_alumne2.items.addAll(aS)
+
             }
 
             Bt_eliminar.setOnMouseClicked {
                 println("Alumne a esborrar: " + alumneEscollit)
                 alumnesSeleccionats.remove(alumneEscollit!!)
+                var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
+                Tv_alumne2.items.removeAll(aS)
             }
                 }
             }
