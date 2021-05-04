@@ -20,8 +20,8 @@ fun callDatabase():Database{
     val database = Database.connect(
         url = "jdbc:mysql://localhost:3306/gestacad",
         driver = "com.mysql.cj.jdbc.Driver",
-        user = "administrador1",
-        password = "admin1"
+        user = "root",
+        password = "1234"
     )
     return database
 }
