@@ -19,3 +19,14 @@ data class Profesors (var id:Int, var nom:String, var cognoms:String, var dni:St
     val emailProperty = SimpleStringProperty(email)
     val descripcioProperty = SimpleStringProperty(descripcio)
 }
+class profesorModel(profesor:Profesors?): ItemViewModel<Profesors>(profesor){
+    val id = bind(Profesors::idProperty)
+    val nom = bind(Profesors::nomProperty)
+    val cognoms = bind(Profesors::cognomsProperty)
+    val dni = bind(Profesors::dniProperty)
+    val data_naixement = bind(Profesors::datanaixementProperty)
+    val sexe = bind(Profesors::sexeProperty)
+    val telefon = bind(Profesors::telefonProperty)
+    val email = bind(Profesors::emailProperty)
+    val descripcio = bind(Profesors::descripcioProperty)
+}
