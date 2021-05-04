@@ -1,32 +1,20 @@
 package com.example.demo.app
 
-import com.example.demo.Controllers.ProfesorsController
-import com.example.demo.app.Controllers.AlumnesController
-import com.example.demo.app.Controllers.FamiliaController
-import com.example.demo.app.Controllers.GrupsController
-import javafx.beans.property.SimpleIntegerProperty
-import javafx.beans.value.ObservableValue
-import javafx.collections.FXCollections
-import javafx.fxml.FXML
-import javafx.scene.control.Button
-import javafx.scene.control.Tab
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
-import javafx.scene.control.cell.PropertyValueFactory
-import javafx.scene.layout.AnchorPane
+import com.example.demo.controllers.AlumnesController
+import com.example.demo.controllers.GrupsController
+import com.example.demo.controllers.ProfesorsController
+import javafx.collections.*
+import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
-import javafx.util.Callback
-import org.ktorm.schema.Column
 import tornadofx.*
-import java.util.Collections.addAll
-import kotlin.reflect.KProperty1
 
-class main: View() {
+class Main: View() {
+
     override val root: BorderPane by fxml()
 
     //CONTROLLERS
     val grupcontroler: GrupsController by inject()
-    val alumnecontroler:AlumnesController by inject()
+    val alumnecontroler: AlumnesController by inject()
     val profesorscontroler: ProfesorsController by inject()
 
     //TABS
@@ -57,7 +45,6 @@ class main: View() {
     var grupEscollit:Grups?=null
     var alumneEscollit:Alumne?=null
 
-
     init{
         llistatGrups = grupcontroler.obteGrups()
         println("llistat grups: "+llistatGrups)
@@ -66,6 +53,7 @@ class main: View() {
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
         var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
+
             with(Tv_grups) {
                 Tv_grups.items=g
                 //t = tableview(g) {
@@ -80,6 +68,7 @@ class main: View() {
                // }
 
             }
+
             with(Tv_alumne){
                 Tv_alumne.items = a
                 column("ID", Alumne::idProperty).isEditable
@@ -116,8 +105,6 @@ class main: View() {
                 layoutY = 100.0
             }
 
-
-
             Tv_grups.onUserSelect {
                 grupEscollit = Tv_grups.selectedItem
                 println("El grup seleccionat es: " + grupEscollit)
@@ -132,7 +119,6 @@ class main: View() {
                 println("Alumne a afegir: " + alumneEscollit)
                 alumnesSeleccionats.add(alumneEscollit!!)
                 //Tv_alumne2.items = aS
-
             }
 
             Bt_eliminar.setOnMouseClicked {
@@ -140,19 +126,6 @@ class main: View() {
                 alumnesSeleccionats.remove(alumneEscollit!!)
             }
                 }
-
-
-
-
             }
         }
-
-
-
-
-   //}
-
-
-
-
 

@@ -1,11 +1,8 @@
-package com.example.demo.app.Controllers
+package com.example.demo.controllers
 
-import com.example.demo.app.Connexio
+import com.example.demo.app.utils.Connexio
 import com.example.demo.app.Familia
-import com.example.demo.app.MyApp
-import org.ktorm.database.Database
-import org.ktorm.dsl.from
-import org.ktorm.dsl.select
+import org.ktorm.dsl.*
 import tornadofx.Controller
 
 class FamiliaController: Controller() {

@@ -1,10 +1,8 @@
-package com.example.demo.app.Controllers
+package com.example.demo.controllers
 
 import com.example.demo.app.Alumne
-import com.example.demo.app.Connexio
-import com.example.demo.app.Grups
-import org.ktorm.dsl.from
-import org.ktorm.dsl.select
+import com.example.demo.app.utils.Connexio
+import org.ktorm.dsl.*
 import tornadofx.Controller
 import java.time.LocalDate
 import java.util.*

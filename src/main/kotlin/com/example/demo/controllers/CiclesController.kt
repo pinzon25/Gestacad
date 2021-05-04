@@ -1,18 +1,16 @@
-package com.example.demo.Controllers
+package com.example.demo.controllers
 
-import com.example.demo.app.Cicle
-import com.example.demo.app.Connexio
-import com.example.demo.app.Grups
-import org.ktorm.dsl.from
-import org.ktorm.dsl.select
+import com.example.demo.view.Cicles
+import com.example.demo.app.utils.Connexio
+import org.ktorm.dsl.*
 
 class CiclesController {
 
     var dd = Connexio().database
 
-    fun obteCicles():MutableList<Cicle>{
-        var cicles:MutableList<Cicle> = ArrayList()
-        var ci: Cicle?=null
+    fun obteCicles():MutableList<Cicles>{
+        var cicles:MutableList<Cicles> = ArrayList()
+        var ci: Cicles?=null
         for(row in dd!!.from(com.example.demo.app.Tables.Cicle).select()){
 
             val id:Int? = row[com.example.demo.app.Tables.Cicle.id]
