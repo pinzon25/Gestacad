@@ -34,7 +34,7 @@ class AlumnesController: Controller() {
             val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
             val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
             val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
-            val telefon:String? = row[com.example.demo.app.Tables.Alumne.telefon]
+            val telefon:Int? = row[com.example.demo.app.Tables.Alumne.telefon]
             val email:String? = row[com.example.demo.app.Tables.Alumne.email]
             val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
             val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
