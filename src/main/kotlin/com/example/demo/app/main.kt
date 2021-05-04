@@ -1,5 +1,6 @@
 package com.example.demo.app
 
+import com.example.demo.Controllers.ProfesorsController
 import com.example.demo.app.Controllers.AlumnesController
 import com.example.demo.app.Controllers.FamiliaController
 import com.example.demo.app.Controllers.GrupsController
@@ -26,6 +27,7 @@ class main: View() {
     //CONTROLLERS
     val grupcontroler: GrupsController by inject()
     val alumnecontroler:AlumnesController by inject()
+    val profesorscontroler: ProfesorsController by inject()
 
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
@@ -38,6 +40,7 @@ class main: View() {
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
+    val Tv_professors:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableProfessors")
 
     //TABLECOLUMNS
     /*val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
@@ -47,6 +50,7 @@ class main: View() {
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
+    var llistatProfessor: MutableList<Alumne> = ArrayList()
     var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
     //Variables canviants i aillades.
@@ -111,6 +115,8 @@ class main: View() {
                 layoutX = 530.0
                 layoutY = 100.0
             }
+
+
 
             Tv_grups.onUserSelect {
                 grupEscollit = Tv_grups.selectedItem
