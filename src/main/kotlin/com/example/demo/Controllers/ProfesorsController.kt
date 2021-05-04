@@ -1,5 +1,4 @@
 package com.example.demo.Controllers
-import com.example.demo.app.Alumne
 import com.example.demo.app.Connexio
 import com.example.demo.app.Professor
 
