@@ -1,6 +1,7 @@
 package com.example.demo.controllers
 
-import com.example.demo.app.utils.Connexio
+import com.example.demo.app.Connexio
+import com.example.demo.app.model.Alumnes_grups
 import org.ktorm.dsl.*
 import tornadofx.Controller
 
@@ -24,5 +25,22 @@ class GrupsController : Controller(){
 
         return grups
     }
+
+    fun obteGrupsAlumne():MutableList<Alumnes_grups>{
+        var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
+        var ag: com.example.demo.app.model.Alumnes_grups?=null
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
+
+            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
+            val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
+
+            ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
+            alumnesGrups.add(ag)
+        }
+
+        return alumnesGrups
+    }
+
+
 
 }
