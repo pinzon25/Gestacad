@@ -1,5 +1,6 @@
 package com.example.demo.app
 
+import com.example.demo.app.model.Alumnes_grups
 import com.example.demo.controllers.AlumnesController
 import com.example.demo.controllers.GrupsController
 import com.example.demo.controllers.ProfesorsController
@@ -37,7 +38,9 @@ class Main: View() {
 
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
+    var llistatAlumnesId: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
+    var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
     //var llistatProfessor: MutableList<Alumne> = ArrayList()
     var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
@@ -49,6 +52,7 @@ class Main: View() {
         llistatGrups = grupcontroler.obteGrups()
         println("llistat grups: "+llistatGrups)
         llistatAlumnes = alumnecontroler.obteAlumnes()
+        grupsAlumnes = grupcontroler.obteGrupsAlumne()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
@@ -67,7 +71,11 @@ class Main: View() {
                     layoutY = 100.0
                // }
 
+                    /*Fer que quan el usuari seleccioni el grup s'obtingui el id d'aquell grup, d'aquell grup buscar el id dels alumnes que te, i buscar cada id al
+                     arraylist d'alumnes, i aquells alumnes afegirlos al arraylist de "alumnesSeleccionats"*/
+
             }
+
 
             with(Tv_alumne){
                 Tv_alumne.items = a
@@ -108,15 +116,14 @@ class Main: View() {
             Tv_grups.onUserSelect {
                 grupEscollit = Tv_grups.selectedItem
                 println("El grup seleccionat es: " + grupEscollit)
+                mostraAlumnesGrup()
+                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
+                Tv_alumne2.items = aS
             }
 
             Tv_alumne.onUserSelect {
                 alumneEscollit=Tv_alumne.selectedItem
                 println("Alumne escollit: " + alumneEscollit)
-                /*if(Bt_afegir.isPressed==true){
-                    alumnesSeleccionats.add(alumneEscollit!!)
-                    Tv_alumne2.items = aS
-                }*/
             }
 
             Bt_afegir.setOnMouseClicked {
@@ -126,17 +133,28 @@ class Main: View() {
                 //afegeixAlumneGrup(alumneEscollit!!)
                 //println("Alumnes Seleccionats: " + alumnesSeleccionats)
                 var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
-                Tv_alumne2.items.addAll(aS)
-
+                Tv_alumne2.items = aS
+                alumneEscollit=null
+                //Tv_alumne2.items.addAll(aS)
             }
 
             Bt_eliminar.setOnMouseClicked {
                 println("Alumne a esborrar: " + alumneEscollit)
                 alumnesSeleccionats.remove(alumneEscollit!!)
                 var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
-                Tv_alumne2.items.removeAll(aS)
+                Tv_alumne2.items=aS
+                alumneEscollit=null
+                //Tv_alumne2.items.removeAll(aS)
             }
                 }
             }
+    fun mostraAlumnesGrup():Unit{
+        for(i in grupsAlumnes.indices){
+            if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
+                llistatAlumnesId = alumnecontroler.obteAlumnePerId(grupsAlumnes[i].id_alumne)
+            }
+        }
+        println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
+    }
         }
 
