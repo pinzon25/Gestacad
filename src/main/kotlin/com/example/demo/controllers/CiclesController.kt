@@ -1,7 +1,7 @@
 package com.example.demo.controllers
 
 import com.example.demo.view.Cicles
-import com.example.demo.app.utils.Connexio
+import com.example.demo.app.Connexio
 import org.ktorm.dsl.*
 
 class CiclesController {

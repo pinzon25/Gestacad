@@ -1,5 +1,5 @@
 package com.example.demo.controllers
-import com.example.demo.app.utils.Connexio
+import com.example.demo.app.Connexio
 import com.example.demo.app.Professor
 
 import org.ktorm.dsl.*

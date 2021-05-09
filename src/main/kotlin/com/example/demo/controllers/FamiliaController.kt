@@ -1,6 +1,6 @@
 package com.example.demo.controllers
 
-import com.example.demo.app.utils.Connexio
+import com.example.demo.app.Connexio
 import com.example.demo.app.Familia
 import org.ktorm.dsl.*
 import tornadofx.Controller
