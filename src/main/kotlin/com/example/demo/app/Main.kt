@@ -16,7 +16,6 @@ class Main: View() {
     //CONTROLLERS
     val grupcontroler: GrupsController by inject()
     val alumnecontroler: AlumnesController by inject()
-    val profesorscontroler: ProfesorsController by inject()
 
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
@@ -29,7 +28,6 @@ class Main: View() {
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
-    val Tv_professors:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableProfessors")
 
     //TABLECOLUMNS
     /*val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
@@ -41,12 +39,17 @@ class Main: View() {
     var llistatAlumnesId: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
     var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
-    //var llistatProfessor: MutableList<Alumne> = ArrayList()
+
     var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
     var alumneEscollit:Alumne?=null
+
+    // Profesor
+    val profesorscontroler: ProfesorsController by inject()
+    val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
+    var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
 
     init{
         llistatGrups = grupcontroler.obteGrups()
@@ -55,6 +58,11 @@ class Main: View() {
         grupsAlumnes = grupcontroler.obteGrupsAlumne()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
+
+        //Profesor
+        llistatProfessor = profesorscontroler.obteProfesors()
+        var e = FXCollections.observableArrayList(llistatProfessor.observable())
+
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
 
@@ -73,6 +81,19 @@ class Main: View() {
 
                     /*Fer que quan el usuari seleccioni el grup s'obtingui el id d'aquell grup, d'aquell grup buscar el id dels alumnes que te, i buscar cada id al
                      arraylist d'alumnes, i aquells alumnes afegirlos al arraylist de "alumnesSeleccionats"*/
+
+            }
+            with(Tv_professors) {
+                Tv_professors.items = e
+                column("ID", com.example.demo.app.Professor::idProperty).isEditable
+                column("Nom", com.example.demo.app.Professor::nomProperty).isEditable
+                column("Cognoms", com.example.demo.app.Professor::cognomsProperty).isEditable
+                column("Dni", com.example.demo.app.Professor::dniProperty).isEditable
+                column("Data naixement", com.example.demo.app.Professor::datanaixementProperty).isEditable
+                column("sexe", com.example.demo.app.Professor::sexeProperty).isEditable
+                column("Telefon", com.example.demo.app.Professor::telefonProperty).isEditable
+                column("Email", com.example.demo.app.Professor::idProperty).isEditable
+                column("Descripció", com.example.demo.app.Professor::descripcioProperty).isEditable
 
             }
 

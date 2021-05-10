@@ -1,11 +1,8 @@
 package com.example.demo.app
 
-import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
-import tornadofx.Controller
 import tornadofx.ItemViewModel
-import java.text.SimpleDateFormat
 import java.util.*
 
 data class Professor (var id:Int, var nom:String, var cognoms:String, var dni:String, var data_naixement: Date, var sexe:String, var telefon:String, var email:String, var descripcio:String){

@@ -1,7 +1,7 @@
 package com.example.demo.controllers
-import com.example.demo.app.Connexio
-import com.example.demo.app.Professor
 
+import com.example.demo.app.Professor
+import com.example.demo.app.Connexio
 import org.ktorm.dsl.*
 import tornadofx.Controller
 import java.time.LocalDate
@@ -9,9 +9,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProfesorsController: Controller() {
+ class ProfesorsController: Controller() {
     var dd = Connexio().database
-    fun obteProfesors():MutableList<Professor>{
+      fun obteProfesors():MutableList<Professor>{
         var profesors:MutableList<Professor> = ArrayList()
         var al: Professor?=null
         for(row in dd!!.from(com.example.demo.app.Tables.Professor).select()){
