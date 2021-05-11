@@ -239,8 +239,10 @@ class Main: View() {
 
             Bt_eliminar.setOnMouseClicked {
                 println("Alumne a esborrar: " + alumneEscollit)
-                alumnesSeleccionats.remove(alumneEscollit!!)
-                var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
+                grupcontroler.esborraAlumneTaula(grupEscollit!!.id,alumneEscollit!!.id)
+                llistatAlumnesId.remove(alumneEscollit!!)
+                //alumnesSeleccionats.remove(alumneEscollit!!)
+                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
                 Tv_alumne2.items=aS
                 alumneEscollit=null
                 //Tv_alumne2.items.removeAll(aS)
