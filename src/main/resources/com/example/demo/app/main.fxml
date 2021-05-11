@@ -666,9 +666,6 @@
                                     <children>
                                         <TableView fx:id="modulstableMODULS" prefHeight="311.0" prefWidth="505.0">
                                             <columns>
-                                                <TableColumn fx:id="table_moduls" prefWidth="114.0" text="Nom" />
-                                                <TableColumn prefWidth="303.0" text="Descripcio" />
-                                                <TableColumn prefWidth="87.0" text="Cicle" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="192.0">
