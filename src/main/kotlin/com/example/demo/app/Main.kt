@@ -56,6 +56,9 @@ class Main: View() {
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
     var alumneEscollit:Alumne?=null
+    var modelGrup: TableViewEditModel<Grups> by singleAssign()
+    var modelAlumnes1: TableViewEditModel<Alumne> by singleAssign()
+    var modelAlumnes2: TableViewEditModel<Alumne> by singleAssign()
 
     // Profesor
     val profesorscontroler: ProfesorsController by inject()
@@ -110,18 +113,20 @@ class Main: View() {
             with(Tv_grups) {
                 Tv_grups.items=g
                 //t = tableview(g) {
-                    column("ID", Grups::idProperty).isEditable
-                    column("Nom", Grups::nomProperty).isEditable
-                    column("Descripció", Grups::descripcioProperty).isEditable
-                    isEditable = true
-                    prefHeight = 266.0
-                    prefWidth = 311.0
-                    layoutX = 370.0
-                    layoutY = 100.0
-               // }
+                column("ID", Grups::idProperty)
+                column("Nom", Grups::nomProperty).makeEditable()
+                column("Descripció", Grups::descripcioProperty).makeEditable()
 
-                    /*Fer que quan el usuari seleccioni el grup s'obtingui el id d'aquell grup, d'aquell grup buscar el id dels alumnes que te, i buscar cada id al
-                     arraylist d'alumnes, i aquells alumnes afegirlos al arraylist de "alumnesSeleccionats"*/
+                contextmenu{ //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
+                    item("Afegir grup").action { println("Has afegit un grup nou.") }
+                }
+
+                isEditable = true
+                prefHeight = 266.0
+                prefWidth = 311.0
+                layoutX = 370.0
+                layoutY = 100.0
+                modelGrup = editModel
 
             }
             with(Tv_moduls) {
@@ -148,38 +153,40 @@ class Main: View() {
 
             with(Tv_alumne){
                 Tv_alumne.items = a
-                column("ID", Alumne::idProperty).isEditable
-                column("Nom", Alumne::nomProperty).isEditable
-                column("Cognoms", Alumne::cognomsProperty).isEditable
-                column("Dni", Alumne::dniProperty).isEditable
-                column("Data naixement", Alumne::datanaixementProperty).isEditable
-                column("sexe", Alumne::sexeProperty).isEditable
-                column("Telefon", Alumne::telefonProperty).isEditable
-                column("Email", Alumne::idProperty).isEditable
-                column("Descripció", Alumne::descripcioProperty).isEditable
+                column("ID", Alumne::idProperty)
+                column("Nom", Alumne::nomProperty).makeEditable()
+                column("Cognoms", Alumne::cognomsProperty).makeEditable()
+                column("Dni", Alumne::dniProperty).makeEditable()
+                column("Data naixement", Alumne::datanaixementProperty).makeEditable()
+                column("sexe", Alumne::sexeProperty).makeEditable()
+                column("Telefon", Alumne::telefonProperty).makeEditable()
+                column("Email", Alumne::idProperty).makeEditable()
+                column("Descripció", Alumne::descripcioProperty).makeEditable()
                 isEditable = true
                 prefHeight = 311.0
                 prefWidth = 246.0
                 layoutX = 530.0
                 layoutY = 100.0
+                modelAlumnes1 = editModel
             }
 
             with(Tv_alumne2){
                 //Tv_alumne2.items = aS
                 column("ID", Alumne::idProperty)
-                column("Nom", Alumne::nomProperty)
-                column("Cognoms", Alumne::cognomsProperty)
-                column("Dni", Alumne::dniProperty)
-                column("Data naixement", Alumne::datanaixementProperty)
-                column("sexe", Alumne::sexeProperty)
-                column("Telefon", Alumne::telefonProperty)
-                column("Email", Alumne::idProperty)
-                column("Descripció", Alumne::descripcioProperty)
+                column("Nom", Alumne::nomProperty).makeEditable()
+                column("Cognoms", Alumne::cognomsProperty).makeEditable()
+                column("Dni", Alumne::dniProperty).makeEditable()
+                column("Data naixement", Alumne::datanaixementProperty).makeEditable()
+                column("sexe", Alumne::sexeProperty).makeEditable()
+                column("Telefon", Alumne::telefonProperty).makeEditable()
+                column("Email", Alumne::idProperty).makeEditable()
+                column("Descripció", Alumne::descripcioProperty).makeEditable()
                 isEditable = true
                 prefHeight = 311.0
                 prefWidth = 198.0
                 layoutX = 530.0
                 layoutY = 100.0
+                modelAlumnes2 = editModel
             }
 
             with(Tv_families) {
