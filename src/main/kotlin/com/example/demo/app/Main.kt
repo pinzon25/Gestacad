@@ -1,9 +1,11 @@
 package com.example.demo.app
 
 import com.example.demo.app.model.Alumnes_grups
+import com.example.demo.app.model.Moduls
 import com.example.demo.controllers.AlumnesController
 import com.example.demo.controllers.FamiliaController
 import com.example.demo.controllers.GrupsController
+import com.example.demo.controllers.ModulsController
 import com.example.demo.controllers.ProfesorsController
 import javafx.collections.*
 import javafx.scene.control.*
@@ -51,6 +53,10 @@ class Main: View() {
     val profesorscontroler: ProfesorsController by inject()
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
     var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
+    // Moduls
+    val modulscontroler: ModulsController by inject()
+    val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
+    var llistatModuls: MutableList<Moduls> = ArrayList()
 
     // Families
     val familiacontroler: FamiliaController by inject()
@@ -69,6 +75,9 @@ class Main: View() {
         //Profesor
         llistatProfessor = profesorscontroler.obteProfesors()
         var e = FXCollections.observableArrayList(llistatProfessor.observable())
+        //Moduls
+        llistatModuls = modulscontroler.obteModuls()
+        var m = FXCollections.observableArrayList(llistatModuls.observable())
 
         //Families
         llistatFamilies = familiacontroler.obteFamilies()
@@ -92,6 +101,14 @@ class Main: View() {
 
                     /*Fer que quan el usuari seleccioni el grup s'obtingui el id d'aquell grup, d'aquell grup buscar el id dels alumnes que te, i buscar cada id al
                      arraylist d'alumnes, i aquells alumnes afegirlos al arraylist de "alumnesSeleccionats"*/
+
+            }
+            with(Tv_moduls) {
+                Tv_moduls.items=m
+                //t = tableview(g) {
+                column("ID", Moduls::idProperty).isEditable
+                column("Nom", Moduls::nomProperty).isEditable
+                column("Descripció", Moduls::descripcioProperty).isEditable
 
             }
             with(Tv_professors) {
