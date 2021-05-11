@@ -27,6 +27,13 @@ class Main: View() {
     val Bt_afegir:Button by fxid("grupsBtnAfegirAlumnes")
     val Bt_eliminar:Button by fxid("grupsBtnTreureAlumnes")
 
+    //TEXTFIELDS
+    val txtCercadorAlumnes:TextField by fxid("alumnesTfNombre")
+
+    //COMBOBOX
+
+    val comboBoxAlumnes:ComboBox<String?> by fxid("alumnesCbGrupos")
+
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
@@ -40,6 +47,7 @@ class Main: View() {
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatAlumnesId: MutableList<Alumne> = ArrayList()
+    var llistatAlumnesNom: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
     var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
 
@@ -64,6 +72,11 @@ class Main: View() {
     var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
     var familiaEscollida:Familia?=null
 
+    //Vista Alumnes
+    val Tv_vistaalumne:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
+    var alumneVistaEscollit:Alumne?=null
+    var llistatNomGrups: MutableList<String?> = ArrayList()
+
     init{
         llistatGrups = grupcontroler.obteGrups()
         println("llistat grups: "+llistatGrups)
@@ -82,6 +95,14 @@ class Main: View() {
         //Families
         llistatFamilies = familiacontroler.obteFamilies()
         var eFamilies = FXCollections.observableArrayList(llistatFamilies.observable())
+
+        //Alumne
+        llistatAlumnesNom = alumnecontroler.obteAlumnes()
+        /*llistatNomGrups = alumnecontroler.obteNomGrupsAlumnes()
+        var cb = FXCollections.observableArrayList(llistatNomGrups.observable())
+        comboBoxAlumnes*/
+
+
 
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
@@ -169,10 +190,29 @@ class Main: View() {
 
             }
 
+            with(Tv_vistaalumne){
+                Tv_vistaalumne.items = a
+                column("ID", Alumne::idProperty)
+                column("Nom", Alumne::nomProperty)
+                column("Cognoms", Alumne::cognomsProperty)
+                column("Dni", Alumne::dniProperty)
+                column("Data naixement", Alumne::datanaixementProperty)
+                column("sexe", Alumne::sexeProperty)
+                column("Telefon", Alumne::telefonProperty)
+                column("Email", Alumne::idProperty)
+                column("Descripció", Alumne::descripcioProperty)
+            }
+
             //Familia seleccionada
             Tv_families.onUserSelect {
                 familiaEscollida=Tv_families.selectedItem
                 println("Familia escollida: " + familiaEscollida)
+            }
+
+            //Alumne seleccionada
+            Tv_vistaalumne.onUserSelect {
+                alumneVistaEscollit=Tv_vistaalumne.selectedItem
+                println("Alumne escollit: " + alumneVistaEscollit)
             }
 
             Tv_grups.onUserSelect {
@@ -215,5 +255,21 @@ class Main: View() {
         }
         println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
     }
+
+    /*fun mostraAlumnesGrupchBox():Unit{
+        for(i in grupsAlumnes.indices){
+            if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
+                llistatAlumnesId = grupcontroler.obteAlumnesGrups(grupEscollit!!.id)
+            }
+        }
+    }
+
+
+
+    fun mostraAlumnesbyNomCognom():Unit {
+        var nomAlumne = txtCercadorAlumnes.getText().toString()
+        llistatAlumnesNom = alumnecontroler.obteAlumnePerNom(nomAlumne)
+
+    }*/
 }
 

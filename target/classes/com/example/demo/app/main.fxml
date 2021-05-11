@@ -101,13 +101,13 @@
                                     <children>
                                         <TableView fx:id="alumnesTableAlumnes" prefHeight="311.0" prefWidth="631.0">
                                             <columns>
-                                                <TableColumn fx:id="table_alumnes" prefWidth="114.0" text="Nom" />
-                                                <TableColumn prefWidth="113.0" text="Cognom" />
-                                                <TableColumn prefWidth="91.0" text="Dni" />
-                                                <TableColumn prefWidth="75.0" text="Naixement" />
-                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe" />
-                                                <TableColumn prefWidth="62.0" text="Telefon" />
-                                                <TableColumn prefWidth="115.0" text="Mail" />
+                                                <TableColumn fx:id="table_alumnes" prefWidth="114.0" text="Nom" visible="false" />
+                                                <TableColumn prefWidth="113.0" text="Cognom" visible="false" />
+                                                <TableColumn prefWidth="91.0" text="Dni" visible="false" />
+                                                <TableColumn prefWidth="75.0" text="Naixement" visible="false" />
+                                                <TableColumn minWidth="3.0" prefWidth="60.0" text="Sexe" visible="false" />
+                                                <TableColumn prefWidth="62.0" text="Telefon" visible="false" />
+                                                <TableColumn prefWidth="115.0" text="Mail" visible="false" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="133.0">
@@ -120,7 +120,7 @@
                                                 </ComboBox>
                                                 <Label prefHeight="50.0" prefWidth="28.0" />
                                                 <Label text="Busca per nom:" />
-                                                <TextField fx:id="alumnesTfNombre" promptText="Escriu el nom...">
+                                                <TextField fx:id="alumnesTfNombre" promptText="Escriu el nom i cognom...">
                                                     <VBox.margin>
                                                         <Insets top="3.0" />
                                                     </VBox.margin>
@@ -666,9 +666,6 @@
                                     <children>
                                         <TableView fx:id="modulstableMODULS" prefHeight="311.0" prefWidth="505.0">
                                             <columns>
-                                                <TableColumn fx:id="table_moduls" prefWidth="114.0" text="Nom" />
-                                                <TableColumn prefWidth="303.0" text="Descripcio" />
-                                                <TableColumn prefWidth="87.0" text="Cicle" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="192.0">
@@ -804,8 +801,8 @@
                                         <VBox prefHeight="311.0" prefWidth="21.0" />
                                         <TableView fx:id="familiestableFAMILIES" prefHeight="311.0" prefWidth="589.0">
                                             <columns>
-                                                <TableColumn fx:id="families_moduls" prefWidth="146.0" text="Nom" />
-                                                <TableColumn prefWidth="442.0" text="Descripcio" />
+                                                <TableColumn fx:id="families_moduls" prefWidth="146.0" text="Nom" visible="false" />
+                                                <TableColumn prefWidth="442.0" text="Descripcio" visible="false" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="86.0" />
