@@ -149,14 +149,11 @@ class Main: View() {
 
             Bt_afegir.setOnMouseClicked {
                 println("Alumne a afegir: " + alumneEscollit)
-                alumnesSeleccionats.add(alumneEscollit!!)
-                //Tv_alumne2.items = aS
-                //afegeixAlumneGrup(alumneEscollit!!)
-                //println("Alumnes Seleccionats: " + alumnesSeleccionats)
-                var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
+                grupcontroler.afegeixAlumneTaula(grupEscollit!!.id,alumneEscollit!!.id)
+                llistatAlumnesId.add(alumneEscollit!!)
+                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
                 Tv_alumne2.items = aS
                 alumneEscollit=null
-                //Tv_alumne2.items.addAll(aS)
             }
 
             Bt_eliminar.setOnMouseClicked {
@@ -172,7 +169,7 @@ class Main: View() {
     fun mostraAlumnesGrup():Unit{
         for(i in grupsAlumnes.indices){
             if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
-                llistatAlumnesId = alumnecontroler.obteAlumnePerId(grupsAlumnes[i].id_alumne)
+                llistatAlumnesId = grupcontroler.obteAlumnesGrups(grupEscollit!!.id)
             }
         }
         println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)

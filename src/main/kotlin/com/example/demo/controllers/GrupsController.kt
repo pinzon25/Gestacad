@@ -97,6 +97,15 @@ class GrupsController : Controller(){
         return alumnesGrups
     }
 
+    fun afegeixAlumneTaula(idgrup:Int,alumneId:Int):Unit{
+        dd!!.insert(Alumne_grup) {
+            set(it.id_grup, idgrup)
+            set(it.id_alumne, alumneId)
+            println("Has afegit correctament l'alumne.")
+        }
+
+    }
+
 
 
 }
