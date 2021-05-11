@@ -30,7 +30,6 @@ import kotlin.collections.ArrayList
             al = Professor(id!!, nom.toString(),cognoms.toString(),dni.toString(),d,sexe.toString(),telefon.toString(),email.toString(),descripcio.toString())
             profesors.add(al)
         }
-
         return profesors
     }
 
