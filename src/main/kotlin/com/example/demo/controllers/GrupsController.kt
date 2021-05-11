@@ -103,7 +103,13 @@ class GrupsController : Controller(){
             set(it.id_alumne, alumneId)
             println("Has afegit correctament l'alumne.")
         }
-
+    }
+    
+    fun esborraAlumneTaula(idgrup:Int,alumneId:Int):Unit{
+        dd!!.delete(Alumne_grup){
+            it.id_grup eq idgrup
+            it.id_alumne eq alumneId
+        }
     }
 
 
