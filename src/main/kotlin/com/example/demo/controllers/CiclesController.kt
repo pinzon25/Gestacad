@@ -2,15 +2,16 @@ package com.example.demo.controllers
 
 import com.example.demo.view.Cicles
 import com.example.demo.app.Connexio
+import com.example.demo.app.model.Cicle
 import org.ktorm.dsl.*
 
 class CiclesController {
 
     var dd = Connexio().database
 
-    fun obteCicles():MutableList<Cicles>{
-        var cicles:MutableList<Cicles> = ArrayList()
-        var ci: Cicles?=null
+    fun obteCicles():MutableList<Cicle>{
+        var cicles:MutableList<Cicle> = ArrayList()
+        var ci: Cicle?= null
         for(row in dd!!.from(com.example.demo.app.Tables.Cicle).select()){
 
             val id:Int? = row[com.example.demo.app.Tables.Cicle.id]
@@ -20,8 +21,8 @@ class CiclesController {
 
             //Jan: Haig de fer bé el constructor de la Classe Cicle
 
-            //ci = Cicle(id!!, idfamilia!!,nom.toString(),descripcio.toString())
-            //cicles.add(ci)
+            ci = Cicle(id!!, idfamilia!!, nom.toString(), descripcio.toString())
+            cicles.add(ci)
         }
 
         return cicles

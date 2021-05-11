@@ -2,6 +2,7 @@ package com.example.demo.app
 
 import com.example.demo.app.model.Alumnes_grups
 import com.example.demo.controllers.AlumnesController
+import com.example.demo.controllers.FamiliaController
 import com.example.demo.controllers.GrupsController
 import com.example.demo.controllers.ProfesorsController
 import javafx.collections.*
@@ -51,6 +52,12 @@ class Main: View() {
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
     var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
 
+    // Families
+    val familiacontroler: FamiliaController by inject()
+    val Tv_families: javafx.scene.control.TableView<com.example.demo.app.Familia> by fxid("familiestableFAMILIES")
+    var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
+    var familiaEscollida:Familia?=null
+
     init{
         llistatGrups = grupcontroler.obteGrups()
         println("llistat grups: "+llistatGrups)
@@ -62,6 +69,10 @@ class Main: View() {
         //Profesor
         llistatProfessor = profesorscontroler.obteProfesors()
         var e = FXCollections.observableArrayList(llistatProfessor.observable())
+
+        //Families
+        llistatFamilies = familiacontroler.obteFamilies()
+        var eFamilies = FXCollections.observableArrayList(llistatFamilies.observable())
 
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
@@ -97,7 +108,6 @@ class Main: View() {
 
             }
 
-
             with(Tv_alumne){
                 Tv_alumne.items = a
                 column("ID", Alumne::idProperty).isEditable
@@ -132,6 +142,20 @@ class Main: View() {
                 prefWidth = 198.0
                 layoutX = 530.0
                 layoutY = 100.0
+            }
+
+            with(Tv_families) {
+                Tv_families.items = eFamilies
+                column("ID", com.example.demo.app.Familia::idProperty).isEditable
+                column("Nom", com.example.demo.app.Familia::nomProperty).isEditable
+                column("Descripció", com.example.demo.app.Familia::descripcioProperty).isEditable
+
+            }
+
+            //Familia seleccionada
+            Tv_families.onUserSelect {
+                familiaEscollida=Tv_families.selectedItem
+                println("Familia escollida: " + familiaEscollida)
             }
 
             Tv_grups.onUserSelect {
@@ -174,5 +198,5 @@ class Main: View() {
         }
         println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
     }
-        }
+}
 

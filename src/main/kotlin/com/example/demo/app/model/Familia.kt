@@ -11,7 +11,7 @@ data class Familia(var id:Int,var nom:String, var descripcio:String) {
     val descripcioProperty = SimpleStringProperty(descripcio)
 }
 
-class FamiliaModel(familia:Familia?): ItemViewModel<Familia>(familia){
+class familiaModel(familia:Familia?): ItemViewModel<Familia>(familia){
     val id = bind(Familia::idProperty)
     val nom = bind(Familia::nomProperty)
     val descripcio = bind(Familia::descripcioProperty)
