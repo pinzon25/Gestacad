@@ -61,11 +61,11 @@ class Main: View() {
     var modelAlumnes2: TableViewEditModel<Alumne> by singleAssign()
 
     // Profesor
-    val profesorscontroler: ProfesorsController by inject()
+    /*val profesorscontroler: ProfesorsController by inject()
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
-    var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
+    var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()*/
     // Moduls
-    val modulscontroler: ModulsController by inject()
+   /* val modulscontroler: ModulsController by inject()
     val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
     var llistatModuls: MutableList<Moduls> = ArrayList()
 
@@ -78,7 +78,7 @@ class Main: View() {
     //Vista Alumnes
     val Tv_vistaalumne:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
     var alumneVistaEscollit:Alumne?=null
-    var llistatNomGrups: MutableList<String?> = ArrayList()
+    var llistatNomGrups: MutableList<String?> = ArrayList()*/
 
     init{
         llistatGrups = grupcontroler.obteGrups()
@@ -87,7 +87,7 @@ class Main: View() {
         grupsAlumnes = grupcontroler.obteGrupsAlumne()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
-
+/*
         //Profesor
         llistatProfessor = profesorscontroler.obteProfesors()
         var e = FXCollections.observableArrayList(llistatProfessor.observable())
@@ -105,7 +105,7 @@ class Main: View() {
         var cb = FXCollections.observableArrayList(llistatNomGrups.observable())
         comboBoxAlumnes*/
 
-
+*/
 
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
@@ -118,7 +118,12 @@ class Main: View() {
                 column("Descripció", Grups::descripcioProperty).makeEditable()
 
                 contextmenu{ //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
-                    item("Afegir grup").action { println("Has afegit un grup nou.") }
+                    item("Afegir grup").action { println("Has afegit un grup nou.")
+                    var nouGrup:Grups = Grups(grupcontroler.obteIdGrupMesGran()+2,0,"","")
+                        g.add(nouGrup)
+                        /*llistatGrups.add(nouGrup)
+                        var g = FXCollections.observableArrayList(llistatGrups.observable())*/
+                    }
                 }
 
                 isEditable = true
@@ -129,7 +134,7 @@ class Main: View() {
                 modelGrup = editModel
 
             }
-            with(Tv_moduls) {
+            /*with(Tv_moduls) {
                 Tv_moduls.items=m
                 //t = tableview(g) {
                 column("ID", Moduls::idProperty).isEditable
@@ -149,7 +154,7 @@ class Main: View() {
                 column("Email", com.example.demo.app.Professor::idProperty).isEditable
                 column("Descripció", com.example.demo.app.Professor::descripcioProperty).isEditable
 
-            }
+            }*/
 
             with(Tv_alumne){
                 Tv_alumne.items = a
@@ -189,7 +194,7 @@ class Main: View() {
                 modelAlumnes2 = editModel
             }
 
-            with(Tv_families) {
+            /*with(Tv_families) {
                 Tv_families.items = eFamilies
                 column("ID", com.example.demo.app.Familia::idProperty).isEditable
                 column("Nom", com.example.demo.app.Familia::nomProperty).isEditable
@@ -220,7 +225,7 @@ class Main: View() {
             Tv_vistaalumne.onUserSelect {
                 alumneVistaEscollit=Tv_vistaalumne.selectedItem
                 println("Alumne escollit: " + alumneVistaEscollit)
-            }
+            }*/
 
             Tv_grups.onUserSelect {
                 grupEscollit = Tv_grups.selectedItem

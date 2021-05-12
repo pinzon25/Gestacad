@@ -97,6 +97,16 @@ class GrupsController : Controller(){
         return alumnesGrups
     }
 
+    fun obteIdGrupMesGran():Int{
+        var idMesGran:Int?=null
+
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
+            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
+             idMesGran = idGrup!!
+        }
+        return idMesGran!!
+    }
+
     fun afegeixAlumneTaula(idgrup:Int,alumneId:Int):Unit{
         dd!!.insert(Alumne_grup) {
             set(it.id_grup, idgrup)
