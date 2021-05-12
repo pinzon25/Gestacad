@@ -104,7 +104,7 @@ class GrupsController : Controller(){
             val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
              idMesGran = idGrup!!
         }
-        return idMesGran!!
+        return idMesGran!!+2
     }
 
     fun afegeixAlumneTaula(idgrup:Int,alumneId:Int):Unit{
