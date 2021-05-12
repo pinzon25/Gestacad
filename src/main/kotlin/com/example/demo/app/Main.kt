@@ -119,7 +119,7 @@ class Main: View() {
 
                 contextmenu{ //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
                     item("Afegir grup").action { println("Has afegit un grup nou.")
-                    var nouGrup:Grups = Grups(grupcontroler.obteIdGrupMesGran()+2,0,"","")
+                    var nouGrup:Grups = Grups(grupcontroler.obteIdGrupMesGran(),0,"","")
                         g.add(nouGrup)
                         /*llistatGrups.add(nouGrup)
                         var g = FXCollections.observableArrayList(llistatGrups.observable())*/
