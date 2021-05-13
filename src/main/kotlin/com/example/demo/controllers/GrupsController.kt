@@ -2,6 +2,7 @@ package com.example.demo.controllers
 
 import com.example.demo.app.Alumne
 import com.example.demo.app.Connexio
+import com.example.demo.app.Grups
 import com.example.demo.app.Tables.Alumne_grup
 import com.example.demo.app.model.Alumnes_grups
 import org.ktorm.dsl.*
@@ -106,6 +107,27 @@ class GrupsController : Controller(){
         }
         return idMesGran!!+2
     }
+
+    /*
+    CREATE TABLE grups (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    id_cicle INTEGER NOT NULL,
+    nom VARCHAR(64) NOT NULL,
+    descripcio VARCHAR(128),
+    FOREIGN KEY (id_cicle)
+    REFERENCES cicles (id)
+);*/
+
+    fun afegeixGrupTaula(grup: Grups):Unit{
+        dd!!.insert(com.example.demo.app.Tables.Grups) {
+            set(it.id, grup.id)
+            set(it.id_cicle, grup.id_cicle)
+            set(it.nom, grup.nom)
+            set(it.descripcio, grup.descripcio)
+            println("Has afegit correctament el grup!!!.")
+        }
+    }
+
 
     fun afegeixAlumneTaula(idgrup:Int,alumneId:Int):Unit{
         dd!!.insert(Alumne_grup) {

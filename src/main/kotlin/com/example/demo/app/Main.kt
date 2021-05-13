@@ -55,6 +55,10 @@ class Main: View() {
 
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
+    var item:Grups?=null
+    var Gru:Grups?=null
+    var ind:Int?=null
+    var itemDirty:Boolean? = null
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
     var modelAlumnes1: TableViewEditModel<Alumne> by singleAssign()
@@ -110,6 +114,16 @@ class Main: View() {
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
 
+            /*with(Tb_grups){
+                var g:Grups?=null
+                if(Tb_grups.isSelected){
+                    workspace.saveButton.setOnMouseClicked {
+                        g = Tv_grups.selectedItem
+                        grupcontroler.afegeixGrupTaula(g!!)
+                    }
+                }
+            }*/
+
             with(Tv_grups) {
                 Tv_grups.items=g
                 //t = tableview(g) {
@@ -132,6 +146,29 @@ class Main: View() {
                 layoutX = 370.0
                 layoutY = 100.0
                 modelGrup = editModel
+
+                modelGrup.selectedItemDirtyState.onChange {
+
+                    var Gr:Grups? = null
+                    Gr = Tv_grups?.selectedItem
+
+                    item = Gr!!.copy(id=Gr.id,id_cicle= Gr.id_cicle,nom=Gr.nom,descripcio=Gr.descripcio) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+                    ind = Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                    println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
+                    itemDirty = modelGrup.isDirty(Gr!!)
+                    println("L'objecte amb l'index " + ind +" Is dirty?--->"+itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+
+                    Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
+                    Gr.id_cicle= Tv_grups!!.selectedItem!!.idCicleProperty.get()
+                    Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
+                    Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
+
+                    println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
+
+                    Gru = Gr.copy(id=Gr.id,id_cicle = Gr.id_cicle,nom=Gr.nom,descripcio = Gr.descripcio)
+
+                    modelGrup.commit(Gru!!)
+                }
 
             }
             /*with(Tv_moduls) {
@@ -173,7 +210,11 @@ class Main: View() {
                 layoutX = 530.0
                 layoutY = 100.0
                 modelAlumnes1 = editModel
+
+
             }
+
+
 
             with(Tv_alumne2){
                 //Tv_alumne2.items = aS
