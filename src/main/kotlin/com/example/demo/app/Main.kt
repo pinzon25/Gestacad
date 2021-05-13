@@ -139,7 +139,8 @@ class Main: View() {
                         var g = FXCollections.observableArrayList(llistatGrups.observable())*/
                     }
                 }
-
+                enableCellEditing()
+                enableDirtyTracking()
                 isEditable = true
                 prefHeight = 266.0
                 prefWidth = 311.0
@@ -168,6 +169,13 @@ class Main: View() {
                     Gru = Gr.copy(id=Gr.id,id_cicle = Gr.id_cicle,nom=Gr.nom,descripcio = Gr.descripcio)
 
                     modelGrup.commit(Gru!!)
+                }
+
+                workspace.saveButton.setOnMouseClicked {
+                    var Gs:Grups? = null
+                    Gs = Tv_grups.selectedItem
+                    grupcontroler.afegeixGrupTaula(Gs!!)
+                    println("S'ha guardat el grup.")
                 }
 
             }
@@ -204,6 +212,8 @@ class Main: View() {
                 column("Telefon", Alumne::telefonProperty).makeEditable()
                 column("Email", Alumne::idProperty).makeEditable()
                 column("Descripció", Alumne::descripcioProperty).makeEditable()
+                enableCellEditing()
+                enableDirtyTracking()
                 isEditable = true
                 prefHeight = 311.0
                 prefWidth = 246.0
@@ -227,6 +237,9 @@ class Main: View() {
                 column("Telefon", Alumne::telefonProperty).makeEditable()
                 column("Email", Alumne::idProperty).makeEditable()
                 column("Descripció", Alumne::descripcioProperty).makeEditable()
+
+                enableCellEditing()
+                enableDirtyTracking()
                 isEditable = true
                 prefHeight = 311.0
                 prefWidth = 198.0
@@ -302,6 +315,7 @@ class Main: View() {
             }
                 }
             }
+
     fun mostraAlumnesGrup():Unit{
         for(i in grupsAlumnes.indices){
             if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
