@@ -2,11 +2,8 @@ package com.example.demo.app
 
 import com.example.demo.app.model.Alumnes_grups
 import com.example.demo.app.model.Moduls
-import com.example.demo.controllers.AlumnesController
-import com.example.demo.controllers.FamiliaController
-import com.example.demo.controllers.GrupsController
-import com.example.demo.controllers.ModulsController
-import com.example.demo.controllers.ProfesorsController
+import com.example.demo.app.model.Ufs
+import com.example.demo.controllers.*
 import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -21,9 +18,12 @@ class Main: View() {
     //CONTROLLERS
     val grupcontroler: GrupsController by inject()
     val alumnecontroler: AlumnesController by inject()
+    val ufscontroler:UfsController by inject()
+    val modulscontroler:ModulsController by inject()
 
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
+    val Tb_ufs:Tab by fxid("Tb_ufs")
 
     //Buttons
     val Bt_afegir:Button by fxid("grupsBtnAfegirAlumnes")
@@ -35,11 +35,13 @@ class Main: View() {
     //COMBOBOX
 
     val comboBoxAlumnes:ComboBox<String?> by fxid("alumnesCbGrupos")
+    val comboBoxModuls:ComboBox<String?> by fxid("ufsCbGrupos")
 
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
+    val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
 
     //TABLECOLUMNS
     /*val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
@@ -48,22 +50,31 @@ class Main: View() {
 
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
-    var llistatAlumnesId: MutableList<Alumne> = ArrayList()
+    var llistatAlumnesId: MutableList<Alumne>? = ArrayList()
     var llistatAlumnesNom: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
     var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
-
+    var llistatUfs:MutableList<Ufs> = ArrayList()
+    var llistatModuls:MutableList<Moduls> = ArrayList()
+    var nomsModuls:MutableList<String> = ArrayList()
     var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
+    var modulEscollit:Moduls?=null
+    var ufEscollida:Ufs?=null
+    var uf:Ufs?=null
+    var nomModulSeleccionat:String?=null
     var item:Grups?=null
+    var ufs:Ufs?=null
     var Gru:Grups?=null
     var ind:Int?=null
+    var induf:Int?= null
     var TaulaSeleccionada:Boolean?=false
     var itemDirty:Boolean? = null
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
+    var modelUfs: TableViewEditModel<Ufs> by singleAssign()
     var modelAlumnes1: TableViewEditModel<Alumne> by singleAssign()
     var modelAlumnes2: TableViewEditModel<Alumne> by singleAssign()
 
@@ -89,11 +100,16 @@ class Main: View() {
 
     init{
         llistatGrups = grupcontroler.obteGrups()
-        println("llistat grups: "+llistatGrups)
+        //println("llistat grups: "+llistatGrups)
+        llistatUfs = ufscontroler.obteUfs()
+        llistatModuls = modulscontroler.obteModuls()
+        nomsModuls = modulscontroler.obteModulsNom()
         llistatAlumnes = alumnecontroler.obteAlumnes()
         grupsAlumnes = grupcontroler.obteGrupAlumnes()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
+        var u = FXCollections.observableArrayList(llistatUfs.observable())
+        var m = FXCollections.observableArrayList(nomsModuls.observable())
 /*
         //Profesor
         llistatProfessor = profesorscontroler.obteProfesors()
@@ -116,114 +132,140 @@ class Main: View() {
 
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
+            with(Tb_grups) {
+                with(Tv_grups) {
+                    TaulaSeleccionada = false
 
-            with(Tv_grups) {
-                TaulaSeleccionada=false
+                    Tv_grups.items = g
+                    //t = tableview(g) {
+                    column("ID", Grups::idProperty)
+                    column("ID Cicle", Grups::idCicleProperty).makeEditable()
+                    column("Nom", Grups::nomProperty).makeEditable()
+                    column("Descripció", Grups::descripcioProperty).makeEditable()
 
-                Tv_grups.items=g
-                //t = tableview(g) {
-                column("ID", Grups::idProperty)
-                column("ID Cicle", Grups::idCicleProperty).makeEditable()
-                column("Nom", Grups::nomProperty).makeEditable()
-                column("Descripció", Grups::descripcioProperty).makeEditable()
-
-                contextmenu{ //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
-                    item("Esborrar").action { println("Has esborrat el grup seleccionat.")
-                    var nouGrup:Grups = Tv_grups.selectedItem!!
-                        g.remove(nouGrup)
+                    contextmenu { //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
+                        item("Esborrar").action {
+                            println("Has esborrat el grup seleccionat.")
+                            var nouGrup: Grups = Tv_grups.selectedItem!!
+                            g.remove(nouGrup)
+                        }
+                        /*item("Refrescar").action {
+                            //Tv_grups.items=null
+                            llistatGrups = grupcontroler.obteGrups()
+                            g=FXCollections.observableArrayList(llistatGrups.observable())
+                            Tv_grups.items=g
+                        }*/
                     }
-                }
-                enableCellEditing()
-                enableDirtyTracking()
-                isEditable = true
-                prefHeight = 266.0
-                prefWidth = 311.0
-                layoutX = 370.0
-                layoutY = 100.0
-                modelGrup = editModel
 
-                //Detectem si els items han patit canvis.
-                modelGrup.selectedItemDirtyState.onChange {
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+                    prefHeight = 266.0
+                    prefWidth = 311.0
+                    layoutX = 370.0
+                    layoutY = 100.0
+                    modelGrup = editModel
 
-                    var Gr:Grups? = null
-                    Gr = Tv_grups?.selectedItem
+                    //Detectem si els items han patit canvis.
+                    modelGrup.selectedItemDirtyState.onChange {
 
-                    item = Gr!!.copy(id=Gr.id,id_cicle= Gr.id_cicle,nom=Gr.nom,descripcio=Gr.descripcio) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
-                    ind = Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
-                    println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
-                    itemDirty = modelGrup.isDirty(Gr!!)
-                    println("L'objecte amb l'index " + ind +" Is dirty?--->"+itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+                        var Gr: Grups? = null
+                        Gr = Tv_grups?.selectedItem
 
-                    Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
-                    Gr.id_cicle= Tv_grups!!.selectedItem!!.idCicleProperty.get()
-                    Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
-                    Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
+                        item = Gr!!.copy(
+                            id = Gr.id,
+                            id_cicle = Gr.id_cicle,
+                            nom = Gr.nom,
+                            descripcio = Gr.descripcio
+                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+                        ind =
+                            Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                        println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
+                        itemDirty = modelGrup.isDirty(Gr!!)
+                        println("L'objecte amb l'index " + ind + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
 
-                    println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
+                        Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
+                        Gr.id_cicle = Tv_grups!!.selectedItem!!.idCicleProperty.get()
+                        Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
+                        Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
 
-                    Gru = Gr.copy(id=Gr.id,id_cicle = Gr.id_cicle,nom=Gr.nom,descripcio = Gr.descripcio)
+                        println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
 
-                    modelGrup.commit(Gru!!)
-                }
+                        Gru = Gr.copy(id = Gr.id, id_cicle = Gr.id_cicle, nom = Gr.nom, descripcio = Gr.descripcio)
+
+                        modelGrup.commit(Gru!!)
+                    }
 
 
-                workspace.saveButton.setOnMouseClicked {
-                    var Gs:Grups? = null
-                    Gs = Tv_grups.selectedItem
+                    workspace.saveButton.setOnMouseClicked {
+                        var Gs: Grups? = null
+                        Gs = Tv_grups.selectedItem
 
-                    if(itemDirty==false) {
-                        try {
-                            grupcontroler.afegeixTaulaGrups(Gs!!)
+                        if (itemDirty == false) {
+                            try {
+                                grupcontroler.afegeixTaulaGrups(Gs!!)
+                                modelGrup.commit()
+                                alert(
+                                    Alert.AlertType.INFORMATION,
+                                    "Grup emmagatzemat.",
+                                    "El grup s'ha emmagatzemat a la base de dades correctament."
+                                )
+                            } catch (ex: SQLIntegrityConstraintViolationException) {
+                                alert(
+                                    Alert.AlertType.ERROR,
+                                    "No es possible guardar el grup.",
+                                    "El grup escollit no es pot afegir, ja es troba a la base de dades."
+                                )
+                            }
+                        }
+
+                         if (itemDirty == true) {
+                            grupcontroler.actualitzarTaulaGrups(Gs!!)
+                            modelGrup.commit()
                             alert(
                                 Alert.AlertType.INFORMATION,
-                                "Grup emmagatzemat.",
-                                "El grup s'ha emmagatzemat a la base de dades correctament."
+                                "Grup actualitzat.",
+                                "El grup s'ha actualitzat a la base de dades correctament."
                             )
+                        }
+                    } //Final Workspace.SaveButton
+
+                    workspace.deleteButton.setOnMouseClicked {
+                        var Gs: Grups? = null
+                        try {
+                            Gs = Tv_grups.selectedItem
+                            grupcontroler.esborraTaulaGrups(Gs!!)
+                            alert(
+                                Alert.AlertType.INFORMATION,
+                                "Grup esborrat.",
+                                "El grup s'ha esborrat de la base de dades."
+                            )
+                            g.remove(Gs)
+                            modelGrup.commit()
                         } catch (ex: SQLIntegrityConstraintViolationException) {
                             alert(
                                 Alert.AlertType.ERROR,
-                                "No es possible guardar el grup.",
-                                "El grup escollit no es pot afegir, ja es troba a la base de dades."
+                                "No es possible esborrar el grup.",
+                                "El grup escollit no es pot esborrar, no es troba a la base de dades."
                             )
                         }
-                    }
+                    }//Final Workspace.DeleteButton
 
-                    if(itemDirty==true){
-                        grupcontroler.actualitzarTaulaGrups(Gs!!)
-                        alert(Alert.AlertType.INFORMATION, "Grup actualitzat.", "El grup s'ha actualitzat a la base de dades correctament.")
-                    }
-                } //Final Workspace.SaveButton
+                    //Fer que es detecti una taula, i que si es detecta, es permeti realitzar les accions amb els botons del workspace.
 
-                workspace.deleteButton.setOnMouseClicked {
-                    var Gs:Grups? = null
-                    try {
-                        Gs = Tv_grups.selectedItem
-                        grupcontroler.esborraTaulaGrups(Gs!!)
-                        alert(Alert.AlertType.INFORMATION, "Grup esborrat.", "El grup s'ha esborrat de la base de dades.")
-                        g.remove(Gs)
-                        modelGrup.commit()
-                    }catch(ex:SQLIntegrityConstraintViolationException){
-                        alert(Alert.AlertType.ERROR, "No es possible esborrar el grup.", "El grup escollit no es pot esborrar, no es troba a la base de dades.")
-                    }
-                }//Final Workspace.DeleteButton
+                    if(Tb_grups.isSelected) {
+                    workspace.createButton.setOnMouseClicked {
+                            var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran() + 1, 0, "", "")
+                            Tv_grups.items.add(nouGrup)
+                        }
+                    }//Final Workspace.CreateButton
+                }
 
-                //Fer que es detecti una taula, i que si es detecta, es permeti realitzar les accions amb els botons del workspace.
-                workspace.createButton.setOnMouseClicked {
 
-                    if (TaulaSeleccionada==false) {
-                        alert(Alert.AlertType.ERROR, "No es possible realitzar l'accio.", "No has escollit cap taula.")
-                    } else {
-                        var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran()+1, 0, "", "")
-                        g.add(nouGrup)
-                    }
-                }//Final Workspace.CreateButton
+                //Final Workspace.RefreshButton
 
-            }
 
-            workspace.refreshButton.setOnMouseClicked {
-                onRefresh()
-            }//Final Workspace.RefreshButton
-            /*with(Tv_moduls) {
+                /*with(Tv_moduls) {
                 Tv_moduls.items=m
                 //t = tableview(g) {
                 column("ID", Moduls::idProperty).isEditable
@@ -245,54 +287,52 @@ class Main: View() {
 
             }*/
 
-            with(Tv_alumne){
-                Tv_alumne.items = a
-                column("ID", Alumne::idProperty)
-                column("Nom", Alumne::nomProperty).makeEditable()
-                column("Cognoms", Alumne::cognomsProperty).makeEditable()
-                column("Dni", Alumne::dniProperty).makeEditable()
-                column("Data naixement", Alumne::datanaixementProperty).makeEditable()
-                column("sexe", Alumne::sexeProperty).makeEditable()
-                column("Telefon", Alumne::telefonProperty).makeEditable()
-                column("Email", Alumne::idProperty).makeEditable()
-                column("Descripció", Alumne::descripcioProperty).makeEditable()
-                enableCellEditing()
-                enableDirtyTracking()
-                isEditable = true
-                prefHeight = 311.0
-                prefWidth = 246.0
-                layoutX = 530.0
-                layoutY = 100.0
-                modelAlumnes1 = editModel
-
-
-            }
+                with(Tv_alumne) {
+                    Tv_alumne.items = a
+                    column("ID", Alumne::idProperty)
+                    column("Nom", Alumne::nomProperty).makeEditable()
+                    column("Cognoms", Alumne::cognomsProperty).makeEditable()
+                    column("Dni", Alumne::dniProperty).makeEditable()
+                    column("Data naixement", Alumne::datanaixementProperty).makeEditable()
+                    column("sexe", Alumne::sexeProperty).makeEditable()
+                    column("Telefon", Alumne::telefonProperty).makeEditable()
+                    column("Email", Alumne::idProperty).makeEditable()
+                    column("Descripció", Alumne::descripcioProperty).makeEditable()
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+                    prefHeight = 311.0
+                    prefWidth = 246.0
+                    layoutX = 530.0
+                    layoutY = 100.0
+                    modelAlumnes1 = editModel
+                }
 
 
 
-            with(Tv_alumne2){
-                //Tv_alumne2.items = aS
-                column("ID", Alumne::idProperty)
-                column("Nom", Alumne::nomProperty).makeEditable()
-                column("Cognoms", Alumne::cognomsProperty).makeEditable()
-                column("Dni", Alumne::dniProperty).makeEditable()
-                column("Data naixement", Alumne::datanaixementProperty).makeEditable()
-                column("sexe", Alumne::sexeProperty).makeEditable()
-                column("Telefon", Alumne::telefonProperty).makeEditable()
-                column("Email", Alumne::idProperty).makeEditable()
-                column("Descripció", Alumne::descripcioProperty).makeEditable()
+                with(Tv_alumne2) {
+                    //Tv_alumne2.items = aS
+                    column("ID", Alumne::idProperty)
+                    column("Nom", Alumne::nomProperty).makeEditable()
+                    column("Cognoms", Alumne::cognomsProperty).makeEditable()
+                    column("Dni", Alumne::dniProperty).makeEditable()
+                    column("Data naixement", Alumne::datanaixementProperty).makeEditable()
+                    column("sexe", Alumne::sexeProperty).makeEditable()
+                    column("Telefon", Alumne::telefonProperty).makeEditable()
+                    column("Email", Alumne::idProperty).makeEditable()
+                    column("Descripció", Alumne::descripcioProperty).makeEditable()
 
-                enableCellEditing()
-                enableDirtyTracking()
-                isEditable = true
-                prefHeight = 311.0
-                prefWidth = 198.0
-                layoutX = 530.0
-                layoutY = 100.0
-                modelAlumnes2 = editModel
-            }
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+                    prefHeight = 311.0
+                    prefWidth = 198.0
+                    layoutX = 530.0
+                    layoutY = 100.0
+                    modelAlumnes2 = editModel
+                }
 
-            /*with(Tv_families) {
+                /*with(Tv_families) {
                 Tv_families.items = eFamilies
                 column("ID", com.example.demo.app.Familia::idProperty).isEditable
                 column("Nom", com.example.demo.app.Familia::nomProperty).isEditable
@@ -325,49 +365,156 @@ class Main: View() {
                 println("Alumne escollit: " + alumneVistaEscollit)
             }*/
 
-            Tv_grups.onUserSelect {
-                grupEscollit = Tv_grups.selectedItem
-                println("El grup seleccionat es: " + grupEscollit)
-                mostraAlumnesGrup()
-                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
-                Tv_alumne2.items = aS
-            }
+                Tv_grups.onUserSelect {
+                    grupEscollit = Tv_grups.selectedItem
+                    println("El grup seleccionat es: " + grupEscollit)
+                    if (item!!.equals(grupEscollit)) {
+                        mostraAlumnesGrup()
+                        var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                        Tv_alumne2.items = aS
+                    } else {
+                        llistatAlumnesId!!.clear()
+                        var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                        Tv_alumne2.items = aS
+                    }
+                }
 
-            Tv_alumne.onUserSelect {
-                alumneEscollit=Tv_alumne.selectedItem
-                println("Alumne escollit: " + alumneEscollit)
-            }
+                Tv_alumne.onUserSelect {
+                    alumneEscollit = Tv_alumne.selectedItem
+                    println("Alumne escollit: " + alumneEscollit)
+                }
 
-            Bt_afegir.setOnMouseClicked {
-                println("Alumne a afegir: " + alumneEscollit)
-                grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id,alumneEscollit!!.id)
-                llistatAlumnesId.add(alumneEscollit!!)
-                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
-                Tv_alumne2.items = aS
-                alumneEscollit=null
-            }
+                Bt_afegir.setOnMouseClicked {
+                    println("Alumne a afegir: " + alumneEscollit)
+                    grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
+                    llistatAlumnesId!!.add(alumneEscollit!!)
+                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                    Tv_alumne2.items = aS
+                    alumneEscollit = null
+                }
 
-            Bt_eliminar.setOnMouseClicked {
-                println("Alumne a esborrar: " + alumneEscollit)
-                grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id,alumneEscollit!!.id)
-                llistatAlumnesId.remove(alumneEscollit!!)
-                //alumnesSeleccionats.remove(alumneEscollit!!)
-                var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
-                Tv_alumne2.items=aS
-                alumneEscollit=null
-                //Tv_alumne2.items.removeAll(aS)
-            }
+                Bt_eliminar.setOnMouseClicked {
+                    println("Alumne a esborrar: " + alumneEscollit)
+                    grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
+                    llistatAlumnesId!!.remove(alumneEscollit!!)
+                    //alumnesSeleccionats.remove(alumneEscollit!!)
+                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                    Tv_alumne2.items = aS
+                    alumneEscollit = null
+                    //Tv_alumne2.items.removeAll(aS)
                 }
             }
 
-    fun mostraAlumnesGrup():Unit{
-        for(i in grupsAlumnes.indices){
-            if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
+            with(Tb_ufs) {
+                with(Tv_ufs) {
+                    Tv_ufs.items = u
+
+                    comboBoxModuls.items = m
+
+                    column("ID", Ufs::idProperty)
+                    column("ID Modul", Ufs::idmodulProperty).makeEditable()
+                    column("Nom", Ufs::nomProperty).makeEditable()
+                    column("Descripció", Ufs::descripcioProperty).makeEditable()
+
+                    contextmenu { //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
+                        item("Esborrar").action {
+                            println("Has esborrat el grup seleccionat.")
+                            var novauf: Ufs = Tv_ufs.selectedItem!!
+                            u.remove(novauf)
+                        }
+                        item("Afegir nova uf").action {
+                            println("Has afegit una nova uf.")
+                            induf = ufscontroler.obteIdUfMesGran()
+                            Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
+
+                        }
+                        item("Guardar Uf").action {
+                            println("S'ha guardat a la bbdd.")
+                            induf = ufscontroler.obteIdUfMesGran()
+                            ufEscollida = Tv_ufs.selectedItem
+                            ufscontroler.afegeixUfs(ufEscollida!!)
+                            //Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
+
+                        }
+
+
+
+                    }
+
+                    modelUfs=editModel
+
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+
+                    modelUfs.selectedItemDirtyState.onChange {
+                        var uF: Ufs? = null
+                        uF = Tv_ufs.selectedItem
+
+                        ufs = uF!!.copy(
+                            id = uF.id,
+                            id_modul = uF.id_modul,
+                            nom = uF.nom,
+                            descripcio = uF.descripcio
+                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+
+                        induf =Tv_ufs?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                        println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
+                        itemDirty = modelUfs.isDirty(uF!!)
+                        println("L'objecte amb l'index " + induf + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+
+                        uF!!.id = Tv_ufs!!.selectedItem!!.idProperty.get()
+                        uF!!.id_modul = Tv_ufs!!.selectedItem!!.idmodulProperty.get()
+                        uF!!.nom = Tv_ufs!!.selectedItem!!.nomProperty.get()
+                        uF!!.descripcio = Tv_ufs!!.selectedItem!!.descripcioProperty.get()
+
+                        println("Alumne modificat: " + uF) //Ens mostra l'objecte modificat.
+
+                        uf = uF!!.copy(id = uF!!.id, id_modul = uF!!.id_modul, nom = uF!!.nom, descripcio = uF!!.descripcio)
+
+                        modelUfs.commit(uf!!)
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        Tv_ufs.items = null
+                        llistatUfs = ufscontroler.obteUfs()
+                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
+                        Tv_ufs.items = u
+                    }
+
+                    comboBoxModuls.setOnMouseClicked {
+                        var modul: String? = null
+                        nomModulSeleccionat = comboBoxModuls.selectionModel.selectedItem
+                        println(nomModulSeleccionat)
+
+                        if (nomModulSeleccionat != null) {
+                            Tv_ufs.items = null
+                            println("Modul seleccionat: " + modul)
+                            llistatUfs = ufscontroler.obteUfsPerModul(nomModulSeleccionat!!)
+                            var aS = FXCollections.observableArrayList(llistatUfs!!.observable())
+                            Tv_ufs.items = aS
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+    fun mostraAlumnesGrup():Unit {
+        for (i in grupsAlumnes.indices) {
+            if (grupEscollit!!.id == grupsAlumnes[i].id_grup) {
                 llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
             }
+            println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
         }
-        println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
     }
+
+
+
+
 
     /*fun mostraAlumnesGrupchBox():Unit{
         for(i in grupsAlumnes.indices){

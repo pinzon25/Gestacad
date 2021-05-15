@@ -13,7 +13,7 @@
         <TabPane prefHeight="400.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
             <tabs>
                 <!--Grups-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_grups" closable="false">
                     <content>
                         <BorderPane>
                             <center>
@@ -21,16 +21,16 @@
                                     <children>
                                         <TableView fx:id="grupsTableGrups" prefHeight="311.0" prefWidth="266.0">
                                             <columns>
-                                                <TableColumn prefWidth="37.0" text="ID" />
-                                                <TableColumn prefWidth="76.0" text="Nom" />
-                                                <TableColumn prefWidth="147.0" text="Descripció" />
+                                                <TableColumn prefWidth="37.0" text="ID" visible="false" />
+                                                <TableColumn prefWidth="76.0" text="Nom" visible="false" />
+                                                <TableColumn prefWidth="147.0" text="Descripció" visible="false" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="44.0" />
                                         <TableView fx:id="grupsTableAlumnes" prefHeight="311.0" prefWidth="190.0">
                                             <columns>
-                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" />
-                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" />
+                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" visible="false" />
+                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" visible="false" />
                                             </columns>
                                         </TableView>
                                         <VBox alignment="BOTTOM_CENTER" prefHeight="311.0" prefWidth="97.0">
@@ -45,8 +45,8 @@
                                         </VBox>
                                         <TableView fx:id="grupsTableAlumnes2" prefHeight="311.0" prefWidth="198.0">
                                             <columns>
-                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" />
-                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" />
+                                                <TableColumn editable="false" prefWidth="81.0" text="Nom" visible="false" />
+                                                <TableColumn editable="false" prefWidth="115.0" text="Cognom" visible="false" />
                                             </columns>
                                         </TableView>
                                     </children>
@@ -590,7 +590,7 @@
                     </graphic>
                 </Tab>
                 <!--UFS-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_ufs" closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" /> -->
                         <BorderPane>
@@ -599,9 +599,9 @@
                                     <children>
                                         <TableView fx:id="ufstableUFS" prefHeight="311.0" prefWidth="505.0">
                                             <columns>
-                                                <TableColumn fx:id="table_ufs" prefWidth="114.0" text="Nom" />
-                                                <TableColumn prefWidth="303.0" text="Descripcio" />
-                                                <TableColumn prefWidth="87.0" text="Modul" />
+                                                <TableColumn fx:id="table_ufs" prefWidth="114.0" text="Nom" visible="false" />
+                                                <TableColumn prefWidth="303.0" text="Descripcio" visible="false" />
+                                                <TableColumn prefWidth="87.0" text="Modul" visible="false" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="192.0">

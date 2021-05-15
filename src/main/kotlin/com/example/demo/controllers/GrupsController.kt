@@ -3,10 +3,13 @@ package com.example.demo.controllers
 import com.example.demo.app.Alumne
 import com.example.demo.app.Connexio
 import com.example.demo.app.Grups
+import com.example.demo.app.Main
 import com.example.demo.app.Tables.Alumne_grup
 import com.example.demo.app.model.Alumnes_grups
+import javafx.scene.control.Alert
 import org.ktorm.dsl.*
 import tornadofx.Controller
+import tornadofx.alert
 
 class GrupsController : Controller(){
 
@@ -89,6 +92,7 @@ class GrupsController : Controller(){
             set(it.id_grup, idgrup)
             set(it.id_alumne, alumneId)
             println("Has afegit correctament l'alumne.")
+            alert(Alert.AlertType.INFORMATION, "Alumne inscrit al grup.", "L'alumne s'ha inscrit al grup correctament.")
         }
     }
 
@@ -98,10 +102,8 @@ class GrupsController : Controller(){
             it.id_grup eq idgrup
             it.id_alumne eq alumneId
         }
+        alert(Alert.AlertType.INFORMATION, "Alumne esborrat del grup.", "L'alumne s'ha esborrat del grup correctament.")
     }
-
-    //UPDATE DE LA TAULA ALUMNE_GRUP
-
 
     //OBTE TOTS ELS ALUMNES QUE PERTANYEN A UN ID DE GRUP CONCRET.
     fun obteAlumnesIdGrup(idGrup:Int):MutableList<Alumne>{
@@ -124,12 +126,16 @@ class GrupsController : Controller(){
             var idAlumne:Int?=null
             idgrup = alumnesGrups.get(i).id_grup
 
-            if(idGrup == idgrup){
+            /*if(idGrup != idgrup){
+            alumnes.clear()
+            }
+            else */if(idGrup == idgrup){
                 alumnes.add(alumneControler.obteAlumnePerId(alumnesGrups.get(i).id_alumne))
             }
         }
         //println("Alumnes obtinguts mitjancant els id_alumne del array alumnesGrups: "+alumnes)
         return alumnes
     }
+
 
 }
