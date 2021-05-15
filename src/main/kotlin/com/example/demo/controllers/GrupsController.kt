@@ -13,12 +13,11 @@ class GrupsController : Controller(){
     var dd = Connexio().database
     val alumneControler:AlumnesController by inject()
 
-    //Obtenim tots els grups
+    //READ DE LA TAULA GRUPS
     fun obteGrups():MutableList<com.example.demo.app.Grups>{
         var grups:MutableList<com.example.demo.app.Grups> = ArrayList()
         var gr: com.example.demo.app.Grups?=null
         for(row in dd!!.from(com.example.demo.app.Tables.Grups).select()){
-
             val id:Int? = row[com.example.demo.app.Tables.Grups.id]
             val idcicle:Int? = row[com.example.demo.app.Tables.Grups.id_cicle]
             val nom:String? = row[com.example.demo.app.Tables.Grups.nom]
@@ -31,34 +30,89 @@ class GrupsController : Controller(){
         return grups
     }
 
+    //INSERT DE LA TAULA GRUPS
+    fun afegeixTaulaGrups(grup: Grups):Unit{
+        dd!!.insert(com.example.demo.app.Tables.Grups) {
+            set(it.id, grup.id)
+            set(it.id_cicle, grup.id_cicle)
+            set(it.nom, grup.nom)
+            set(it.descripcio, grup.descripcio)
+            println("Has afegit correctament el grup!!!.")
+        }
+    }
 
-    /*fun obteAlumnesIdGrup(idgrup:Int):MutableList<Alumne>{
-        var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
-        var alumnes:MutableList<Alumne> = ArrayList()
-        var ag: com.example.demo.app.model.Alumnes_grups?=null
-        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
+    //DELETE DE LA TAULA GRUPS.
+    fun esborraTaulaGrups(grup:Grups):Unit{
+        dd!!.delete(com.example.demo.app.Tables.Grups){
+            it.id eq grup.id
+        }
+    }
 
-                val idGrup: Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
-                val idAlumne: Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
+    //UPDATE DE LA TAULA GRUPS
+    fun actualitzarTaulaGrups(grup:Grups):Unit{
+        dd!!.update(com.example.demo.app.Tables.Grups){
+            set(it.id_cicle,grup.id_cicle)
+            set(it.nom,grup.nom)
+            set(it.descripcio,grup.descripcio)
+            where { it.id eq grup.id }
+        }
+    }
 
-            if(idgrup == idGrup) {
-                alumnes = alumneControler.obteAlumnePerId(idAlumne!!)
-            }
+    //OBTENIM EL ID MES GRAN DE LA TAULA GRUPS
+    fun obteIdGrupMesGran():Int{
+        var idMesGran:Int?=null
+        for(row in dd!!.from(com.example.demo.app.Tables.Grups).select()){
+            val idGrup:Int? = row[com.example.demo.app.Tables.Grups.id]
+            idMesGran = idGrup!!
         }
 
-        return alumnes
-    }*/
+        return idMesGran!!
+    }
 
-    fun obteAlumnesGrups(idGrup:Int):MutableList<Alumne>{
+    //READ LA TAULA ALUMNE_GRUP.
+    fun obteGrupAlumnes():MutableList<Alumnes_grups>{
         var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
-        var alumnes:MutableList<Alumne> = ArrayList()
         var ag: com.example.demo.app.model.Alumnes_grups?=null
-
         for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
-
             val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
             val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
 
+            ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
+            alumnesGrups.add(ag)
+        }
+        return alumnesGrups
+    }
+
+    //INSERT DE LA TAULA ALUMNE_GRUP
+    fun afegeixAlumneTaulaAlumneGrup(idgrup:Int,alumneId:Int):Unit{
+        dd!!.insert(Alumne_grup) {
+            set(it.id_grup, idgrup)
+            set(it.id_alumne, alumneId)
+            println("Has afegit correctament l'alumne.")
+        }
+    }
+
+    //DELETE DE LA TAULA ALUMNE_GRUP
+    fun esborraAlumneTaulaAlumneGrup(idgrup:Int,alumneId:Int):Unit{
+        dd!!.delete(Alumne_grup){
+            it.id_grup eq idgrup
+            it.id_alumne eq alumneId
+        }
+    }
+
+    //UPDATE DE LA TAULA ALUMNE_GRUP
+
+
+    //OBTE TOTS ELS ALUMNES QUE PERTANYEN A UN ID DE GRUP CONCRET.
+    fun obteAlumnesIdGrup(idGrup:Int):MutableList<Alumne>{
+        var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
+        var alumnes:MutableList<Alumne> = ArrayList()
+        var ag: com.example.demo.app.model.Alumnes_grups?=null
+
+        //Llegim tots els registres de la taula alumne_grup.
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
+            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
+            val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
             ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
             alumnesGrups.add(ag) //Obtenim totes les dades de la taula grups_alumnes.
         }
@@ -69,81 +123,13 @@ class GrupsController : Controller(){
             var idgrup:Int?=null
             var idAlumne:Int?=null
             idgrup = alumnesGrups.get(i).id_grup
-            //idAlumne = alumnesGrups.get(i).id_alumne
-            /*println("id del idgrup: " + idgrup) //Aqui ja obtenim el id del grup.
-            println("id del idalumne: " + idAlumne) //Aqui ja obtenim els id dels alumnes guardats al array.*/
+
             if(idGrup == idgrup){
                 alumnes.add(alumneControler.obteAlumnePerId(alumnesGrups.get(i).id_alumne))
             }
-
-
         }
-
         //println("Alumnes obtinguts mitjancant els id_alumne del array alumnesGrups: "+alumnes)
         return alumnes
     }
-
-    fun obteGrupsAlumne():MutableList<Alumnes_grups>{
-        var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
-        var ag: com.example.demo.app.model.Alumnes_grups?=null
-        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
-
-            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
-            val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
-
-            ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
-            alumnesGrups.add(ag)
-        }
-
-        return alumnesGrups
-    }
-
-    fun obteIdGrupMesGran():Int{
-        var idMesGran:Int?=null
-
-        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
-            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
-             idMesGran = idGrup!!
-        }
-        return idMesGran!!+2
-    }
-
-    /*
-    CREATE TABLE grups (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    id_cicle INTEGER NOT NULL,
-    nom VARCHAR(64) NOT NULL,
-    descripcio VARCHAR(128),
-    FOREIGN KEY (id_cicle)
-    REFERENCES cicles (id)
-);*/
-
-    fun afegeixGrupTaula(grup: Grups):Unit{
-        dd!!.insert(com.example.demo.app.Tables.Grups) {
-            set(it.id, grup.id)
-            set(it.id_cicle, grup.id_cicle)
-            set(it.nom, grup.nom)
-            set(it.descripcio, grup.descripcio)
-            println("Has afegit correctament el grup!!!.")
-        }
-    }
-
-
-    fun afegeixAlumneTaula(idgrup:Int,alumneId:Int):Unit{
-        dd!!.insert(Alumne_grup) {
-            set(it.id_grup, idgrup)
-            set(it.id_alumne, alumneId)
-            println("Has afegit correctament l'alumne.")
-        }
-    }
-    
-    fun esborraAlumneTaula(idgrup:Int,alumneId:Int):Unit{
-        dd!!.delete(Alumne_grup){
-            it.id_grup eq idgrup
-            it.id_alumne eq alumneId
-        }
-    }
-
-
 
 }

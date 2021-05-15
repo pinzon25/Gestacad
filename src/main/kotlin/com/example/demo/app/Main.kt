@@ -11,6 +11,8 @@ import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import java.awt.image.ImageObserver.ERROR
+import java.sql.SQLIntegrityConstraintViolationException
 
 class Main: View() {
 
@@ -58,6 +60,7 @@ class Main: View() {
     var item:Grups?=null
     var Gru:Grups?=null
     var ind:Int?=null
+    var TaulaSeleccionada:Boolean?=false
     var itemDirty:Boolean? = null
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
@@ -88,7 +91,7 @@ class Main: View() {
         llistatGrups = grupcontroler.obteGrups()
         println("llistat grups: "+llistatGrups)
         llistatAlumnes = alumnecontroler.obteAlumnes()
-        grupsAlumnes = grupcontroler.obteGrupsAlumne()
+        grupsAlumnes = grupcontroler.obteGrupAlumnes()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
 /*
@@ -114,29 +117,20 @@ class Main: View() {
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
 
-            /*with(Tb_grups){
-                var g:Grups?=null
-                if(Tb_grups.isSelected){
-                    workspace.saveButton.setOnMouseClicked {
-                        g = Tv_grups.selectedItem
-                        grupcontroler.afegeixGrupTaula(g!!)
-                    }
-                }
-            }*/
-
             with(Tv_grups) {
+                TaulaSeleccionada=false
+
                 Tv_grups.items=g
                 //t = tableview(g) {
                 column("ID", Grups::idProperty)
+                column("ID Cicle", Grups::idCicleProperty).makeEditable()
                 column("Nom", Grups::nomProperty).makeEditable()
                 column("Descripció", Grups::descripcioProperty).makeEditable()
 
                 contextmenu{ //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
-                    item("Afegir grup").action { println("Has afegit un grup nou.")
-                    var nouGrup:Grups = Grups(grupcontroler.obteIdGrupMesGran(),0,"","")
-                        g.add(nouGrup)
-                        /*llistatGrups.add(nouGrup)
-                        var g = FXCollections.observableArrayList(llistatGrups.observable())*/
+                    item("Esborrar").action { println("Has esborrat el grup seleccionat.")
+                    var nouGrup:Grups = Tv_grups.selectedItem!!
+                        g.remove(nouGrup)
                     }
                 }
                 enableCellEditing()
@@ -148,6 +142,7 @@ class Main: View() {
                 layoutY = 100.0
                 modelGrup = editModel
 
+                //Detectem si els items han patit canvis.
                 modelGrup.selectedItemDirtyState.onChange {
 
                     var Gr:Grups? = null
@@ -171,14 +166,63 @@ class Main: View() {
                     modelGrup.commit(Gru!!)
                 }
 
+
                 workspace.saveButton.setOnMouseClicked {
                     var Gs:Grups? = null
                     Gs = Tv_grups.selectedItem
-                    grupcontroler.afegeixGrupTaula(Gs!!)
-                    println("S'ha guardat el grup.")
-                }
+
+                    if(itemDirty==false) {
+                        try {
+                            grupcontroler.afegeixTaulaGrups(Gs!!)
+                            alert(
+                                Alert.AlertType.INFORMATION,
+                                "Grup emmagatzemat.",
+                                "El grup s'ha emmagatzemat a la base de dades correctament."
+                            )
+                        } catch (ex: SQLIntegrityConstraintViolationException) {
+                            alert(
+                                Alert.AlertType.ERROR,
+                                "No es possible guardar el grup.",
+                                "El grup escollit no es pot afegir, ja es troba a la base de dades."
+                            )
+                        }
+                    }
+
+                    if(itemDirty==true){
+                        grupcontroler.actualitzarTaulaGrups(Gs!!)
+                        alert(Alert.AlertType.INFORMATION, "Grup actualitzat.", "El grup s'ha actualitzat a la base de dades correctament.")
+                    }
+                } //Final Workspace.SaveButton
+
+                workspace.deleteButton.setOnMouseClicked {
+                    var Gs:Grups? = null
+                    try {
+                        Gs = Tv_grups.selectedItem
+                        grupcontroler.esborraTaulaGrups(Gs!!)
+                        alert(Alert.AlertType.INFORMATION, "Grup esborrat.", "El grup s'ha esborrat de la base de dades.")
+                        g.remove(Gs)
+                        modelGrup.commit()
+                    }catch(ex:SQLIntegrityConstraintViolationException){
+                        alert(Alert.AlertType.ERROR, "No es possible esborrar el grup.", "El grup escollit no es pot esborrar, no es troba a la base de dades.")
+                    }
+                }//Final Workspace.DeleteButton
+
+                //Fer que es detecti una taula, i que si es detecta, es permeti realitzar les accions amb els botons del workspace.
+                workspace.createButton.setOnMouseClicked {
+
+                    if (TaulaSeleccionada==false) {
+                        alert(Alert.AlertType.ERROR, "No es possible realitzar l'accio.", "No has escollit cap taula.")
+                    } else {
+                        var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran()+1, 0, "", "")
+                        g.add(nouGrup)
+                    }
+                }//Final Workspace.CreateButton
 
             }
+
+            workspace.refreshButton.setOnMouseClicked {
+                onRefresh()
+            }//Final Workspace.RefreshButton
             /*with(Tv_moduls) {
                 Tv_moduls.items=m
                 //t = tableview(g) {
@@ -296,7 +340,7 @@ class Main: View() {
 
             Bt_afegir.setOnMouseClicked {
                 println("Alumne a afegir: " + alumneEscollit)
-                grupcontroler.afegeixAlumneTaula(grupEscollit!!.id,alumneEscollit!!.id)
+                grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id,alumneEscollit!!.id)
                 llistatAlumnesId.add(alumneEscollit!!)
                 var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
                 Tv_alumne2.items = aS
@@ -305,7 +349,7 @@ class Main: View() {
 
             Bt_eliminar.setOnMouseClicked {
                 println("Alumne a esborrar: " + alumneEscollit)
-                grupcontroler.esborraAlumneTaula(grupEscollit!!.id,alumneEscollit!!.id)
+                grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id,alumneEscollit!!.id)
                 llistatAlumnesId.remove(alumneEscollit!!)
                 //alumnesSeleccionats.remove(alumneEscollit!!)
                 var aS = FXCollections.observableArrayList(llistatAlumnesId.observable())
@@ -319,7 +363,7 @@ class Main: View() {
     fun mostraAlumnesGrup():Unit{
         for(i in grupsAlumnes.indices){
             if(grupEscollit!!.id==grupsAlumnes[i].id_grup){
-                llistatAlumnesId = grupcontroler.obteAlumnesGrups(grupEscollit!!.id)
+                llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
             }
         }
         println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
