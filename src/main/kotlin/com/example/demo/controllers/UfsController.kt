@@ -45,7 +45,7 @@ fun obteUfs():MutableList<Ufs>{
             set(it.nom, uf.nom)
             set(it.descripcio, uf.descripcio)
             println("Has afegit correctament la uf.")
-            alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
+            //alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
         }
     }
 
@@ -66,6 +66,7 @@ fun obteUfs():MutableList<Ufs>{
             set(it.descripcio, uf.descripcio)
             where { it.id eq uf.id }
         }
+        alert(Alert.AlertType.INFORMATION, "UF actualitzada.", "La UF s'ha actualitzat correctament.")
     }
 
     /*Obtenir el id del modul segons el nom de modul passat per parametre,
@@ -73,7 +74,38 @@ fun obteUfs():MutableList<Ufs>{
     les dades de la uf, agafem la uf i la afegim al arraylist de ufs.
     * */
 
-    fun obteUfsPerModul(nomModul:String):MutableList<Ufs>{
+    fun obteUfsPerModul(modul:com.example.demo.app.model.Moduls):MutableList<Ufs>{
+        //var modul:com.example.demo.app.model.Moduls?=null
+        var uf:Ufs?=null
+        var moduls:MutableList<com.example.demo.app.model.Moduls> = ArrayList()
+        var ufs:MutableList<com.example.demo.app.model.Ufs> = ArrayList()
+
+        /*for(row in dd!!.from(com.example.demo.app.Tables.Moduls).select().where(Moduls.nom eq nomModul)){
+
+            val id:Int? = row[com.example.demo.app.Tables.Moduls.id]
+            val idcicle:Int? = row[com.example.demo.app.Tables.Moduls.id_cicle]
+            val nom:String? = row[com.example.demo.app.Tables.Moduls.nom]
+            val descripcio:String? = row[com.example.demo.app.Tables.Moduls.descripcio]
+
+            modul = com.example.demo.app.model.Moduls(id!!, idcicle!!, nom.toString(), descripcio.toString())
+            moduls.add(modul)
+        }*/
+
+        for(row in dd!!.from(com.example.demo.app.Tables.UFS).select().where(UFS.id_modul eq modul!!.id/*moduls.get(0).id*/)){
+
+            val id:Int? = row[com.example.demo.app.Tables.UFS.id]
+            val idmodul:Int? = row[com.example.demo.app.Tables.UFS.id_modul]
+            val nom:String? = row[com.example.demo.app.Tables.UFS.nom]
+            val descripcio:String? = row[com.example.demo.app.Tables.UFS.descripcio]
+
+            uf = com.example.demo.app.model.Ufs(id!!, idmodul!!, nom.toString(), descripcio.toString())
+            ufs.add(uf)
+        }
+
+        return ufs
+    }
+
+    fun obteModulPerNom(nomModul:String):com.example.demo.app.model.Moduls{
         var modul:com.example.demo.app.model.Moduls?=null
         var uf:Ufs?=null
         var moduls:MutableList<com.example.demo.app.model.Moduls> = ArrayList()
@@ -90,18 +122,8 @@ fun obteUfs():MutableList<Ufs>{
             moduls.add(modul)
         }
 
-        for(row in dd!!.from(com.example.demo.app.Tables.UFS).select().where(UFS.id_modul eq moduls.get(0).id)){
 
-            val id:Int? = row[com.example.demo.app.Tables.UFS.id]
-            val idmodul:Int? = row[com.example.demo.app.Tables.UFS.id_modul]
-            val nom:String? = row[com.example.demo.app.Tables.UFS.nom]
-            val descripcio:String? = row[com.example.demo.app.Tables.UFS.descripcio]
-
-            uf = com.example.demo.app.model.Ufs(id!!, idmodul!!, nom.toString(), descripcio.toString())
-            ufs.add(uf)
-        }
-
-        return ufs
+        return moduls.get(0)
     }
 
     fun obteIdUfMesGran():Int{
