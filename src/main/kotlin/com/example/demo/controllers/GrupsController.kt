@@ -106,36 +106,22 @@ class GrupsController : Controller(){
     }
 
     //OBTE TOTS ELS ALUMNES QUE PERTANYEN A UN ID DE GRUP CONCRET.
-    fun obteAlumnesIdGrup(idGrup:Int):MutableList<Alumne>{
-        var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
+    fun obteAlumnesIdGrup(idgrup:Int):MutableList<Alumne>{
+        //var alumnesGrups:MutableList<Alumnes_grups> = ArrayList()
         var alumnes:MutableList<Alumne> = ArrayList()
-        var ag: com.example.demo.app.model.Alumnes_grups?=null
+        //var ag: com.example.demo.app.model.Alumnes_grups?=null
 
         //Llegim tots els registres de la taula alumne_grup.
-        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select()){
-            val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne_grup).select().where(Alumne_grup.id_grup eq idgrup)){
+            //val idGrup:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_grup]
             val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne_grup.id_alumne]
-            ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
-            alumnesGrups.add(ag) //Obtenim totes les dades de la taula grups_alumnes.
+            /*ag = com.example.demo.app.model.Alumnes_grups(idGrup!!,idAlumne!!)
+            alumnesGrups.add(ag) //Obtenim totes les dades de la taula grups_alumnes.*/
+            alumnes.add(alumneControler.obteAlumnePerId(idAlumne!!))
         }
 
-
-        for(i in alumnesGrups.indices){
-            var alum:Alumne?=null
-            var idgrup:Int?=null
-            var idAlumne:Int?=null
-            idgrup = alumnesGrups.get(i).id_grup
-
-            /*if(idGrup != idgrup){
-            alumnes.clear()
-            }
-            else */if(idGrup == idgrup){
-                alumnes.add(alumneControler.obteAlumnePerId(alumnesGrups.get(i).id_alumne))
-            }
-        }
         //println("Alumnes obtinguts mitjancant els id_alumne del array alumnesGrups: "+alumnes)
         return alumnes
     }
-
 
 }

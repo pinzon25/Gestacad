@@ -43,21 +43,14 @@ class Main: View() {
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
 
-    //TABLECOLUMNS
-    /*val Tc_id:TableColumn<TableView<Grups>,Int> by fxid("Cl_id")
-    val Tc_nom:TableColumn<TableView<Grups>,String> by fxid("Cl_nom")
-    val Tc_descripcio:TableColumn<TableView<Grups>,String> by fxid("Cl_descripcio")*/
-
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatAlumnesId: MutableList<Alumne>? = ArrayList()
-    var llistatAlumnesNom: MutableList<Alumne> = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
     var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
     var llistatUfs:MutableList<Ufs> = ArrayList()
     var llistatModuls:MutableList<Moduls> = ArrayList()
     var nomsModuls:MutableList<String> = ArrayList()
-    var alumnesSeleccionats: MutableList<Alumne> = ArrayList()
 
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
@@ -75,8 +68,6 @@ class Main: View() {
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
     var modelUfs: TableViewEditModel<Ufs> by singleAssign()
-    var modelAlumnes1: TableViewEditModel<Alumne> by singleAssign()
-    var modelAlumnes2: TableViewEditModel<Alumne> by singleAssign()
 
     // Profesor
     /*val profesorscontroler: ProfesorsController by inject()
@@ -196,7 +187,6 @@ class Main: View() {
                         modelGrup.commit(Gru!!)
                     }
 
-
                     workspace.saveButton.setOnMouseClicked {
                         var Gs: Grups? = null
                         Gs = Tv_grups.selectedItem
@@ -228,7 +218,7 @@ class Main: View() {
                                 "El grup s'ha actualitzat a la base de dades correctament."
                             )
                         }
-                    } //Final Workspace.SaveButton
+                    }
 
                     workspace.deleteButton.setOnMouseClicked {
                         var Gs: Grups? = null
@@ -249,20 +239,224 @@ class Main: View() {
                                 "El grup escollit no es pot esborrar, no es troba a la base de dades."
                             )
                         }
-                    }//Final Workspace.DeleteButton
+                    }
 
-                    //Fer que es detecti una taula, i que si es detecta, es permeti realitzar les accions amb els botons del workspace.
 
-                    if(Tb_grups.isSelected) {
                     workspace.createButton.setOnMouseClicked {
                             var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran() + 1, 0, "", "")
                             Tv_grups.items.add(nouGrup)
                         }
-                    }//Final Workspace.CreateButton
+
+
+                    Tv_grups.onUserSelect {
+                        grupEscollit = Tv_grups.selectedItem
+                        println("El grup seleccionat es: " + grupEscollit)
+                        llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
+                        println("Contingut del array d'alumnes obtinguts per grup: " + llistatAlumnesId)
+                        if(llistatAlumnesId.isNullOrEmpty()) {
+                            netejaTableview()
+                        }else{
+                            Tv_alumne2.items.addAll(llistatAlumnesId!!)
+                        }
+                    }
+                }
+
+                with(Tv_alumne) {
+                    Tv_alumne.items = a
+                    column("ID", Alumne::idProperty)
+                    column("Nom", Alumne::nomProperty)
+                    column("Cognoms", Alumne::cognomsProperty)
+                    column("Dni", Alumne::dniProperty)
+                    column("Data naixement", Alumne::datanaixementProperty)
+                    column("sexe", Alumne::sexeProperty)
+                    column("Telefon", Alumne::telefonProperty)
+                    column("Email", Alumne::idProperty)
+                    column("Descripció", Alumne::descripcioProperty)
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+                    prefHeight = 311.0
+                    prefWidth = 246.0
+                    layoutX = 530.0
+                    layoutY = 100.0
+                    //modelAlumnes1 = editModel
                 }
 
 
-                //Final Workspace.RefreshButton
+
+                with(Tv_alumne2) {
+                    //Tv_alumne2.items = aS
+                    column("ID", Alumne::idProperty)
+                    column("Nom", Alumne::nomProperty)
+                    column("Cognoms", Alumne::cognomsProperty)
+                    column("Dni", Alumne::dniProperty)
+                    column("Data naixement", Alumne::datanaixementProperty)
+                    column("sexe", Alumne::sexeProperty)
+                    column("Telefon", Alumne::telefonProperty)
+                    column("Email", Alumne::idProperty)
+                    column("Descripció", Alumne::descripcioProperty)
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+                    prefHeight = 311.0
+                    prefWidth = 198.0
+                    layoutX = 530.0
+                    layoutY = 100.0
+                    //modelAlumnes2 = editModel
+                }
+
+                Tv_alumne.onUserSelect {
+                    alumneEscollit = Tv_alumne.selectedItem
+                    println("Alumne escollit: " + alumneEscollit)
+                }
+
+                Bt_afegir.setOnMouseClicked {
+                    println("Alumne a afegir: " + alumneEscollit)
+                    grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
+                    llistatAlumnesId!!.add(alumneEscollit!!)
+                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                    Tv_alumne2.items = aS
+                    alumneEscollit = null
+                }
+
+                Bt_eliminar.setOnMouseClicked {
+                    println("Alumne a esborrar: " + alumneEscollit)
+                    grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
+                    llistatAlumnesId!!.remove(alumneEscollit!!)
+                    //alumnesSeleccionats.remove(alumneEscollit!!)
+                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
+                    Tv_alumne2.items = aS
+                    alumneEscollit = null
+                    //Tv_alumne2.items.removeAll(aS)
+                }
+
+            }
+
+
+            with(Tb_ufs) {
+                with(Tv_ufs) {
+                    Tv_ufs.items = u
+
+                    comboBoxModuls.items = m
+
+                    column("ID", Ufs::idProperty)
+                    column("ID Modul", Ufs::idmodulProperty).makeEditable()
+                    column("Nom", Ufs::nomProperty).makeEditable()
+                    column("Descripció", Ufs::descripcioProperty).makeEditable()
+
+                    contextmenu {
+                        item("Esborrar").action {
+                            u.remove(ufEscollida)
+                            ufscontroler.esborraUfs(ufEscollida!!.id)
+                            Tv_ufs.items.remove(ufEscollida)
+                            modelUfs.commit()
+                        }
+
+                        item("Afegir nova uf").action {
+                            println("Has afegit una nova uf.")
+                            induf = ufscontroler.obteIdUfMesGran()
+                            if(modulEscollit != null) { //Si hem filtrat per moduls el id_modul de la nova uf sera el del modul seleccionat.
+                                Tv_ufs.items.add(Ufs(induf!! + 1, modulEscollit!!.id, "", ""))
+                            }else{//Si no hem filtrat per moduls el id_modul de la nova uf sera zero.
+                                Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
+                            }
+                        }
+
+                        item("Guardar Uf").action {
+                            induf = ufscontroler.obteIdUfMesGran()
+                            try {
+                                ufscontroler.afegeixUfs(ufEscollida!!)
+                                alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
+                            }catch(ex:SQLIntegrityConstraintViolationException){
+                                alert(Alert.AlertType.ERROR, "No es pot afegir la Uf.", "")
+                            }catch(e:NullPointerException){
+                                alert(Alert.AlertType.ERROR, "No has seleccionat cap Uf.", "")
+                            }
+                            modelUfs.commit()
+                        }
+
+                        item("Actualitzar").action {
+                            //guardaCanvis(Tv_ufs.selectedItem!!)
+                            modelUfs.commit()
+                            ufscontroler.actualitzarUfs(ufEscollida!!)
+                        }
+                    }
+
+                    modelUfs=editModel
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+
+                    onUserSelect {
+                        ufEscollida=Tv_ufs.selectedItem
+                        println("Uf seleccionada: " + ufEscollida)
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        Tv_ufs.items.clear()
+                        llistatUfs = ufscontroler.obteUfs()
+                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
+                        Tv_ufs.items = u
+                    }
+
+                    comboBoxModuls.setOnMouseClicked {
+                        var modul: String? = null
+                        nomModulSeleccionat = comboBoxModuls.selectionModel.selectedItem
+                        modul = nomModulSeleccionat
+                        println("Item modul seleccionat: " +nomModulSeleccionat)
+
+                        if (nomModulSeleccionat != null) {
+                            Tv_ufs.items = null
+                            println("Modul seleccionat: " + modul)
+                            modulEscollit = ufscontroler.obteModulPerNom(modul!!)
+                            println("Modul obtingut: " + modulEscollit)
+                            llistatUfs = ufscontroler.obteUfsPerModul(modulEscollit!!)
+                            var aS = FXCollections.observableArrayList(llistatUfs!!.observable())
+                            Tv_ufs.items = aS
+                        }
+                    }
+                }
+
+                modelUfs.selectedItemDirtyState.onChange {
+                    var uF: Ufs? = null
+                    uF = Tv_ufs?.selectedItem
+
+                    try {
+                        ufs = uF!!.copy( //ufs es un objecte buit de tipus Ufs.
+                            id = uF.id,
+                            id_modul = uF.id_modul,
+                            nom = uF.nom,
+                            descripcio = uF.descripcio
+                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+
+                        induf = Tv_ufs?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                        println("\n\nIndex Uf actual: " + induf) //Ens mostra l'objecte avans de ser modificat.
+                        itemDirty = modelUfs.isDirty(uF)
+                        println("La UF amb l'index " + induf + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+
+                        uF!!.id = Tv_ufs!!.selectedItem!!.idProperty.get()
+                        uF!!.id_modul = Tv_ufs!!.selectedItem!!.idmodulProperty.get()
+                        uF!!.nom = Tv_ufs!!.selectedItem!!.nomProperty.get()
+                        uF!!.descripcio = Tv_ufs!!.selectedItem!!.descripcioProperty.get()
+
+                        println("Uf modificada: " + uF) //Ens mostra l'objecte modificat.
+
+                        uf = uF!!.copy( id = uF.id,id_modul = uF.id_modul,nom = uF.nom,descripcio = uF.descripcio)
+                    }catch(e:NullPointerException){
+                        println("Ha deixat d'haver una uf seleccionada.")
+                    }
+                    modelUfs.commit(uf!!)
+                }
+            }
+        }
+    }
+
+    fun netejaTableview():Unit{
+        for( i in Tv_alumne2.items.indices){
+            Tv_alumne2.items.remove(0,Tv_alumne2.items.lastIndex+1)
+        }
+    }
 
 
                 /*with(Tv_moduls) {
@@ -287,50 +481,7 @@ class Main: View() {
 
             }*/
 
-                with(Tv_alumne) {
-                    Tv_alumne.items = a
-                    column("ID", Alumne::idProperty)
-                    column("Nom", Alumne::nomProperty).makeEditable()
-                    column("Cognoms", Alumne::cognomsProperty).makeEditable()
-                    column("Dni", Alumne::dniProperty).makeEditable()
-                    column("Data naixement", Alumne::datanaixementProperty).makeEditable()
-                    column("sexe", Alumne::sexeProperty).makeEditable()
-                    column("Telefon", Alumne::telefonProperty).makeEditable()
-                    column("Email", Alumne::idProperty).makeEditable()
-                    column("Descripció", Alumne::descripcioProperty).makeEditable()
-                    enableCellEditing()
-                    enableDirtyTracking()
-                    isEditable = true
-                    prefHeight = 311.0
-                    prefWidth = 246.0
-                    layoutX = 530.0
-                    layoutY = 100.0
-                    modelAlumnes1 = editModel
-                }
 
-
-
-                with(Tv_alumne2) {
-                    //Tv_alumne2.items = aS
-                    column("ID", Alumne::idProperty)
-                    column("Nom", Alumne::nomProperty).makeEditable()
-                    column("Cognoms", Alumne::cognomsProperty).makeEditable()
-                    column("Dni", Alumne::dniProperty).makeEditable()
-                    column("Data naixement", Alumne::datanaixementProperty).makeEditable()
-                    column("sexe", Alumne::sexeProperty).makeEditable()
-                    column("Telefon", Alumne::telefonProperty).makeEditable()
-                    column("Email", Alumne::idProperty).makeEditable()
-                    column("Descripció", Alumne::descripcioProperty).makeEditable()
-
-                    enableCellEditing()
-                    enableDirtyTracking()
-                    isEditable = true
-                    prefHeight = 311.0
-                    prefWidth = 198.0
-                    layoutX = 530.0
-                    layoutY = 100.0
-                    modelAlumnes2 = editModel
-                }
 
                 /*with(Tv_families) {
                 Tv_families.items = eFamilies
@@ -365,200 +516,9 @@ class Main: View() {
                 println("Alumne escollit: " + alumneVistaEscollit)
             }*/
 
-                Tv_grups.onUserSelect {
-                    grupEscollit = Tv_grups.selectedItem
-                    println("El grup seleccionat es: " + grupEscollit)
-                    if (item!!.equals(grupEscollit)) {
-                        mostraAlumnesGrup()
-                        var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
-                        Tv_alumne2.items = aS
-                    } else {
-                        llistatAlumnesId!!.clear()
-                        var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
-                        Tv_alumne2.items = aS
-                    }
-                }
-
-                Tv_alumne.onUserSelect {
-                    alumneEscollit = Tv_alumne.selectedItem
-                    println("Alumne escollit: " + alumneEscollit)
-                }
-
-                Bt_afegir.setOnMouseClicked {
-                    println("Alumne a afegir: " + alumneEscollit)
-                    grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
-                    llistatAlumnesId!!.add(alumneEscollit!!)
-                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
-                    Tv_alumne2.items = aS
-                    alumneEscollit = null
-                }
-
-                Bt_eliminar.setOnMouseClicked {
-                    println("Alumne a esborrar: " + alumneEscollit)
-                    grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
-                    llistatAlumnesId!!.remove(alumneEscollit!!)
-                    //alumnesSeleccionats.remove(alumneEscollit!!)
-                    var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
-                    Tv_alumne2.items = aS
-                    alumneEscollit = null
-                    //Tv_alumne2.items.removeAll(aS)
-                }
-            }
-
-            with(Tb_ufs) {
-                with(Tv_ufs) {
-                    Tv_ufs.items = u
-
-                    comboBoxModuls.items = m
-
-                    column("ID", Ufs::idProperty)
-                    column("ID Modul", Ufs::idmodulProperty).makeEditable()
-                    column("Nom", Ufs::nomProperty).makeEditable()
-                    column("Descripció", Ufs::descripcioProperty).makeEditable()
-
-                    contextmenu {
-                        item("Esborrar").action {
-                            u.remove(ufEscollida)
-                            ufscontroler.esborraUfs(ufEscollida!!.id)
-                            Tv_ufs.items.remove(ufEscollida)
-                            modelUfs.commit()
-                            //ufEscollida=null
-                        }
-
-                        item("Afegir nova uf").action {
-                            println("Has afegit una nova uf.")
-                            induf = ufscontroler.obteIdUfMesGran()
-                            if(modulEscollit != null) { //Si hem filtrat per moduls el id_modul de la nova uf sera el del modul seleccionat.
-                                Tv_ufs.items.add(Ufs(induf!! + 1, modulEscollit!!.id, "", ""))
-                            }else{//Si no hem filtrat per moduls el id_modul de la nova uf sera zero.
-                                Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
-                            }
-                        }
-
-                        item("Guardar Uf").action {
-                            induf = ufscontroler.obteIdUfMesGran()
-                            try {
-                                ufscontroler.afegeixUfs(ufEscollida!!)
-                                alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
-                                //ufEscollida=null
-                            }catch(ex:SQLIntegrityConstraintViolationException){
-                                alert(Alert.AlertType.ERROR, "No es pot afegir la Uf.", "")
-                            }catch(e:NullPointerException){
-                                alert(Alert.AlertType.ERROR, "No has seleccionat cap Uf.", "")
-                            }
-                            modelUfs.commit()
-                        }
-
-                        /*item("Commit").action {
-                            guardaCanvis(Tv_ufs.selectedItem!!)
-                        }*/
-
-                        item("Actualitzar").action {
-                            //guardaCanvis(Tv_ufs.selectedItem!!)
-                            modelUfs.commit()
-                            ufscontroler.actualitzarUfs(ufEscollida!!)
-                        }
-                    }
-
-                    modelUfs=editModel
-
-                    enableCellEditing()
-                    enableDirtyTracking()
-
-                    onUserSelect {
-                        ufEscollida=Tv_ufs.selectedItem
-                        println("Uf seleccionada: " + ufEscollida)
 
 
-                    }
 
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_ufs.items.clear()
-                        llistatUfs = ufscontroler.obteUfs()
-                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
-                        Tv_ufs.items = u
-
-                    }
-
-                    comboBoxModuls.setOnMouseClicked {
-                        var modul: String? = null
-                        nomModulSeleccionat = comboBoxModuls.selectionModel.selectedItem
-                        modul = nomModulSeleccionat
-                        println("Item modul seleccionat: " +nomModulSeleccionat)
-
-                        if (nomModulSeleccionat != null) {
-                            Tv_ufs.items = null
-                            println("Modul seleccionat: " + modul)
-                            modulEscollit = ufscontroler.obteModulPerNom(modul!!)
-                            println("Modul obtingut: " + modulEscollit)
-                            llistatUfs = ufscontroler.obteUfsPerModul(modulEscollit!!)
-                            var aS = FXCollections.observableArrayList(llistatUfs!!.observable())
-                            Tv_ufs.items = aS
-                        }
-                    }
-
-
-                }
-
-                modelUfs.selectedItemDirtyState.onChange {
-                    var uF: Ufs? = null
-                    uF = Tv_ufs?.selectedItem
-
-                    try {
-                        ufs = uF!!.copy( //ufs es un objecte buit de tipus Ufs.
-                            id = uF.id,
-                            id_modul = uF.id_modul,
-                            nom = uF.nom,
-                            descripcio = uF.descripcio
-                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
-
-                    induf = Tv_ufs?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
-                    println("\n\nIndex Uf actual: " + induf) //Ens mostra l'objecte avans de ser modificat.
-                    itemDirty = modelUfs.isDirty(uF)
-                    println("La UF amb l'index " + induf + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
-
-                    uF!!.id = Tv_ufs!!.selectedItem!!.idProperty.get()
-                    uF!!.id_modul = Tv_ufs!!.selectedItem!!.idmodulProperty.get()
-                    uF!!.nom = Tv_ufs!!.selectedItem!!.nomProperty.get()
-                    uF!!.descripcio = Tv_ufs!!.selectedItem!!.descripcioProperty.get()
-
-                    println("Uf modificada: " + uF) //Ens mostra l'objecte modificat.
-
-                    uf = uF!!.copy( id = uF.id,id_modul = uF.id_modul,nom = uF.nom,descripcio = uF.descripcio)
-                    }catch(e:NullPointerException){
-                        println("Ha deixat d'haver una uf seleccionada.")
-                    }
-                    modelUfs.commit(uf!!)
-                }
-
-            }
-
-        }
-    }
-
-    fun mostraAlumnesGrup():Unit {
-        for (i in grupsAlumnes.indices) {
-            if (grupEscollit!!.id == grupsAlumnes[i].id_grup) {
-                llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
-            }
-            println("Alumnes obtinguts que pertanyen al grup seleccionat: " + llistatAlumnesId)
-        }
-    }
-
-    fun guardaCanvis(uf:Ufs):Unit{
-        //Fer que els canvis en les propertys es lliguin al objecte en questio (bind).
-
-        //fer que cadascun dels atributs del objecte se li assigni el nou property.get()
-
-        uf.id= Tv_ufs!!.selectedItem!!.idProperty.get()
-        uf.id_modul= Tv_ufs!!.selectedItem!!.idmodulProperty.get()
-        uf.nom= Tv_ufs!!.selectedItem!!.nomProperty.get()
-        uf.descripcio= Tv_ufs!!.selectedItem!!.descripcioProperty.get()
-
-        modelUfs.commit(uf)
-        println("La uf seleccionada ara te les seguents propietats: " + uf)
-        //println("S'han desat els canvis del model.")
-    }
 
 
 
