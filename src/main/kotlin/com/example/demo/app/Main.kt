@@ -1,11 +1,9 @@
 package com.example.demo.app
 
-import com.example.demo.app.Tables.Cicle
 import com.example.demo.app.model.Alumnes_grups
 import com.example.demo.app.model.Moduls
 import com.example.demo.app.model.Ufs
 import com.example.demo.controllers.*
-import com.example.demo.view.Cicles
 import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -17,24 +15,15 @@ class Main: View() {
 
     override val root: BorderPane by fxml()
 
-    val mainView: Main by inject()
-
     //CONTROLLERS
     val grupcontroler: GrupsController by inject()
     val alumnecontroler: AlumnesController by inject()
     val ufscontroler:UfsController by inject()
     val modulscontroler:ModulsController by inject()
 
-    val ciclesController: CiclesController by inject()
-
-    val familiacontroler: FamiliaController by inject()
-
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
     val Tb_ufs:Tab by fxid("Tb_ufs")
-    val Tb_cicles:Tab by fxid("Tb_cicles")
-    val Tb_families:Tab by fxid("Tb_families")
-    val Tb_alumnesvista:Tab by fxid("Tb_alumnesvista")
 
     //Buttons
     val Bt_afegir:Button by fxid("grupsBtnAfegirAlumnes")
@@ -54,11 +43,6 @@ class Main: View() {
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
 
-    val Tv_cicles:javafx.scene.control.TableView<com.example.demo.app.model.Cicle> by fxid("ciclestableCicles")
-
-    val Tv_families: javafx.scene.control.TableView<com.example.demo.app.Familia> by fxid("familiestableFAMILIES")
-    val Tv_vistaalumne:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
-
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatAlumnesId: MutableList<Alumne>? = ArrayList()
@@ -67,11 +51,6 @@ class Main: View() {
     var llistatUfs:MutableList<Ufs> = ArrayList()
     var llistatModuls:MutableList<Moduls> = ArrayList()
     var nomsModuls:MutableList<String> = ArrayList()
-
-    var llistatCicles: MutableList<com.example.demo.app.model.Cicle> = ArrayList()
-
-    var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
-
 
     //Variables canviants i aillades.
     var grupEscollit:Grups?=null
@@ -89,24 +68,6 @@ class Main: View() {
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
     var modelUfs: TableViewEditModel<Ufs> by singleAssign()
-
-
-    //Cicles
-    var modelCicle: TableViewEditModel<com.example.demo.app.model.Cicle> by singleAssign()
-    var itemCicle:com.example.demo.app.model.Cicle?=null
-    var indCicle:Int?=null
-    var itemDirtyCicle:Boolean?=null
-    var Cic:com.example.demo.app.model.Cicle?=null
-
-    //Familia
-    var familiaEscollida:Familia?=null
-    var modelFamilia: TableViewEditModel<Familia> by singleAssign()
-    var itemFamilia:Familia?=null
-    var indFamilia:Int?=null
-    var itemDirtyFamilia:Boolean? = null
-    var Fam:Familia?=null
-    var alumneVistaEscollit:Alumne?=null
-
 
     // Profesor
     /*val profesorscontroler: ProfesorsController by inject()
@@ -140,16 +101,6 @@ class Main: View() {
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
         var u = FXCollections.observableArrayList(llistatUfs.observable())
         var m = FXCollections.observableArrayList(nomsModuls.observable())
-
-
-        //Cicles
-        llistatCicles = ciclesController.obteCicles()
-        var eCicles = FXCollections.observableArrayList(llistatCicles.observable())
-
-
-        //Families
-        llistatFamilies = familiacontroler.obteFamilies()
-        var eFamilies = FXCollections.observableArrayList(llistatFamilies.observable())
 /*
         //Profesor
         llistatProfessor = profesorscontroler.obteProfesors()
@@ -158,7 +109,9 @@ class Main: View() {
         llistatModuls = modulscontroler.obteModuls()
         var m = FXCollections.observableArrayList(llistatModuls.observable())
 
-
+        //Families
+        llistatFamilies = familiacontroler.obteFamilies()
+        var eFamilies = FXCollections.observableArrayList(llistatFamilies.observable())
 
         //Alumne
         llistatAlumnesNom = alumnecontroler.obteAlumnes()
@@ -300,11 +253,11 @@ class Main: View() {
                         println("El grup seleccionat es: " + grupEscollit)
                         llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
                         println("Contingut del array d'alumnes obtinguts per grup: " + llistatAlumnesId)
-                        /*if(llistatAlumnesId.isNullOrEmpty()) {
+                        if(llistatAlumnesId.isNullOrEmpty()) {
                             netejaTableview()
                         }else{
                             Tv_alumne2.items.addAll(llistatAlumnesId!!)
-                        }*/
+                        }
                     }
                 }
 
@@ -494,136 +447,6 @@ class Main: View() {
                         println("Ha deixat d'haver una uf seleccionada.")
                     }
                     modelUfs.commit(uf!!)
-                }
-            }
-
-
-            with(Tb_cicles) {
-                with(Tv_cicles) {
-                    Tv_cicles.items = eCicles
-                    column("ID", com.example.demo.app.model.Cicle::idProperty)
-                    column("Id_Cicles", com.example.demo.app.model.Cicle::idFamiliaProperty)
-                    column("Nom", com.example.demo.app.model.Cicle::nomProperty).makeEditable()
-                    column("Descripció", com.example.demo.app.model.Cicle::descripcioProperty).makeEditable()
-
-                    enableCellEditing()
-                    enableDirtyTracking()
-                    isEditable = true
-
-                    modelCicle = editModel
-
-                    modelCicle.selectedItemDirtyState.onChange {
-
-                        var Cs: com.example.demo.app.model.Cicle? = null
-                        Cs = Tv_cicles?.selectedItem
-
-                        itemCicle = Cs!!.copy(
-                            id = Cs.id,
-                            nom = Cs.nom,
-                            descripcio = Cs.descripcio
-                        )
-
-                        indCicle = Tv_cicles?.selectionModel?.selectedIndex
-                        println("\n\nitem actual: " + itemCicle)
-                        itemDirtyCicle = modelCicle.isDirty(Cs!!)
-                        println("L'objecte amb l'index " + indCicle + " Is dirty?--->" + itemDirtyCicle)
-
-                        Cs.id = Tv_cicles!!.selectedItem!!.idProperty.get()
-                        Cs.id_familia = Tv_cicles!!.selectedItem!!.idFamiliaProperty.get()
-                        Cs.nom = Tv_cicles!!.selectedItem!!.nomProperty.get()
-                        Cs.descripcio = Tv_cicles!!.selectedItem!!.descripcioProperty.get()
-
-                        Cic = Cs.copy(id = Cs.id, id_familia = Cs.id_familia, nom = Cs.nom, descripcio = Cs.descripcio)
-
-                        modelCicle.commit(Cic!!)
-
-                    }
-                }
-            }
-
-            with(Tb_families) {
-                with(Tv_families) {
-                    Tv_families.items = eFamilies
-                    column("ID", com.example.demo.app.Familia::idProperty)
-                    column("Nom", com.example.demo.app.Familia::nomProperty).makeEditable()
-                    column("Descripció", com.example.demo.app.Familia::descripcioProperty).makeEditable()
-
-                    /*contextmenu{
-                        item("Afegir familia").action { println("Has afegit una familia nova.")
-                            var novaFamilia:Familia = Familia(familiacontroler.obteIdFamiliaMesGran(),"","")
-                            eFamilies.add(novaFamilia)
-                        }
-                    }*/
-
-                    enableCellEditing()
-                    enableDirtyTracking()
-                    isEditable = true
-
-                    modelFamilia = editModel
-
-                    //Detectem si els items han patit canvis.
-                    modelFamilia.selectedItemDirtyState.onChange {
-
-                        var Fs: Familia? = null
-                        Fs = Tv_families?.selectedItem
-
-                        itemFamilia = Fs!!.copy(
-                                id = Fs.id,
-                                nom = Fs.nom,
-                                descripcio = Fs.descripcio
-                        )
-
-                        indFamilia = Tv_families?.selectionModel?.selectedIndex
-                        println("\n\nitem actual: " + itemFamilia)
-                        itemDirtyFamilia = modelFamilia.isDirty(Fs!!)
-                        println("L'objecte amb l'index " + indFamilia +" Is dirty?--->"+itemDirtyFamilia)
-
-
-                        Fs.id = Tv_families!!.selectedItem!!.idProperty.get()
-                        Fs.nom = Tv_families!!.selectedItem!!.nomProperty.get()
-                        Fs.descripcio = Tv_families!!.selectedItem!!.descripcioProperty.get()
-
-                        println("Familia modificada: " + Fs)
-
-                        Fam = Fs.copy(id = Fs.id, nom = Fs.nom, descripcio = Fs.descripcio)
-
-                        modelFamilia.commit(Fam!!)
-                    }
-
-                    workspace.saveButton.setOnMouseClicked {
-                        var Fs:Familia? = null
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.actualitzarTaulaFamilies(Fs!!)
-                        modelFamilia.commit()
-                        println("S'ha guardat la familia.")
-                    }
-
-                    workspace.createButton.setOnMouseClicked {
-                        /*var Fs:Familia? = null
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.afegeixFamiliaTaula(Fs!!)
-                        println("S'ha creat la familia.")*/
-                        var novaFamilia:Familia = Familia(familiacontroler.obteIdFamiliaMesGran(),"","")
-                        familiacontroler.afegeixFamiliaTaula(novaFamilia)
-                        eFamilies.add(novaFamilia)
-                        modelFamilia.commit()
-                        println("S'ha creat l'espai de la nova familia.")
-                    }
-
-                    workspace.deleteButton.setOnMouseClicked {
-                        var Fs:Familia? = null
-
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.eliminaFamiliaTaula(Fs!!)
-                        eFamilies.remove(Fs!!)
-                        println("S'ha eliminat la familia.")
-                        modelFamilia.commit()
-
-                    }
-
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_families.refresh()
-                    }
                 }
             }
         }
