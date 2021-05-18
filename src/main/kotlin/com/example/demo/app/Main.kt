@@ -1,9 +1,11 @@
 package com.example.demo.app
 
+import com.example.demo.app.Tables.Cicle
 import com.example.demo.app.model.Alumnes_grups
 import com.example.demo.app.model.Moduls
 import com.example.demo.app.model.Ufs
 import com.example.demo.controllers.*
+import com.example.demo.view.Cicles
 import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
@@ -23,11 +25,14 @@ class Main: View() {
     val ufscontroler:UfsController by inject()
     val modulscontroler:ModulsController by inject()
 
+    val ciclesController: CiclesController by inject()
+
     val familiacontroler: FamiliaController by inject()
 
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
     val Tb_ufs:Tab by fxid("Tb_ufs")
+    val Tb_cicles:Tab by fxid("Tb_cicles")
     val Tb_families:Tab by fxid("Tb_families")
     val Tb_alumnesvista:Tab by fxid("Tb_alumnesvista")
 
@@ -49,6 +54,8 @@ class Main: View() {
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
 
+    val Tv_cicles:javafx.scene.control.TableView<com.example.demo.app.model.Cicle> by fxid("ciclestableCicles")
+
     val Tv_families: javafx.scene.control.TableView<com.example.demo.app.Familia> by fxid("familiestableFAMILIES")
     val Tv_vistaalumne:javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
 
@@ -60,6 +67,9 @@ class Main: View() {
     var llistatUfs:MutableList<Ufs> = ArrayList()
     var llistatModuls:MutableList<Moduls> = ArrayList()
     var nomsModuls:MutableList<String> = ArrayList()
+
+    var llistatCicles: MutableList<com.example.demo.app.model.Cicle> = ArrayList()
+
     var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
 
 
@@ -80,6 +90,13 @@ class Main: View() {
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
     var modelUfs: TableViewEditModel<Ufs> by singleAssign()
 
+
+    //Cicles
+    var modelCicle: TableViewEditModel<com.example.demo.app.model.Cicle> by singleAssign()
+    var itemCicle:com.example.demo.app.model.Cicle?=null
+    var indCicle:Int?=null
+    var itemDirtyCicle:Boolean?=null
+    var Cic:com.example.demo.app.model.Cicle?=null
 
     //Familia
     var familiaEscollida:Familia?=null
@@ -123,6 +140,11 @@ class Main: View() {
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
         var u = FXCollections.observableArrayList(llistatUfs.observable())
         var m = FXCollections.observableArrayList(nomsModuls.observable())
+
+
+        //Cicles
+        llistatCicles = ciclesController.obteCicles()
+        var eCicles = FXCollections.observableArrayList(llistatCicles.observable())
 
 
         //Families
@@ -472,6 +494,50 @@ class Main: View() {
                         println("Ha deixat d'haver una uf seleccionada.")
                     }
                     modelUfs.commit(uf!!)
+                }
+            }
+
+
+            with(Tb_cicles) {
+                with(Tv_cicles) {
+                    Tv_cicles.items = eCicles
+                    column("ID", com.example.demo.app.model.Cicle::idProperty)
+                    column("Id_Cicles", com.example.demo.app.model.Cicle::idFamiliaProperty)
+                    column("Nom", com.example.demo.app.model.Cicle::nomProperty).makeEditable()
+                    column("Descripció", com.example.demo.app.model.Cicle::descripcioProperty).makeEditable()
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+
+                    modelCicle = editModel
+
+                    modelCicle.selectedItemDirtyState.onChange {
+
+                        var Cs: com.example.demo.app.model.Cicle? = null
+                        Cs = Tv_cicles?.selectedItem
+
+                        itemCicle = Cs!!.copy(
+                            id = Cs.id,
+                            nom = Cs.nom,
+                            descripcio = Cs.descripcio
+                        )
+
+                        indCicle = Tv_cicles?.selectionModel?.selectedIndex
+                        println("\n\nitem actual: " + itemCicle)
+                        itemDirtyCicle = modelCicle.isDirty(Cs!!)
+                        println("L'objecte amb l'index " + indCicle + " Is dirty?--->" + itemDirtyCicle)
+
+                        Cs.id = Tv_cicles!!.selectedItem!!.idProperty.get()
+                        Cs.id_familia = Tv_cicles!!.selectedItem!!.idFamiliaProperty.get()
+                        Cs.nom = Tv_cicles!!.selectedItem!!.nomProperty.get()
+                        Cs.descripcio = Tv_cicles!!.selectedItem!!.descripcioProperty.get()
+
+                        Cic = Cs.copy(id = Cs.id, id_familia = Cs.id_familia, nom = Cs.nom, descripcio = Cs.descripcio)
+
+                        modelCicle.commit(Cic!!)
+
+                    }
                 }
             }
 
