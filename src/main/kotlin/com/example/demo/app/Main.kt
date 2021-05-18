@@ -24,6 +24,7 @@ class Main: View() {
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
     val Tb_ufs:Tab by fxid("Tb_ufs")
+    val Tb_moduls:Tab by fxid("Tb_moduls")
 
     //Buttons
     val Bt_afegir:Button by fxid("grupsBtnAfegirAlumnes")
@@ -36,12 +37,15 @@ class Main: View() {
 
     val comboBoxAlumnes:ComboBox<String?> by fxid("alumnesCbGrupos")
     val comboBoxModuls:ComboBox<String?> by fxid("ufsCbGrupos")
+    val comboBoxCicle:ComboBox<String?> by fxid("modulsCbGrupos")
 
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
+    val Tv_moduls:javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
+
 
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
@@ -73,10 +77,10 @@ class Main: View() {
     /*val profesorscontroler: ProfesorsController by inject()
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
     var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()*/
-    // Moduls
-   /* val modulscontroler: ModulsController by inject()
-    val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
-    var llistatModuls: MutableList<Moduls> = ArrayList()
+
+
+   /*
+
 
     // Families
     val familiacontroler: FamiliaController by inject()
@@ -338,12 +342,127 @@ class Main: View() {
                 with(Tv_ufs) {
                     Tv_ufs.items = u
 
-                    comboBoxModuls.items = m
+                    comboBoxCicle.items = m
 
                     column("ID", Ufs::idProperty)
                     column("ID Modul", Ufs::idmodulProperty).makeEditable()
                     column("Nom", Ufs::nomProperty).makeEditable()
                     column("Descripció", Ufs::descripcioProperty).makeEditable()
+
+                    contextmenu {
+                        item("Esborrar").action {
+                            u.remove(ufEscollida)
+                            ufscontroler.esborraUfs(ufEscollida!!.id)
+                            Tv_ufs.items.remove(ufEscollida)
+                            modelUfs.commit()
+                        }
+
+                        item("Afegir nova uf").action {
+                            println("Has afegit una nova uf.")
+                            induf = ufscontroler.obteIdUfMesGran()
+                            if(modulEscollit != null) { //Si hem filtrat per moduls el id_modul de la nova uf sera el del modul seleccionat.
+                                Tv_ufs.items.add(Ufs(induf!! + 1, modulEscollit!!.id, "", ""))
+                            }else{//Si no hem filtrat per moduls el id_modul de la nova uf sera zero.
+                                Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
+                            }
+                        }
+
+                        item("Guardar Uf").action {
+                            induf = ufscontroler.obteIdUfMesGran()
+                            try {
+                                ufscontroler.afegeixUfs(ufEscollida!!)
+                                alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
+                            }catch(ex:SQLIntegrityConstraintViolationException){
+                                alert(Alert.AlertType.ERROR, "No es pot afegir la Uf.", "")
+                            }catch(e:NullPointerException){
+                                alert(Alert.AlertType.ERROR, "No has seleccionat cap Uf.", "")
+                            }
+                            modelUfs.commit()
+                        }
+
+                        item("Actualitzar").action {
+                            //guardaCanvis(Tv_ufs.selectedItem!!)
+                            modelUfs.commit()
+                            ufscontroler.actualitzarUfs(ufEscollida!!)
+                        }
+                    }
+
+                    modelUfs=editModel
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+
+                    onUserSelect {
+                        ufEscollida=Tv_ufs.selectedItem
+                        println("Uf seleccionada: " + ufEscollida)
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        Tv_ufs.items.clear()
+                        llistatUfs = ufscontroler.obteUfs()
+                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
+                        Tv_ufs.items = u
+                    }
+
+                    comboBoxModuls.setOnMouseClicked {
+                        var modul: String? = null
+                        nomModulSeleccionat = comboBoxModuls.selectionModel.selectedItem
+                        modul = nomModulSeleccionat
+                        println("Item modul seleccionat: " +nomModulSeleccionat)
+
+                        if (nomModulSeleccionat != null) {
+                            Tv_ufs.items = null
+                            println("Modul seleccionat: " + modul)
+                            modulEscollit = ufscontroler.obteModulPerNom(modul!!)
+                            println("Modul obtingut: " + modulEscollit)
+                            llistatUfs = ufscontroler.obteUfsPerModul(modulEscollit!!)
+                            var aS = FXCollections.observableArrayList(llistatUfs!!.observable())
+                            Tv_ufs.items = aS
+                        }
+                    }
+                }
+
+                modelUfs.selectedItemDirtyState.onChange {
+                    var uF: Ufs? = null
+                    uF = Tv_ufs?.selectedItem
+
+                    try {
+                        ufs = uF!!.copy( //ufs es un objecte buit de tipus Ufs.
+                            id = uF.id,
+                            id_modul = uF.id_modul,
+                            nom = uF.nom,
+                            descripcio = uF.descripcio
+                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+
+                        induf = Tv_ufs?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                        println("\n\nIndex Uf actual: " + induf) //Ens mostra l'objecte avans de ser modificat.
+                        itemDirty = modelUfs.isDirty(uF)
+                        println("La UF amb l'index " + induf + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+
+                        uF!!.id = Tv_ufs!!.selectedItem!!.idProperty.get()
+                        uF!!.id_modul = Tv_ufs!!.selectedItem!!.idmodulProperty.get()
+                        uF!!.nom = Tv_ufs!!.selectedItem!!.nomProperty.get()
+                        uF!!.descripcio = Tv_ufs!!.selectedItem!!.descripcioProperty.get()
+
+                        println("Uf modificada: " + uF) //Ens mostra l'objecte modificat.
+
+                        uf = uF!!.copy( id = uF.id,id_modul = uF.id_modul,nom = uF.nom,descripcio = uF.descripcio)
+                    }catch(e:NullPointerException){
+                        println("Ha deixat d'haver una uf seleccionada.")
+                    }
+                    modelUfs.commit(uf!!)
+                }
+            }
+            with(Tb_moduls) {
+                with(Tv_moduls) {
+                    Tv_moduls.items = m
+
+                    comboBoxCicle.items = m
+
+                    column("ID", Moduls::idProperty)
+                    column("ID Cicle", Moduls::idCicleProperty).makeEditable()
+                    column("Nom", Moduls::nomProperty).makeEditable()
+                    column("Descripció", Moduls::descripcioProperty).makeEditable()
 
                     contextmenu {
                         item("Esborrar").action {
