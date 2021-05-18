@@ -93,7 +93,7 @@
                     </graphic>
                 </Tab>
                 <!--Alumnes-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_alumnesvista" closable="false">
                     <content>
                         <BorderPane>
                             <center>
@@ -791,7 +791,7 @@
                     </graphic>
                 </Tab>
                 <!--Families-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_families" closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
                         <BorderPane>

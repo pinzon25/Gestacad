@@ -8,6 +8,7 @@ import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import tornadofx.*
+import java.awt.image.ImageObserver.ERROR
 import java.sql.SQLIntegrityConstraintViolationException
 
 class Main: View() {
@@ -19,12 +20,10 @@ class Main: View() {
     val alumnecontroler: AlumnesController by inject()
     val ufscontroler:UfsController by inject()
     val modulscontroler:ModulsController by inject()
-    val profesorscontroler: ProfesorsController by inject()
 
     //TABS
     val Tb_grups:Tab by fxid("Tb_grups")
     val Tb_ufs:Tab by fxid("Tb_ufs")
-    val Tb_moduls:Tab by fxid("Tb_moduls")
 
     //Buttons
     val Bt_afegir:Button by fxid("grupsBtnAfegirAlumnes")
@@ -36,23 +35,18 @@ class Main: View() {
     //COMBOBOX
 
     val comboBoxAlumnes:ComboBox<String?> by fxid("alumnesCbGrupos")
-    val comboBoxCicle:ComboBox<String?> by fxid("ufsCbGrupos")
-
+    val comboBoxModuls:ComboBox<String?> by fxid("ufsCbGrupos")
 
     //TABLEVIEWS
     val Tv_grups:javafx.scene.control.TableView<Grups> by fxid("grupsTableGrups")
     val Tv_alumne:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2:javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs:javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
-    val Tv_moduls:javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
-    val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
-
 
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
     var llistatAlumnesId: MutableList<Alumne>? = ArrayList()
     var llistatGrups: MutableList<Grups> = ArrayList()
-    var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
     var grupsAlumnes : MutableList<Alumnes_grups> = ArrayList()
     var llistatUfs:MutableList<Ufs> = ArrayList()
     var llistatModuls:MutableList<Moduls> = ArrayList()
@@ -74,13 +68,16 @@ class Main: View() {
     var alumneEscollit:Alumne?=null
     var modelGrup: TableViewEditModel<Grups> by singleAssign()
     var modelUfs: TableViewEditModel<Ufs> by singleAssign()
-    var modelModuls: TableViewEditModel<Moduls> by singleAssign()
-    var indMod:Int?= null
-    var modul:Moduls?=null
 
+    // Profesor
+    /*val profesorscontroler: ProfesorsController by inject()
+    val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
+    var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()*/
+    // Moduls
+   /* val modulscontroler: ModulsController by inject()
+    val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
+    var llistatModuls: MutableList<Moduls> = ArrayList()
 
-
-   /*
     // Families
     val familiacontroler: FamiliaController by inject()
     val Tv_families: javafx.scene.control.TableView<com.example.demo.app.Familia> by fxid("familiestableFAMILIES")
@@ -100,17 +97,17 @@ class Main: View() {
         nomsModuls = modulscontroler.obteModulsNom()
         llistatAlumnes = alumnecontroler.obteAlumnes()
         grupsAlumnes = grupcontroler.obteGrupAlumnes()
-        llistatProfessor = profesorscontroler.obteProfesors()
-
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         var a = FXCollections.observableArrayList(llistatAlumnes.observable())
         var u = FXCollections.observableArrayList(llistatUfs.observable())
         var m = FXCollections.observableArrayList(nomsModuls.observable())
-        var o = FXCollections.observableArrayList(llistatModuls.observable())
-        var e = FXCollections.observableArrayList(llistatProfessor.observable())
-
 /*
-
+        //Profesor
+        llistatProfessor = profesorscontroler.obteProfesors()
+        var e = FXCollections.observableArrayList(llistatProfessor.observable())
+        //Moduls
+        llistatModuls = modulscontroler.obteModuls()
+        var m = FXCollections.observableArrayList(llistatModuls.observable())
 
         //Families
         llistatFamilies = familiacontroler.obteFamilies()
@@ -263,6 +260,7 @@ class Main: View() {
                         }
                     }
                 }
+
                 with(Tv_alumne) {
                     Tv_alumne.items = a
                     column("ID", Alumne::idProperty)
@@ -283,6 +281,9 @@ class Main: View() {
                     layoutY = 100.0
                     //modelAlumnes1 = editModel
                 }
+
+
+
                 with(Tv_alumne2) {
                     //Tv_alumne2.items = aS
                     column("ID", Alumne::idProperty)
@@ -304,10 +305,12 @@ class Main: View() {
                     layoutY = 100.0
                     //modelAlumnes2 = editModel
                 }
+
                 Tv_alumne.onUserSelect {
                     alumneEscollit = Tv_alumne.selectedItem
                     println("Alumne escollit: " + alumneEscollit)
                 }
+
                 Bt_afegir.setOnMouseClicked {
                     println("Alumne a afegir: " + alumneEscollit)
                     grupcontroler.afegeixAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
@@ -316,6 +319,7 @@ class Main: View() {
                     Tv_alumne2.items = aS
                     alumneEscollit = null
                 }
+
                 Bt_eliminar.setOnMouseClicked {
                     println("Alumne a esborrar: " + alumneEscollit)
                     grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
@@ -326,12 +330,15 @@ class Main: View() {
                     alumneEscollit = null
                     //Tv_alumne2.items.removeAll(aS)
                 }
+
             }
+
+
             with(Tb_ufs) {
                 with(Tv_ufs) {
                     Tv_ufs.items = u
 
-                    comboBoxCicle.items = m
+                    comboBoxModuls.items = m
 
                     column("ID", Ufs::idProperty)
                     column("ID Modul", Ufs::idmodulProperty).makeEditable()
@@ -393,9 +400,9 @@ class Main: View() {
                         Tv_ufs.items = u
                     }
 
-                    comboBoxCicle.setOnMouseClicked {
+                    comboBoxModuls.setOnMouseClicked {
                         var modul: String? = null
-                        nomModulSeleccionat = comboBoxCicle.selectionModel.selectedItem
+                        nomModulSeleccionat = comboBoxModuls.selectionModel.selectedItem
                         modul = nomModulSeleccionat
                         println("Item modul seleccionat: " +nomModulSeleccionat)
 
@@ -442,86 +449,7 @@ class Main: View() {
                     modelUfs.commit(uf!!)
                 }
             }
-            with(Tv_moduls) {
-                    Tv_moduls.items = o
-                    column("ID", Moduls::idProperty)
-                    column("ID Cicle", Moduls::idCicleProperty).makeEditable()
-                    column("Nom", Moduls::nomProperty).makeEditable()
-                    column("Descripció", Moduls::descripcioProperty).makeEditable()
-
-                    contextmenu {
-                        item("Esborrar").action {
-                            o.remove(modulEscollit)
-                            modulscontroler.esborraModuls(modulEscollit!!.id)
-                            Tv_moduls.items.remove(modulEscollit)
-                            modelModuls.commit()
-                        }
-                    }
-
-                    modelModuls=editModel
-
-                    enableCellEditing()
-                    enableDirtyTracking()
-                    onUserSelect {
-                        ufEscollida=Tv_ufs.selectedItem
-                        println("Uf seleccionada: " + ufEscollida)
-                    }
-
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_moduls.items.clear()
-                        llistatModuls = modulscontroler.obteModuls()
-                        var o = FXCollections.observableArrayList(llistatModuls!!.observable())
-                        Tv_moduls.items = o
-                    }
-                modelModuls.selectedItemDirtyState.onChange {
-                    var mO: Moduls? = null
-                    mO = Tv_moduls?.selectedItem
-
-                    try {
-                        modul = mO!!.copy(
-                            id = mO.id,
-                            id_cicle = mO.id_cicle,
-                            nom = mO.nom,
-                            descripcio = mO.descripcio
-                        )
-
-                        indMod = Tv_moduls?.selectionModel?.selectedIndex
-                        println("\n\nIndex Modul actual: " + indMod) //Ens mostra l'objecte avans de ser modificat.
-                        itemDirty = modelModuls.isDirty(mO)
-                        println("EL modul amb l'index " + indMod + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
-
-                        mO!!.id = Tv_moduls!!.selectedItem!!.idProperty.get()
-                        mO!!.id_cicle = Tv_moduls!!.selectedItem!!.idCicleProperty.get()
-                        mO!!.nom = Tv_moduls!!.selectedItem!!.nomProperty.get()
-                        mO!!.descripcio = Tv_moduls!!.selectedItem!!.descripcioProperty.get()
-
-                        println("Uf modificada: " + mO) //Ens mostra l'objecte modificat.
-
-                        mO = mO!!.copy( id = mO.id,id_cicle = mO.id_cicle,nom = mO.nom,descripcio = mO.descripcio)
-                    }catch(e:NullPointerException){
-                        println("Ha deixat d'haver un modul seleccionada.")
-                    }
-                    modelModuls.commit(mO!!)
-                }
-
-                }
-            with(Tv_professors) {
-                Tv_professors.items = e
-                column("ID", com.example.demo.app.Professor::idProperty).isEditable
-                column("Nom", com.example.demo.app.Professor::nomProperty).makeEditable()
-                column("Cognoms", com.example.demo.app.Professor::cognomsProperty).makeEditable()
-                column("Dni", com.example.demo.app.Professor::dniProperty).makeEditable()
-                column("Data naixement", com.example.demo.app.Professor::datanaixementProperty).makeEditable()
-                column("sexe", com.example.demo.app.Professor::sexeProperty).makeEditable()
-                column("Telefon", com.example.demo.app.Professor::telefonProperty).makeEditable()
-                column("Email", com.example.demo.app.Professor::idProperty).makeEditable()
-                column("Descripció", com.example.demo.app.Professor::descripcioProperty).makeEditable()
-            }
-
-
-
-
-            }
+        }
     }
 
     fun netejaTableview():Unit{
@@ -531,6 +459,27 @@ class Main: View() {
     }
 
 
+                /*with(Tv_moduls) {
+                Tv_moduls.items=m
+                //t = tableview(g) {
+                column("ID", Moduls::idProperty).isEditable
+                column("Nom", Moduls::nomProperty).isEditable
+                column("Descripció", Moduls::descripcioProperty).isEditable
+
+            }
+            with(Tv_professors) {
+                Tv_professors.items = e
+                column("ID", com.example.demo.app.Professor::idProperty).isEditable
+                column("Nom", com.example.demo.app.Professor::nomProperty).isEditable
+                column("Cognoms", com.example.demo.app.Professor::cognomsProperty).isEditable
+                column("Dni", com.example.demo.app.Professor::dniProperty).isEditable
+                column("Data naixement", com.example.demo.app.Professor::datanaixementProperty).isEditable
+                column("sexe", com.example.demo.app.Professor::sexeProperty).isEditable
+                column("Telefon", com.example.demo.app.Professor::telefonProperty).isEditable
+                column("Email", com.example.demo.app.Professor::idProperty).isEditable
+                column("Descripció", com.example.demo.app.Professor::descripcioProperty).isEditable
+
+            }*/
 
 
 
