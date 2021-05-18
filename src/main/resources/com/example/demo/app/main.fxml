@@ -721,18 +721,15 @@
                     </graphic>
                 </Tab>
                 <!--Cicles-->
-                <Tab closable="false">
+                <Tab  fx:id="Tb_cicles"  closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
                         <BorderPane>
                             <center>
                                 <HBox BorderPane.alignment="CENTER">
                                     <children>
-                                        <TableView fx:id="ciclestableCICLES" prefHeight="311.0" prefWidth="505.0">
+                                        <TableView fx:id="ciclestableCicles" prefHeight="311.0" prefWidth="505.0">
                                             <columns>
-                                                <TableColumn fx:id="cicles_moduls" prefWidth="114.0" text="Nom" />
-                                                <TableColumn prefWidth="293.0" text="Descripcio" />
-                                                <TableColumn prefWidth="97.0" text="Familia" />
                                             </columns>
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="192.0">
