@@ -2,8 +2,11 @@ package com.example.demo.controllers
 
 import com.example.demo.app.Alumne
 import com.example.demo.app.Connexio
+import com.example.demo.app.MyApp
+import javafx.scene.layout.BorderPane
 import org.ktorm.dsl.*
 import tornadofx.Controller
+import tornadofx.Workspace
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
@@ -114,30 +117,41 @@ class AlumnesController: Controller() {
         return grups
     }
 
-    /*fun obteAlumnePerId(idAl:Int):MutableList<Alumne>{
-        var alumnes:MutableList<Alumne> = ArrayList()
-        var al: Alumne?=null
-        for(row in dd!!.from(com.example.demo.app.Tables.Alumne).select()){
 
-            val id:Int? = row[com.example.demo.app.Tables.Alumne.id]
-            val nom:String? = row[com.example.demo.app.Tables.Alumne.nom]
-            val cognoms:String? = row[com.example.demo.app.Tables.Alumne.cognoms]
-            val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
-            val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
-            val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
-            val telefon:Int? = row[com.example.demo.app.Tables.Alumne.telefon]
-            val email:String? = row[com.example.demo.app.Tables.Alumne.email]
-            val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
-            val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
+    /*fun esborraAlumne(id: Int?) {
+        val ps = dd.prepareStatement("DELETE FROM Alumne WHERE id_alumne = ?")
 
-            var d:Date = Date(datanaixement!!.year,datanaixement.monthValue, datanaixement.dayOfMonth)//Conversio del SimpleDateFormat/LocalDate a Date(year: Int, month: Int, day: Int)
-            al = Alumne(id!!, nom.toString(),cognoms.toString(),dni.toString(),d,sexe.toString(),telefon.toString(),email.toString(),deleted==false,descripcio.toString())
-            if(idAl == al.id) {
-                alumnes.add(al)
-            }
+        if (id != null) {
+            ps.setInt(1, id)
+            ps.executeUpdate()
+            alert(Alert.AlertType.CONFIRMATION, "", "L'alumne s'ha esborrat correctament!")
+        } else {
+            alert(Alert.AlertType.ERROR, "", "No has escollit ningun alumne!")
         }
 
-        return alumnes
+        //c.close()
+    }
+
+    fun crearNouAlumne(alumne: Alumne) {
+        val ps = c.prepareStatement("INSERT INTO Alumne (Nom,Cognoms,Edat) VALUES (?,?,?)")
+        ps.setString(1, alumne.nom)
+        ps.setString(2, alumne.cognoms)
+        ps.setInt(3, alumne.edat)
+        ps.executeUpdate()
+        alert(Alert.AlertType.CONFIRMATION, "", "Alumne creat correctament!")
+        //c.close()
+    }
+
+    fun actualitza(a: Alumne) {
+        //println("Has entrat al metode on actualitzem els camps al SQL.")
+        println("Alumne rebut al metode Actualitza: " + a)
+        val ps = c.prepareStatement("UPDATE Alumne SET Nom = ?, Cognoms = ?,  edat = ? WHERE id_alumne = ?")
+        ps.setString(1, a.nom)
+        ps.setString(2, a.cognoms)
+        ps.setInt(3, a.edat)
+        ps.setInt(4, a.id)
+        val rs = ps.executeUpdate()
+        alert(Alert.AlertType.CONFIRMATION, "", "L'alumne actualitzat correctament!")
     }*/
 
 }
