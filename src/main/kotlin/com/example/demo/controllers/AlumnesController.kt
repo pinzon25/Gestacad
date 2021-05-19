@@ -8,6 +8,7 @@ import org.ktorm.dsl.*
 import tornadofx.Controller
 import tornadofx.Workspace
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,7 +36,7 @@ class AlumnesController: Controller() {
             val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
             val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
             val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
-            val telefon:Int? = row[com.example.demo.app.Tables.Alumne.telefon]
+            val telefon:String? = row[com.example.demo.app.Tables.Alumne.telefon]
             val email:String? = row[com.example.demo.app.Tables.Alumne.email]
             val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
             val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
@@ -60,7 +61,7 @@ class AlumnesController: Controller() {
             val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
             val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
             val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
-            val telefon:Int? = row[com.example.demo.app.Tables.Alumne.telefon]
+            val telefon:String? = row[com.example.demo.app.Tables.Alumne.telefon]
             val email:String? = row[com.example.demo.app.Tables.Alumne.email]
             val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
             val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
@@ -88,7 +89,7 @@ class AlumnesController: Controller() {
             val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
             val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
             val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
-            val telefon:Int? = row[com.example.demo.app.Tables.Alumne.telefon]
+            val telefon:String? = row[com.example.demo.app.Tables.Alumne.telefon]
             val email:String? = row[com.example.demo.app.Tables.Alumne.email]
             val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
             val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
@@ -118,40 +119,58 @@ class AlumnesController: Controller() {
     }
 
 
-    /*fun esborraAlumne(id: Int?) {
-        val ps = dd.prepareStatement("DELETE FROM Alumne WHERE id_alumne = ?")
+    fun obteIdAlumneMesGran():Int{
+        var idMesGran:Int?=null
 
-        if (id != null) {
-            ps.setInt(1, id)
-            ps.executeUpdate()
-            alert(Alert.AlertType.CONFIRMATION, "", "L'alumne s'ha esborrat correctament!")
-        } else {
-            alert(Alert.AlertType.ERROR, "", "No has escollit ningun alumne!")
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne).select()){
+            val idAlumne:Int? = row[com.example.demo.app.Tables.Alumne.id]
+            idMesGran = idAlumne!!
         }
-
-        //c.close()
+        return idMesGran!!+1
     }
 
-    fun crearNouAlumne(alumne: Alumne) {
-        val ps = c.prepareStatement("INSERT INTO Alumne (Nom,Cognoms,Edat) VALUES (?,?,?)")
-        ps.setString(1, alumne.nom)
-        ps.setString(2, alumne.cognoms)
-        ps.setInt(3, alumne.edat)
-        ps.executeUpdate()
-        alert(Alert.AlertType.CONFIRMATION, "", "Alumne creat correctament!")
-        //c.close()
+    fun afegeixAlumneTaula(alumne: Alumne):Unit{
+
+        dd!!.insert(com.example.demo.app.Tables.Alumne) {
+            var date:Date = alumne.data_naixement
+            var localDate:LocalDate = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDate()
+
+            set(it.id, alumne.id)
+            set(it.nom,alumne.nom)
+            set(it.cognoms,alumne.cognoms)
+            set(it.dni,alumne.dni)
+            set(it.data_naixement,localDate)
+            set(it.sexe,alumne.sexe)
+            set(it.telefon,alumne.telefon)
+            set(it.email,alumne.email)
+            set(it.deleted,alumne.deleted)
+            set(it.descripcio,alumne.descripcio)
+            println("Has creat correctament l'alumne!!!.")
+        }
     }
 
-    fun actualitza(a: Alumne) {
-        //println("Has entrat al metode on actualitzem els camps al SQL.")
-        println("Alumne rebut al metode Actualitza: " + a)
-        val ps = c.prepareStatement("UPDATE Alumne SET Nom = ?, Cognoms = ?,  edat = ? WHERE id_alumne = ?")
-        ps.setString(1, a.nom)
-        ps.setString(2, a.cognoms)
-        ps.setInt(3, a.edat)
-        ps.setInt(4, a.id)
-        val rs = ps.executeUpdate()
-        alert(Alert.AlertType.CONFIRMATION, "", "L'alumne actualitzat correctament!")
-    }*/
+    fun actualitzarTaulaAlumnes(alumne: Alumne):Unit{
+        dd!!.update(com.example.demo.app.Tables.Alumne){
+            var date:Date = alumne.data_naixement
+            var localDate:LocalDate = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDate()
+
+            set(it.nom,alumne.nom)
+            set(it.cognoms,alumne.cognoms)
+            set(it.dni,alumne.dni)
+            set(it.data_naixement,localDate)
+            set(it.sexe,alumne.sexe)
+            set(it.telefon,alumne.telefon)
+            set(it.email,alumne.email)
+            set(it.deleted,alumne.deleted)
+            set(it.descripcio,alumne.descripcio)
+            where { it.id eq alumne.id }
+        }
+    }
+
+    fun eliminaAlumneTaula(alumne: Alumne):Unit{
+        dd!!.delete(com.example.demo.app.Tables.Alumne) {
+            it.id eq alumne.id
+        }
+    }
 
 }

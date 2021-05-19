@@ -10,7 +10,7 @@ object Alumne : Table<Nothing>("alumnes") {
     val dni = varchar("dni")
     val data_naixement = date("data_naixement")
     val sexe = varchar("sexe")
-    val telefon = int("telefon")
+    val telefon = varchar("telefon")
     val email = varchar("email")
     val deleted = boolean("deleted")
     val descripcio = varchar("descripcio")

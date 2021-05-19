@@ -9,9 +9,15 @@ import com.example.demo.view.Cicles
 import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
+import sun.management.jmxremote.LocalRMIServerSocketFactory
 import tornadofx.*
 import java.awt.image.ImageObserver.ERROR
 import java.sql.SQLIntegrityConstraintViolationException
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Main: View() {
 
@@ -105,6 +111,16 @@ class Main: View() {
     var indFamilia:Int?=null
     var itemDirtyFamilia:Boolean? = null
     var Fam:Familia?=null
+    //var alumneVistaEscollit:Alumne?=null
+
+    //Alumne
+
+    var alumneEscollida:Alumne?=null
+    var modelAlumne: TableViewEditModel<Alumne> by singleAssign()
+    var itemAlumne:Alumne?=null
+    var indAlumne:Int?=null
+    var itemDirtyAlumne:Boolean? = null
+    var Alu:Alumne?=null
     var alumneVistaEscollit:Alumne?=null
 
 
@@ -623,6 +639,116 @@ class Main: View() {
 
                     workspace.refreshButton.setOnMouseClicked {
                         Tv_families.refresh()
+                    }
+                }
+            }
+
+            with(Tb_alumnesvista) {
+                with(Tv_vistaalumne) {
+                    Tv_vistaalumne.items = a
+                    column("ID", Alumne::idProperty)
+                    column("Nom", Alumne::nomProperty).makeEditable()
+                    column("Cognoms", Alumne::cognomsProperty).makeEditable()
+                    column("Dni", Alumne::dniProperty).makeEditable()
+                    column("Data naixement", Alumne::datanaixementProperty).makeEditable()
+                    column("sexe", Alumne::sexeProperty).makeEditable()
+                    column("Telefon", Alumne::telefonProperty).makeEditable()
+                    column("Email", Alumne::idProperty).makeEditable()
+                    column("Descripció", Alumne::descripcioProperty).makeEditable()
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+
+                    modelAlumne = editModel
+
+                    //Detectem si els items han patit canvis.
+                    modelAlumne.selectedItemDirtyState.onChange {
+
+                        var Al: Alumne? = null
+                        Al = Tv_vistaalumne?.selectedItem
+
+                        itemAlumne = Al!!.copy(
+                                id = Al.id,
+                                nom = Al.nom,
+                                cognoms = Al.cognoms,
+                                dni = Al.dni,
+                                data_naixement = Al.data_naixement,
+                                sexe = Al.sexe,
+                                telefon = Al.telefon,
+                                email = Al.email,
+                                deleted = Al.deleted,
+                                descripcio = Al.descripcio
+                        )
+
+                        indAlumne = Tv_vistaalumne?.selectionModel?.selectedIndex
+                        println("\n\nitem actual: " + itemAlumne)
+                        itemDirtyAlumne = modelAlumne.isDirty(Al!!)
+                        println("L'objecte amb l'index " + indAlumne +" Is dirty?--->"+itemDirtyAlumne)
+
+
+                        Al.id = Tv_vistaalumne!!.selectedItem!!.idProperty.get()
+                        Al.nom = Tv_vistaalumne!!.selectedItem!!.nomProperty.get()
+                        Al.cognoms = Tv_vistaalumne!!.selectedItem!!.cognomsProperty.get()
+                        Al.dni = Tv_vistaalumne!!.selectedItem!!.dniProperty.get()
+
+                        var data:String? = Tv_vistaalumne!!.selectedItem!!.datanaixementProperty.get()
+                        var formatoDelTexto:SimpleDateFormat = SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                        Al.data_naixement = formatoDelTexto.parse(data)
+                        //LocalDate.parse(data)
+                        //Al.data_naixement =LocalDate.parse(data)
+                        // ("EE MMM dd HH:mm:ss z yyyy",
+                        //                        //                                            Locale.ENGLISH)
+
+                        Al.sexe = Tv_vistaalumne!!.selectedItem!!.sexeProperty.get()
+                        Al.telefon = Tv_vistaalumne!!.selectedItem!!.telefonProperty.get()
+                        Al.email = Tv_vistaalumne!!.selectedItem!!.emailProperty.get()
+                        Al.deleted = Tv_vistaalumne!!.selectedItem!!.deletedProperty.get()
+                        Al.descripcio = Tv_vistaalumne!!.selectedItem!!.descripcioProperty.get()
+
+                        println("Alumne modificat: " + Al)
+
+                        Alu = Al.copy(id = Al.id, nom = Al.nom, cognoms = Al.cognoms, dni = Al.dni, data_naixement = Al.data_naixement, sexe = Al.sexe, telefon = Al.telefon, email = Al.email, deleted = Al.deleted,descripcio = Al.descripcio)
+
+                        modelAlumne.commit(Alu!!)
+                    }
+
+                    workspace.saveButton.setOnMouseClicked {
+                        var Al:Alumne? = null
+                        Al = Tv_vistaalumne.selectedItem
+                        alumnecontroler.actualitzarTaulaAlumnes(Al!!)
+                        modelAlumne.commit()
+                        println("S'ha guardat l'alumne.")
+                    }
+
+                    workspace.createButton.setOnMouseClicked {
+
+                        var pattern:String = "yyyy-MM-dd";
+                        var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern);
+
+                        var date: LocalDate = LocalDate.parse("2018-09-09");
+                        var defaultZoneId: ZoneId = ZoneId.of("UTC")
+                        var dateDate:Date = Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+                        var nouAlumne:Alumne = Alumne(alumnecontroler.obteIdAlumneMesGran(),"", "","", dateDate, "H","","", false, "")
+                        alumnecontroler.afegeixAlumneTaula(nouAlumne)
+                        a.add(nouAlumne)
+                        modelAlumne.commit()
+                        println("S'ha creat l'espai del nou alumne.")
+                    }
+
+                    workspace.deleteButton.setOnMouseClicked {
+                        var Al:Alumne? = null
+
+                        Al = Tv_vistaalumne.selectedItem
+                        alumnecontroler.eliminaAlumneTaula(Al!!)
+                        a.remove(Al!!)
+                        println("S'ha eliminat l'alumne.")
+                        modelAlumne.commit()
+
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        Tv_vistaalumne.refresh()
                     }
                 }
             }
