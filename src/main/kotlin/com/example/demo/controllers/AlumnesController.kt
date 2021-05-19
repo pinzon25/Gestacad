@@ -3,6 +3,8 @@ package com.example.demo.controllers
 import com.example.demo.app.Alumne
 import com.example.demo.app.Connexio
 import com.example.demo.app.MyApp
+import com.example.demo.app.Tables.UFS
+import com.example.demo.app.model.Ufs
 import javafx.scene.layout.BorderPane
 import org.ktorm.dsl.*
 import tornadofx.Controller
@@ -171,6 +173,34 @@ class AlumnesController: Controller() {
         dd!!.delete(com.example.demo.app.Tables.Alumne) {
             it.id eq alumne.id
         }
+    }
+
+    fun obteAlumnesPerNom(alumneNom:String):MutableList<Alumne>{
+        //var modul:com.example.demo.app.model.Moduls?=null
+        var al: Alumne?=null
+        var alumnesCercats:MutableList<Alumne> = ArrayList()
+        var alumnes:MutableList<Alumne> = ArrayList()
+
+
+        for(row in dd!!.from(com.example.demo.app.Tables.Alumne).select().where(com.example.demo.app.Tables.Alumne.nom eq alumneNom)){
+
+            val id:Int? = row[com.example.demo.app.Tables.Alumne.id]
+            val nom:String? = row[com.example.demo.app.Tables.Alumne.nom]
+            val cognoms:String? = row[com.example.demo.app.Tables.Alumne.cognoms]
+            val dni:String? = row[com.example.demo.app.Tables.Alumne.dni]
+            val datanaixement: LocalDate? = row[com.example.demo.app.Tables.Alumne.data_naixement]
+            val sexe:String? = row[com.example.demo.app.Tables.Alumne.sexe]
+            val telefon:String? = row[com.example.demo.app.Tables.Alumne.telefon]
+            val email:String? = row[com.example.demo.app.Tables.Alumne.email]
+            val deleted:Boolean? = row[com.example.demo.app.Tables.Alumne.deleted]
+            val descripcio:String? = row[com.example.demo.app.Tables.Alumne.descripcio]
+
+            var d:Date = Date(datanaixement!!.year,datanaixement.monthValue, datanaixement.dayOfMonth)//Conversio del SimpleDateFormat/LocalDate a Date(year: Int, month: Int, day: Int)
+            al = Alumne(id!!, nom.toString(),cognoms.toString(),dni.toString(),d,sexe.toString(),telefon.toString(),email.toString(),deleted==false,descripcio.toString())
+            alumnes.add(al)
+        }
+
+        return alumnes
     }
 
 }

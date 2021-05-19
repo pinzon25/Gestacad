@@ -112,13 +112,7 @@
                                         </TableView>
                                         <VBox prefHeight="311.0" prefWidth="133.0">
                                             <children>
-                                                <Label text="Busca per grup:" />
-                                                <ComboBox fx:id="alumnesCbGrupos" prefWidth="150.0">
-                                                    <VBox.margin>
-                                                        <Insets top="3.0" />
-                                                    </VBox.margin>
-                                                </ComboBox>
-                                                <Label prefHeight="50.0" prefWidth="28.0" />
+                                                <!--<Label prefHeight="50.0" prefWidth="28.0" />-->
                                                 <Label text="Busca per nom:" />
                                                 <TextField fx:id="alumnesTfNombre" promptText="Escriu el nom i cognom...">
                                                     <VBox.margin>

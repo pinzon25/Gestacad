@@ -122,7 +122,7 @@ class Main: View() {
     var itemDirtyAlumne:Boolean? = null
     var Alu:Alumne?=null
     var alumneVistaEscollit:Alumne?=null
-
+    var nomAlumneSeleccionat:String?=null
 
     // Profesor
     /*val profesorscontroler: ProfesorsController by inject()
@@ -630,42 +630,46 @@ class Main: View() {
                         modelFamilia.commit(Fam!!)
                     }
 
-                    //val workspaceFamilia:Workspace = MyApp.wor
+                    Tb_families.whenSelected {
+                        println("Has seleccionat la tab de families")
 
-                    workspace.saveButton.setOnMouseClicked {
-                        var Fs:Familia? = null
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.actualitzarTaulaFamilies(Fs!!)
-                        modelFamilia.commit()
-                        println("S'ha guardat la familia.")
+                        workspace.saveButton.setOnMouseClicked {
+                            var Fs:Familia? = null
+                            Fs = Tv_families.selectedItem
+                            familiacontroler.actualitzarTaulaFamilies(Fs!!)
+                            modelFamilia.commit()
+                            println("S'ha guardat la familia.")
+                        }
+
+                        workspace.createButton.setOnMouseClicked {
+                            /*var Fs:Familia? = null
+                            Fs = Tv_families.selectedItem
+                            familiacontroler.afegeixFamiliaTaula(Fs!!)
+                            println("S'ha creat la familia.")*/
+                            var novaFamilia:Familia = Familia(familiacontroler.obteIdFamiliaMesGran(),"","")
+                            familiacontroler.afegeixFamiliaTaula(novaFamilia)
+                            eFamilies.add(novaFamilia)
+                            modelFamilia.commit()
+                            println("S'ha creat l'espai de la nova familia.")
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var Fs:Familia? = null
+
+                            Fs = Tv_families.selectedItem
+                            familiacontroler.eliminaFamiliaTaula(Fs!!)
+                            eFamilies.remove(Fs!!)
+                            println("S'ha eliminat la familia.")
+                            modelFamilia.commit()
+
+                        }
+
+                        workspace.refreshButton.setOnMouseClicked {
+                            Tv_families.refresh()
+                        }
                     }
 
-                    workspace.createButton.setOnMouseClicked {
-                        /*var Fs:Familia? = null
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.afegeixFamiliaTaula(Fs!!)
-                        println("S'ha creat la familia.")*/
-                        var novaFamilia:Familia = Familia(familiacontroler.obteIdFamiliaMesGran(),"","")
-                        familiacontroler.afegeixFamiliaTaula(novaFamilia)
-                        eFamilies.add(novaFamilia)
-                        modelFamilia.commit()
-                        println("S'ha creat l'espai de la nova familia.")
-                    }
 
-                    workspace.deleteButton.setOnMouseClicked {
-                        var Fs:Familia? = null
-
-                        Fs = Tv_families.selectedItem
-                        familiacontroler.eliminaFamiliaTaula(Fs!!)
-                        eFamilies.remove(Fs!!)
-                        println("S'ha eliminat la familia.")
-                        modelFamilia.commit()
-
-                    }
-
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_families.refresh()
-                    }
                 }
             }//Xavi
 
@@ -740,42 +744,66 @@ class Main: View() {
                         modelAlumne.commit(Alu!!)
                     }
 
-                    workspace.saveButton.setOnMouseClicked {
-                        var Al:Alumne? = null
-                        Al = Tv_vistaalumne.selectedItem
-                        alumnecontroler.actualitzarTaulaAlumnes(Al!!)
-                        modelAlumne.commit()
-                        println("S'ha guardat l'alumne.")
+                    Tb_alumnesvista.whenSelected {
+                        println("Has seleccionat la tab de Alumnes Vista")
+
+                        workspace.saveButton.setOnMouseClicked {
+                            var Al:Alumne? = null
+                            Al = Tv_vistaalumne.selectedItem
+                            alumnecontroler.actualitzarTaulaAlumnes(Al!!)
+                            modelAlumne.commit()
+                            println("S'ha guardat l'alumne.")
+                        }
+
+                        workspace.createButton.setOnMouseClicked {
+
+                            var pattern:String = "yyyy-MM-dd";
+                            var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern);
+
+                            var date: LocalDate = LocalDate.parse("2018-09-09");
+                            var defaultZoneId: ZoneId = ZoneId.of("UTC")
+                            var dateDate:Date = Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+                            var nouAlumne:Alumne = Alumne(alumnecontroler.obteIdAlumneMesGran(),"", "","", dateDate, "H","","", false, "")
+                            alumnecontroler.afegeixAlumneTaula(nouAlumne)
+                            a.add(nouAlumne)
+                            modelAlumne.commit()
+                            println("S'ha creat l'espai del nou alumne.")
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var Al:Alumne? = null
+
+                            Al = Tv_vistaalumne.selectedItem
+                            alumnecontroler.eliminaAlumneTaula(Al!!)
+                            a.remove(Al!!)
+                            println("S'ha eliminat l'alumne.")
+                            modelAlumne.commit()
+
+                        }
+
+                        workspace.refreshButton.setOnMouseClicked {
+                            Tv_vistaalumne.refresh()
+                        }
                     }
 
-                    workspace.createButton.setOnMouseClicked {
 
-                        var pattern:String = "yyyy-MM-dd";
-                        var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern);
+                    txtCercadorAlumnes.setOnMouseClicked {
+                        var alumne: String? = null
+                        nomAlumneSeleccionat = txtCercadorAlumnes.getText().toString()
+                        alumne = nomAlumneSeleccionat
+                        println("Item alumne seleccionat: " +nomAlumneSeleccionat)
 
-                        var date: LocalDate = LocalDate.parse("2018-09-09");
-                        var defaultZoneId: ZoneId = ZoneId.of("UTC")
-                        var dateDate:Date = Date.from(date.atStartOfDay(defaultZoneId).toInstant());
-                        var nouAlumne:Alumne = Alumne(alumnecontroler.obteIdAlumneMesGran(),"", "","", dateDate, "H","","", false, "")
-                        alumnecontroler.afegeixAlumneTaula(nouAlumne)
-                        a.add(nouAlumne)
-                        modelAlumne.commit()
-                        println("S'ha creat l'espai del nou alumne.")
-                    }
-
-                    workspace.deleteButton.setOnMouseClicked {
-                        var Al:Alumne? = null
-
-                        Al = Tv_vistaalumne.selectedItem
-                        alumnecontroler.eliminaAlumneTaula(Al!!)
-                        a.remove(Al!!)
-                        println("S'ha eliminat l'alumne.")
-                        modelAlumne.commit()
-
-                    }
-
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_vistaalumne.refresh()
+                        if (nomAlumneSeleccionat != null) {
+                            Tv_vistaalumne.items = null
+                            println("Nom alumne seleccionat: " + alumne)
+                            //var nomAlumneEscollit:String = alumnecontroler.obteAlumnePerNom(alumne!!)
+                            //println("Nom alumne obtingut: " + nomAlumneEscollit)
+                            nomAlumneSeleccionat = txtCercadorAlumnes.getText().toString()
+                            alumne = nomAlumneSeleccionat
+                            llistatAlumnes = alumnecontroler.obteAlumnesPerNom(alumne!!)
+                            var alT = FXCollections.observableArrayList(llistatAlumnes!!.observable())
+                            Tv_vistaalumne.items = alT
+                        }
                     }
                 }
             } //Xavi
