@@ -124,6 +124,7 @@ class Main: View() {
     var alumneVistaEscollit:Alumne?=null
     var nomAlumneSeleccionat:String?=null
 
+
     // Profesor
     /*val profesorscontroler: ProfesorsController by inject()
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
@@ -220,29 +221,36 @@ class Main: View() {
 
                         var Gr: Grups? = null
                         Gr = Tv_grups?.selectedItem
+                            try {
+                                item = Gr!!.copy(
+                                    id = Gr.id,
+                                    id_cicle = Gr.id_cicle,
+                                    nom = Gr.nom,
+                                    descripcio = Gr.descripcio
+                                ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
 
-                        item = Gr!!.copy(
-                            id = Gr.id,
-                            id_cicle = Gr.id_cicle,
-                            nom = Gr.nom,
-                            descripcio = Gr.descripcio
-                        ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+                                ind =
+                                    Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                                println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
+                                itemDirty = modelGrup.isDirty(Gr!!)
+                                println("L'objecte amb l'index " + ind + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
 
-                        ind = Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
-                        println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
-                        itemDirty = modelGrup.isDirty(Gr!!)
-                        println("L'objecte amb l'index " + ind + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+                                Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
+                                Gr.id_cicle = Tv_grups!!.selectedItem!!.idCicleProperty.get()
+                                Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
+                                Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
 
-                        Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
-                        Gr.id_cicle = Tv_grups!!.selectedItem!!.idCicleProperty.get()
-                        Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
-                        Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
+                                println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
 
-                        println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
+                                Gru = Gr.copy(
+                                    id = Gr.id,
+                                    id_cicle = Gr.id_cicle,
+                                    nom = Gr.nom,
+                                    descripcio = Gr.descripcio
+                                )
 
-                        Gru = Gr.copy(id = Gr.id, id_cicle = Gr.id_cicle, nom = Gr.nom, descripcio = Gr.descripcio)
-
-                        modelGrup.commit(Gru!!)
+                                modelGrup.commit(Gru!!)
+                            }catch(e:java.lang.NullPointerException){}
                     }
 
                     Tv_grups.onUserSelect {
@@ -330,7 +338,6 @@ class Main: View() {
                 }
 
                 Tb_grups.whenSelected { println("Has seleccionat la tab de grups")
-                //workspace.saveButton.setOnMouseClicked { println("Has cridat al saveButton de la tab de grups.") }
 
                     workspace.refreshButton.setOnMouseClicked {
                         println("RefreshButton de la tab de Grups.")
@@ -668,8 +675,6 @@ class Main: View() {
                             Tv_families.refresh()
                         }
                     }
-
-
                 }
             }//Xavi
 
@@ -805,6 +810,44 @@ class Main: View() {
                             Tv_vistaalumne.items = alT
                         }
                     }
+
+                    /*workspace.saveButton.setOnMouseClicked {
+                        var Al:Alumne? = null
+                        Al = Tv_vistaalumne.selectedItem
+                        alumnecontroler.actualitzarTaulaAlumnes(Al!!)
+                        modelAlumne.commit()
+                        println("S'ha guardat l'alumne.")
+                    }
+
+                    workspace.createButton.setOnMouseClicked {
+
+                        var pattern:String = "yyyy-MM-dd";
+                        var simpleDateFormat: SimpleDateFormat = SimpleDateFormat(pattern);
+
+                        var date: LocalDate = LocalDate.parse("2018-09-09");
+                        var defaultZoneId: ZoneId = ZoneId.of("UTC")
+                        var dateDate:Date = Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+                        var nouAlumne:Alumne = Alumne(alumnecontroler.obteIdAlumneMesGran(),"", "","", dateDate, "H","","", false, "")
+                        alumnecontroler.afegeixAlumneTaula(nouAlumne)
+                        a.add(nouAlumne)
+                        modelAlumne.commit()
+                        println("S'ha creat l'espai del nou alumne.")
+                    }
+
+                    workspace.deleteButton.setOnMouseClicked {
+                        var Al:Alumne? = null
+
+                        Al = Tv_vistaalumne.selectedItem
+                        alumnecontroler.eliminaAlumneTaula(Al!!)
+                        a.remove(Al!!)
+                        println("S'ha eliminat l'alumne.")
+                        modelAlumne.commit()
+
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        Tv_vistaalumne.refresh()
+                    }*/
                 }
             } //Xavi
         }
