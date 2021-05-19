@@ -316,11 +316,11 @@ class Main: View() {
                         println("El grup seleccionat es: " + grupEscollit)
                         llistatAlumnesId = grupcontroler.obteAlumnesIdGrup(grupEscollit!!.id)
                         println("Contingut del array d'alumnes obtinguts per grup: " + llistatAlumnesId)
-                        /*if(llistatAlumnesId.isNullOrEmpty()) {
+                        if(llistatAlumnesId.isNullOrEmpty()) {
                             netejaTableview()
                         }else{
                             Tv_alumne2.items.addAll(llistatAlumnesId!!)
-                        }*/
+                        }
                     }
                 }
 
@@ -573,6 +573,7 @@ class Main: View() {
 
                     enableCellEditing()
                     enableDirtyTracking()
+                    //onUserSelect { workspace.dock<Main>() }
                     isEditable = true
 
                     modelFamilia = editModel
@@ -605,6 +606,8 @@ class Main: View() {
 
                         modelFamilia.commit(Fam!!)
                     }
+
+                    //val workspaceFamilia:Workspace = MyApp.wor
 
                     workspace.saveButton.setOnMouseClicked {
                         var Fs:Familia? = null
@@ -643,7 +646,7 @@ class Main: View() {
                 }
             }
 
-            with(Tb_alumnesvista) {
+            /*with(Tb_alumnesvista) {
                 with(Tv_vistaalumne) {
                     Tv_vistaalumne.items = a
                     column("ID", Alumne::idProperty)
@@ -751,7 +754,7 @@ class Main: View() {
                         Tv_vistaalumne.refresh()
                     }
                 }
-            }
+            }*/
         }
     }
 
