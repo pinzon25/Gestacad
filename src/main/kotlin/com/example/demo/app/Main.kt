@@ -319,6 +319,7 @@ class Main: View() {
                         if(llistatAlumnesId.isNullOrEmpty()) {
                             netejaTableview()
                         }else{
+                            netejaTableview()
                             Tv_alumne2.items.addAll(llistatAlumnesId!!)
                         }
                     }
