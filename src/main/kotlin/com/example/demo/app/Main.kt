@@ -184,6 +184,7 @@ class Main: View() {
 
 */
 
+
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root){
             with(Tb_grups) {
@@ -197,19 +198,13 @@ class Main: View() {
                     column("Nom", Grups::nomProperty).makeEditable()
                     column("Descripció", Grups::descripcioProperty).makeEditable()
 
-                    contextmenu { //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
+                    /*contextmenu { //Afegir metode que agregui un nou grup en blanc, i que despres es pugui editar i guardar.
                         item("Esborrar").action {
                             println("Has esborrat el grup seleccionat.")
                             var nouGrup: Grups = Tv_grups.selectedItem!!
                             g.remove(nouGrup)
                         }
-                        /*item("Refrescar").action {
-                            //Tv_grups.items=null
-                            llistatGrups = grupcontroler.obteGrups()
-                            g=FXCollections.observableArrayList(llistatGrups.observable())
-                            Tv_grups.items=g
-                        }*/
-                    }
+                    }*/
 
                     enableCellEditing()
                     enableDirtyTracking()
@@ -250,67 +245,6 @@ class Main: View() {
                         modelGrup.commit(Gru!!)
                     }
 
-                    workspace.saveButton.setOnMouseClicked {
-                        var Gs: Grups? = null
-                        Gs = Tv_grups.selectedItem
-
-                        if (itemDirty == false) {
-                            try {
-                                grupcontroler.afegeixTaulaGrups(Gs!!)
-                                modelGrup.commit()
-                                alert(
-                                    Alert.AlertType.INFORMATION,
-                                    "Grup emmagatzemat.",
-                                    "El grup s'ha emmagatzemat a la base de dades correctament."
-                                )
-                            } catch (ex: SQLIntegrityConstraintViolationException) {
-                                alert(
-                                    Alert.AlertType.ERROR,
-                                    "No es possible guardar el grup.",
-                                    "El grup escollit no es pot afegir, ja es troba a la base de dades."
-                                )
-                            }
-                        }
-
-                        if (itemDirty == true) {
-                            grupcontroler.actualitzarTaulaGrups(Gs!!)
-                            modelGrup.commit()
-                            alert(
-                                Alert.AlertType.INFORMATION,
-                                "Grup actualitzat.",
-                                "El grup s'ha actualitzat a la base de dades correctament."
-                            )
-                        }
-                    }
-
-                    workspace.deleteButton.setOnMouseClicked {
-                        var Gs: Grups? = null
-                        try {
-                            Gs = Tv_grups.selectedItem
-                            grupcontroler.esborraTaulaGrups(Gs!!)
-                            alert(
-                                Alert.AlertType.INFORMATION,
-                                "Grup esborrat.",
-                                "El grup s'ha esborrat de la base de dades."
-                            )
-                            g.remove(Gs)
-                            modelGrup.commit()
-                        } catch (ex: SQLIntegrityConstraintViolationException) {
-                            alert(
-                                Alert.AlertType.ERROR,
-                                "No es possible esborrar el grup.",
-                                "El grup escollit no es pot esborrar, no es troba a la base de dades."
-                            )
-                        }
-                    }
-
-
-                    workspace.createButton.setOnMouseClicked {
-                        var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran() + 1, 0, "", "")
-                        Tv_grups.items.add(nouGrup)
-                    }
-
-
                     Tv_grups.onUserSelect {
                         grupEscollit = Tv_grups.selectedItem
                         println("El grup seleccionat es: " + grupEscollit)
@@ -319,10 +253,12 @@ class Main: View() {
                         if(llistatAlumnesId.isNullOrEmpty()) {
                             netejaTableview()
                         }else{
+                            netejaTableview()
                             Tv_alumne2.items.addAll(llistatAlumnesId!!)
                         }
                     }
                 }
+
 
                 with(Tv_alumne) {
                     Tv_alumne.items = a
@@ -344,7 +280,6 @@ class Main: View() {
                     layoutY = 100.0
                     //modelAlumnes1 = editModel
                 }
-
 
 
                 with(Tv_alumne2) {
@@ -394,6 +329,80 @@ class Main: View() {
                     //Tv_alumne2.items.removeAll(aS)
                 }
 
+                Tb_grups.whenSelected { println("Has seleccionat la tab de grups")
+                //workspace.saveButton.setOnMouseClicked { println("Has cridat al saveButton de la tab de grups.") }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        println("RefreshButton de la tab de Grups.")
+                        llistatGrups = grupcontroler.obteGrups()
+                        g=FXCollections.observableArrayList(llistatGrups.observable())
+                        Tv_grups.items=g
+                    }
+
+                    workspace.saveButton.setOnMouseClicked {
+                        println("saveButton de la tab de grups.")
+
+                        var Gs: Grups? = null
+                        Gs = Tv_grups.selectedItem
+
+                        if (itemDirty == false) {
+                            try {
+                                grupcontroler.afegeixTaulaGrups(Gs!!)
+                                modelGrup.commit()
+                                alert(
+                                    Alert.AlertType.INFORMATION,
+                                    "Grup emmagatzemat.",
+                                    "El grup s'ha emmagatzemat a la base de dades correctament."
+                                )
+                            } catch (ex: SQLIntegrityConstraintViolationException) {
+                                alert(
+                                    Alert.AlertType.ERROR,
+                                    "No es possible guardar el grup.",
+                                    "El grup escollit no es pot afegir, ja es troba a la base de dades."
+                                )
+                            }
+                        }
+
+                        if (itemDirty == true) {
+                            grupcontroler.actualitzarTaulaGrups(Gs!!)
+                            modelGrup.commit()
+                            alert(
+                                Alert.AlertType.INFORMATION,
+                                "Grup actualitzat.",
+                                "El grup s'ha actualitzat a la base de dades correctament."
+                            )
+                        }
+                    }
+
+                    workspace.deleteButton.setOnMouseClicked {
+                        println("deleteButton de la tab de grups.")
+                        var Gs: Grups? = null
+                        try {
+                            Gs = Tv_grups.selectedItem
+                            grupcontroler.esborraTaulaGrups(Gs!!)
+                            alert(
+                                Alert.AlertType.INFORMATION,
+                                "Grup esborrat.",
+                                "El grup s'ha esborrat de la base de dades."
+                            )
+                            g.remove(Gs)
+                            modelGrup.commit()
+                        } catch (ex: SQLIntegrityConstraintViolationException) {
+                            alert(
+                                Alert.AlertType.ERROR,
+                                "No es possible esborrar el grup.",
+                                "El grup escollit no es pot esborrar, no es troba a la base de dades."
+                            )
+                        }
+                    }
+
+
+                    workspace.createButton.setOnMouseClicked {
+                        println("CreateButton de la tab de grups.")
+                        var nouGrup: Grups = Grups(grupcontroler.obteIdGrupMesGran() + 1, 0, "", "")
+                        Tv_grups.items.add(nouGrup)
+                    }
+                }
             }
 
 
@@ -408,44 +417,6 @@ class Main: View() {
                     column("Nom", Ufs::nomProperty).makeEditable()
                     column("Descripció", Ufs::descripcioProperty).makeEditable()
 
-                    contextmenu {
-                        item("Esborrar").action {
-                            u.remove(ufEscollida)
-                            ufscontroler.esborraUfs(ufEscollida!!.id)
-                            Tv_ufs.items.remove(ufEscollida)
-                            modelUfs.commit()
-                        }
-
-                        item("Afegir nova uf").action {
-                            println("Has afegit una nova uf.")
-                            induf = ufscontroler.obteIdUfMesGran()
-                            if(modulEscollit != null) { //Si hem filtrat per moduls el id_modul de la nova uf sera el del modul seleccionat.
-                                Tv_ufs.items.add(Ufs(induf!! + 1, modulEscollit!!.id, "", ""))
-                            }else{//Si no hem filtrat per moduls el id_modul de la nova uf sera zero.
-                                Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
-                            }
-                        }
-
-                        item("Guardar Uf").action {
-                            induf = ufscontroler.obteIdUfMesGran()
-                            try {
-                                ufscontroler.afegeixUfs(ufEscollida!!)
-                                alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
-                            }catch(ex:SQLIntegrityConstraintViolationException){
-                                alert(Alert.AlertType.ERROR, "No es pot afegir la Uf.", "")
-                            }catch(e:NullPointerException){
-                                alert(Alert.AlertType.ERROR, "No has seleccionat cap Uf.", "")
-                            }
-                            modelUfs.commit()
-                        }
-
-                        item("Actualitzar").action {
-                            //guardaCanvis(Tv_ufs.selectedItem!!)
-                            modelUfs.commit()
-                            ufscontroler.actualitzarUfs(ufEscollida!!)
-                        }
-                    }
-
                     modelUfs=editModel
 
                     enableCellEditing()
@@ -454,13 +425,6 @@ class Main: View() {
                     onUserSelect {
                         ufEscollida=Tv_ufs.selectedItem
                         println("Uf seleccionada: " + ufEscollida)
-                    }
-
-                    workspace.refreshButton.setOnMouseClicked {
-                        Tv_ufs.items.clear()
-                        llistatUfs = ufscontroler.obteUfs()
-                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
-                        Tv_ufs.items = u
                     }
 
                     comboBoxModuls.setOnMouseClicked {
@@ -511,6 +475,64 @@ class Main: View() {
                     }
                     modelUfs.commit(uf!!)
                 }
+
+                Tb_ufs.whenSelected { println("Has seleccionat la tab de UFS.")
+                    workspace.saveButton.setOnMouseClicked {
+                        println("SaveButton de la tab de UFS.")
+                        var Us:Ufs? = null
+                        Us = ufEscollida
+                        if(itemDirty == false){
+                            try {
+                                induf = ufscontroler.obteIdUfMesGran()
+                                try {
+                                    ufscontroler.afegeixUfs(ufEscollida!!)
+                                    alert(Alert.AlertType.INFORMATION, "Uf afegida.", "La UF s'ha afegit correctament.")
+                                }catch(ex:SQLIntegrityConstraintViolationException){
+                                    alert(Alert.AlertType.ERROR, "No es pot afegir la Uf.", "")
+                                }catch(e:NullPointerException){
+                                    alert(Alert.AlertType.ERROR, "No has seleccionat cap Uf.", "")
+                                }
+                                modelUfs.commit()
+                            } catch (ex: SQLIntegrityConstraintViolationException) {
+                                alert(
+                                    Alert.AlertType.ERROR,
+                                    "No es possible guardar el grup.",
+                                    "El grup escollit no es pot afegir, ja es troba a la base de dades."
+                                )
+                            }
+                        }else{
+                            modelUfs.commit()
+                            ufscontroler.actualitzarUfs(ufEscollida!!)
+                        }
+                    }
+
+                    workspace.refreshButton.setOnMouseClicked {
+                        println("RefreshButton de la tab de UFS.")
+                        Tv_ufs.items.clear()
+                        llistatUfs = ufscontroler.obteUfs()
+                        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
+                        Tv_ufs.items = u
+                    }
+
+                    workspace.createButton.setOnMouseClicked {
+                        println("CreateButton de la tab de UFS.")
+                        //println("Has afegit una nova uf.")
+                        induf = ufscontroler.obteIdUfMesGran()
+                        if(modulEscollit != null) { //Si hem filtrat per moduls el id_modul de la nova uf sera el del modul seleccionat.
+                            Tv_ufs.items.add(Ufs(induf!! + 1, modulEscollit!!.id, "", ""))
+                        }else{//Si no hem filtrat per moduls el id_modul de la nova uf sera zero.
+                            Tv_ufs.items.add(Ufs(induf!! + 1, 0, "", ""))
+                        }
+                    }
+
+                    workspace.deleteButton.setOnMouseClicked {
+                        println("deleteButton de la tab de UFS.")
+                        u.remove(ufEscollida)
+                        ufscontroler.esborraUfs(ufEscollida!!.id)
+                        Tv_ufs.items.remove(ufEscollida)
+                        modelUfs.commit()
+                    }
+                }
             }
 
 
@@ -557,6 +579,7 @@ class Main: View() {
                 }
             }
 
+            //Xavi
             with(Tb_families) {
                 with(Tv_families) {
                     Tv_families.items = eFamilies
@@ -644,9 +667,10 @@ class Main: View() {
                         Tv_families.refresh()
                     }
                 }
-            }
+            }//Xavi
 
-            /*with(Tb_alumnesvista) {
+            //Xavi
+            with(Tb_alumnesvista) {
                 with(Tv_vistaalumne) {
                     Tv_vistaalumne.items = a
                     column("ID", Alumne::idProperty)
@@ -754,7 +778,7 @@ class Main: View() {
                         Tv_vistaalumne.refresh()
                     }
                 }
-            }*/
+            } //Xavi
         }
     }
 
