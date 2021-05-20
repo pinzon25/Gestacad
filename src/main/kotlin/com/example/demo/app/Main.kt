@@ -672,7 +672,11 @@ class Main: View() {
                         }
 
                         workspace.refreshButton.setOnMouseClicked {
-                            Tv_families.refresh()
+                            println("RefreshButton de la tab de Families.")
+                            Tv_families.items.clear()
+                            llistatFamilies = familiacontroler.obteFamilies()
+                            var fm = FXCollections.observableArrayList(llistatFamilies!!.observable())
+                            Tv_families.items = fm
                         }
                     }
                 }
@@ -787,7 +791,12 @@ class Main: View() {
                         }
 
                         workspace.refreshButton.setOnMouseClicked {
-                            Tv_vistaalumne.refresh()
+                            println("RefreshButton de la tab de Alumnes.")
+                            Tv_vistaalumne.items.clear()
+                            llistatAlumnes = alumnecontroler.obteAlumnes()
+                            var al = FXCollections.observableArrayList(llistatAlumnes!!.observable())
+                            Tv_vistaalumne.items = al
+                            txtCercadorAlumnes.clear()
                         }
                     }
 
