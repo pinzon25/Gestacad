@@ -689,7 +689,7 @@ class Main: View() {
                     column("Data naixement", Alumne::datanaixementProperty).makeEditable()
                     column("sexe", Alumne::sexeProperty).makeEditable()
                     column("Telefon", Alumne::telefonProperty).makeEditable()
-                    column("Email", Alumne::idProperty).makeEditable()
+                    column("Email", Alumne::emailProperty).makeEditable()
                     column("Descripció", Alumne::descripcioProperty).makeEditable()
 
                     enableCellEditing()
