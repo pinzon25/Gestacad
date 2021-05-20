@@ -35,6 +35,7 @@ class GrupsController : Controller(){
 
     //INSERT DE LA TAULA GRUPS
     fun afegeixTaulaGrups(grup: Grups):Unit{
+
         dd!!.insert(com.example.demo.app.Tables.Grups) {
             set(it.id, grup.id)
             set(it.id_cicle, grup.id_cicle)
@@ -42,6 +43,7 @@ class GrupsController : Controller(){
             set(it.descripcio, grup.descripcio)
             println("Has afegit correctament el grup!!!.")
         }
+        //alert(Alert.AlertType.INFORMATION,"Grup afegit.", "El grup s'ha afegit a la base de dades.")
     }
 
     //DELETE DE LA TAULA GRUPS.
