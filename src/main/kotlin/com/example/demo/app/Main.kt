@@ -6,13 +6,16 @@ import com.example.demo.app.model.Moduls
 import com.example.demo.app.model.Ufs
 import com.example.demo.controllers.*
 import com.example.demo.view.Cicles
+import com.google.protobuf.TextFormat
 import javafx.collections.*
 import javafx.scene.control.*
 import javafx.scene.layout.BorderPane
 import sun.management.jmxremote.LocalRMIServerSocketFactory
 import tornadofx.*
 import java.awt.image.ImageObserver.ERROR
+import java.lang.RuntimeException
 import java.sql.SQLIntegrityConstraintViolationException
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.ZoneId
@@ -221,36 +224,44 @@ class Main: View() {
 
                         var Gr: Grups? = null
                         Gr = Tv_grups?.selectedItem
-                            try {
-                                item = Gr!!.copy(
-                                    id = Gr.id,
-                                    id_cicle = Gr.id_cicle,
-                                    nom = Gr.nom,
-                                    descripcio = Gr.descripcio
-                                ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+                           // try {
+                        if(Gr != null) {
+                          try {
+                              item = Gr!!.copy(
+                                  id = Gr.id,
+                                  id_cicle = Gr.id_cicle,
+                                  nom = Gr.nom,
+                                  descripcio = Gr.descripcio
+                              ) //Copiem les dades del objecte seleccionat a l'item Alumne, aixo ens permetra verificar canvis.
+                              // }catch(e:java.lang.NullPointerException){}
+                          }catch(e:RuntimeException){println("Has introduit una lletra!!")
 
-                                ind =
-                                    Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
-                                println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
-                                itemDirty = modelGrup.isDirty(Gr!!)
-                                println("L'objecte amb l'index " + ind + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+                          }
+                            ind = Tv_grups?.selectionModel?.selectedIndex  //Ens permet saber l'index corresponent al alumne seleccionat al TableView.
+                            println("\n\nitem actual: " + item) //Ens mostra l'objecte avans de ser modificat.
+                            itemDirty = modelGrup.isDirty(Gr!!)
+                            println("L'objecte amb l'index " + ind + " Is dirty?--->" + itemDirty) //Ens mostra si el model ha detectat canvis a l'objecte seleccionat en aquell moment.
+
 
                                 Gr.id = Tv_grups!!.selectedItem!!.idProperty.get()
                                 Gr.id_cicle = Tv_grups!!.selectedItem!!.idCicleProperty.get()
                                 Gr.nom = Tv_grups!!.selectedItem!!.nomProperty.get()
                                 Gr.descripcio = Tv_grups!!.selectedItem!!.descripcioProperty.get()
 
-                                println("Alumne modificat: " + Gr) //Ens mostra l'objecte modificat.
+                            println("Grup modificat: " + Gr) //Ens mostra l'objecte modificat.
 
-                                Gru = Gr.copy(
-                                    id = Gr.id,
-                                    id_cicle = Gr.id_cicle,
-                                    nom = Gr.nom,
-                                    descripcio = Gr.descripcio
-                                )
+                            Gru = Gr.copy(
+                                id = Gr.id,
+                                id_cicle = Gr.id_cicle,
+                                nom = Gr.nom,
+                                descripcio = Gr.descripcio
+                            )
 
-                                modelGrup.commit(Gru!!)
-                            }catch(e:java.lang.NullPointerException){}
+                            //modelGrup.commit(Gru!!)
+                        }else{
+                            refrescaTableviewGrups()
+                        }
+
                     }
 
                     Tv_grups.onUserSelect {
@@ -277,7 +288,7 @@ class Main: View() {
                     column("Data naixement", Alumne::datanaixementProperty)
                     column("sexe", Alumne::sexeProperty)
                     column("Telefon", Alumne::telefonProperty)
-                    column("Email", Alumne::idProperty)
+                    column("Email", Alumne::emailProperty)
                     column("Descripció", Alumne::descripcioProperty)
                     enableCellEditing()
                     enableDirtyTracking()
@@ -299,7 +310,7 @@ class Main: View() {
                     column("Data naixement", Alumne::datanaixementProperty)
                     column("sexe", Alumne::sexeProperty)
                     column("Telefon", Alumne::telefonProperty)
-                    column("Email", Alumne::idProperty)
+                    column("Email", Alumne::emailProperty)
                     column("Descripció", Alumne::descripcioProperty)
 
                     enableCellEditing()
@@ -330,20 +341,15 @@ class Main: View() {
                     println("Alumne a esborrar: " + alumneEscollit)
                     grupcontroler.esborraAlumneTaulaAlumneGrup(grupEscollit!!.id, alumneEscollit!!.id)
                     llistatAlumnesId!!.remove(alumneEscollit!!)
-                    //alumnesSeleccionats.remove(alumneEscollit!!)
                     var aS = FXCollections.observableArrayList(llistatAlumnesId!!.observable())
                     Tv_alumne2.items = aS
                     alumneEscollit = null
-                    //Tv_alumne2.items.removeAll(aS)
                 }
 
                 Tb_grups.whenSelected { println("Has seleccionat la tab de grups")
 
                     workspace.refreshButton.setOnMouseClicked {
-                        println("RefreshButton de la tab de Grups.")
-                        llistatGrups = grupcontroler.obteGrups()
-                        g=FXCollections.observableArrayList(llistatGrups.observable())
-                        Tv_grups.items=g
+                            refrescaTableviewGrups()
                     }
 
                     workspace.saveButton.setOnMouseClicked {
@@ -387,18 +393,25 @@ class Main: View() {
                         try {
                             Gs = Tv_grups.selectedItem
                             grupcontroler.esborraTaulaGrups(Gs!!)
+                            modelGrup.commit()
                             alert(
                                 Alert.AlertType.INFORMATION,
                                 "Grup esborrat.",
                                 "El grup s'ha esborrat de la base de dades."
                             )
                             g.remove(Gs)
-                            modelGrup.commit()
+                            refrescaTableviewGrups()
                         } catch (ex: SQLIntegrityConstraintViolationException) {
                             alert(
                                 Alert.AlertType.ERROR,
                                 "No es possible esborrar el grup.",
-                                "El grup escollit no es pot esborrar, no es troba a la base de dades."
+                                "El grup escollit no es pot esborrar, es possible que el grup no estigui buit."
+                            )
+                        }catch(e:java.lang.NullPointerException){
+                            alert(
+                                Alert.AlertType.ERROR,
+                                "No es possible esborrar el grup.",
+                                "No has escollit cap grup."
                             )
                         }
                     }
@@ -456,7 +469,7 @@ class Main: View() {
                     var uF: Ufs? = null
                     uF = Tv_ufs?.selectedItem
 
-                    try {
+                    if(uF != null) {
                         ufs = uF!!.copy( //ufs es un objecte buit de tipus Ufs.
                             id = uF.id,
                             id_modul = uF.id_modul,
@@ -476,11 +489,9 @@ class Main: View() {
 
                         println("Uf modificada: " + uF) //Ens mostra l'objecte modificat.
 
-                        uf = uF!!.copy( id = uF.id,id_modul = uF.id_modul,nom = uF.nom,descripcio = uF.descripcio)
-                    }catch(e:NullPointerException){
-                        println("Ha deixat d'haver una uf seleccionada.")
-                    }
-                    modelUfs.commit(uf!!)
+                        uf = uF!!.copy(id = uF.id, id_modul = uF.id_modul, nom = uF.nom, descripcio = uF.descripcio)
+                        modelUfs.commit(uf!!)
+                    }else{}
                 }
 
                 Tb_ufs.whenSelected { println("Has seleccionat la tab de UFS.")
@@ -507,9 +518,11 @@ class Main: View() {
                                     "El grup escollit no es pot afegir, ja es troba a la base de dades."
                                 )
                             }
-                        }else{
-                            modelUfs.commit()
+                        }
+
+                        if(itemDirty == true){
                             ufscontroler.actualitzarUfs(ufEscollida!!)
+                            modelUfs.commit()
                         }
                     }
 
@@ -857,6 +870,19 @@ class Main: View() {
         for( i in Tv_alumne2.items.indices){
             Tv_alumne2.items.remove(0,Tv_alumne2.items.lastIndex+1)
         }
+    }
+
+    fun refrescaTableviewGrups():Unit{
+        llistatGrups = grupcontroler.obteGrups()
+        var g = FXCollections.observableArrayList(llistatGrups.observable())
+        Tv_grups.items = g
+    }
+
+    fun refrescaTableViewUfs():Unit{
+        Tv_ufs.items.clear()
+        llistatUfs = ufscontroler.obteUfs()
+        var u = FXCollections.observableArrayList(llistatUfs!!.observable())
+        Tv_ufs.items = u
     }
 
 
