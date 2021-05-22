@@ -160,7 +160,7 @@
                     </graphic>
                 </Tab>
                 <!--Professors-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_professors"  closable="false">
                     <content>
                         <BorderPane>
                             <center>
@@ -651,7 +651,7 @@
                     </graphic>
                 </Tab>
                 <!--Moduls-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_moduls"  closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
                         <BorderPane>
