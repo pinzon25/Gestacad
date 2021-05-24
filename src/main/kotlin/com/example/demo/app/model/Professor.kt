@@ -5,7 +5,8 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.ItemViewModel
 import java.util.*
 
-data class Professor (var id:Int, var nom:String, var cognoms:String, var dni:String, var data_naixement: Date, var sexe:String, var telefon:String, var email:String, var descripcio:String){
+data class Professor (var id:Int, var nom:String, var cognoms:String, var dni:String,
+                      var data_naixement: Date, var sexe:String, var telefon:String, var email:String, var descripcio:String){
     val idProperty = SimpleIntegerProperty(id)
     val nomProperty = SimpleStringProperty(nom)
     val cognomsProperty = SimpleStringProperty(cognoms)
