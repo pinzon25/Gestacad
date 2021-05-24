@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 class ProfesorsController : Controller() {
     var dd = Connexio().database
     fun obteProfesors(): MutableList<Professor> {
-        var profesors: MutableList<Professor> = ArrayList()
+        var profesor: MutableList<Professor> = ArrayList()
         var prof: Professor? = null
         for (row in dd!!.from(com.example.demo.app.Tables.Professor).select()) {
 
@@ -39,12 +39,12 @@ class ProfesorsController : Controller() {
                 email.toString(),
                 descripcio.toString()
             )
-            profesors.add(prof)
+            profesor.add(prof)
         }
-        return profesors
+        return profesor
     }
     fun obteProfesorsPerNom(profesorNom:String): MutableList<Professor> {
-        var profesors: MutableList<Professor> = ArrayList()
+        var profesor: MutableList<Professor> = ArrayList()
         var prof: Professor? = null
         for (row in dd!!.from(com.example.demo.app.Tables.Professor).select().where(com.example.demo.app.Tables.Professor.nom eq profesorNom)) {
 
@@ -70,9 +70,9 @@ class ProfesorsController : Controller() {
                 email.toString(),
                 descripcio.toString()
             )
-            profesors.add(prof)
+            profesor.add(prof)
         }
-        return profesors
+        return profesor
     }
     fun obteIdProfesorsMesGran():Int{
         var idMesGran:Int?=null
@@ -83,43 +83,43 @@ class ProfesorsController : Controller() {
         }
         return idMesGran!!+1
     }
-    fun afegeixProfesorTaula(profesors: Professor):Unit{
-        dd!!.insert(com.example.demo.app.Tables.Professor) {
-            var date:Date = profesors.data_naixement
-            var localDate:LocalDate = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDate()
+    fun afegeixProfesorTaula(profesor: Professor):Unit{
 
-            set(it.id, profesors.id)
-            set(it.nom,profesors.nom)
-            set(it.cognoms,profesors.cognoms)
-            set(it.dni,profesors.dni)
+        dd!!.insert(com.example.demo.app.Tables.Professor) {
+            var date:Date = profesor.data_naixement
+            var localDate:LocalDate = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDate()
+            set(it.id, profesor.id)
+            set(it.nom,profesor.nom)
+            set(it.cognoms,profesor.cognoms)
+            set(it.dni,profesor.dni)
             set(it.data_naixement,localDate)
-            set(it.sexe,profesors.sexe)
-            set(it.telefon,profesors.telefon)
-            set(it.email,profesors.email)
-            set(it.descripcio,profesors.descripcio)
+            set(it.sexe,profesor.sexe)
+            set(it.telefon,profesor.telefon)
+            set(it.email,profesor.email)
+            set(it.descripcio,profesor.descripcio)
             println("Professor creat correctament  !!!.")
         }
     }
-    fun actualitzarTaulaProfesors(profesors: Professor):Unit{
+    fun actualitzarTaulaProfesors(profesor: Professor):Unit{
         dd!!.update(com.example.demo.app.Tables.Professor) {
-            var date:Date = profesors.data_naixement
+            var date:Date = profesor.data_naixement
             var localDate:LocalDate = date.toInstant().atZone(ZoneId.of("UTC")).toLocalDate()
 
-            set(it.id, profesors.id)
-            set(it.nom,profesors.nom)
-            set(it.cognoms,profesors.cognoms)
-            set(it.dni,profesors.dni)
+            set(it.id, profesor.id)
+            set(it.nom,profesor.nom)
+            set(it.cognoms,profesor.cognoms)
+            set(it.dni,profesor.dni)
             set(it.data_naixement,localDate)
-            set(it.sexe,profesors.sexe)
-            set(it.telefon,profesors.telefon)
-            set(it.email,profesors.email)
-            set(it.descripcio,profesors.descripcio)
-            where { it.id eq profesors.id }
+            set(it.sexe,profesor.sexe)
+            set(it.telefon,profesor.telefon)
+            set(it.email,profesor.email)
+            set(it.descripcio,profesor.descripcio)
+            where { it.id eq profesor.id }
         }
     }
-    fun eliminaProfesorsTaula(profesors: Professor):Unit{
+    fun eliminaProfesorsTaula(profesor: Professor):Unit{
         dd!!.delete(com.example.demo.app.Tables.Professor) {
-            it.id eq profesors.id
+            it.id eq profesor.id
         }
     }
 }
