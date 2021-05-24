@@ -160,7 +160,7 @@
                     </graphic>
                 </Tab>
                 <!--Professors-->
-                <Tab fx:id="Tb_professors"  closable="false">
+                <Tab fx:id="Tb_professors" closable="false">
                     <content>
                         <BorderPane>
                             <center>
@@ -219,7 +219,7 @@
                     </graphic>
                 </Tab>
                 <!--Notes-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_notes" closable="false">
                     <content>
                         <BorderPane>
                             <top>
@@ -368,7 +368,7 @@
                     </graphic>
                 </Tab>
                 <!--Matricules-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_matricules" closable="false">
                     <content>
                         <BorderPane>
                             <top>
@@ -651,7 +651,7 @@
                     </graphic>
                 </Tab>
                 <!--Moduls-->
-                <Tab fx:id="Tb_moduls"  closable="false">
+                <Tab fx:id="Tb_moduls" closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
                         <BorderPane>
@@ -715,7 +715,7 @@
                     </graphic>
                 </Tab>
                 <!--Cicles-->
-                <Tab  fx:id="Tb_cicles"  closable="false">
+                <Tab fx:id="Tb_cicles" closable="false">
                     <content>
                         <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
                         <BorderPane>
