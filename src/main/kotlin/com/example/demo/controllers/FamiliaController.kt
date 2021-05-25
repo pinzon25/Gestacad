@@ -1,7 +1,7 @@
 package com.example.demo.controllers
 
 import com.example.demo.app.Connexio
-import com.example.demo.app.Familia
+import com.example.demo.app.model.Familia
 import com.example.demo.app.Grups
 import com.example.demo.app.Professor
 import org.ktorm.dsl.*
