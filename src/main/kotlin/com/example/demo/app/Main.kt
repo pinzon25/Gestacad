@@ -2,6 +2,7 @@ package com.example.demo.app
 
 import com.example.demo.app.Tables.Cicle
 import com.example.demo.app.model.Alumnes_grups
+import com.example.demo.app.model.Familia
 import com.example.demo.app.model.Moduls
 import com.example.demo.app.model.Ufs
 import com.example.demo.controllers.*
@@ -34,12 +35,14 @@ class Main : View() {
     val ufscontroler: UfsController by inject()
     val modulscontroler: ModulsController by inject()
     val profesorscontroler: ProfesorsController by inject()
+    val assignaturesController: AssignaturesController by inject()
     val ciclesController: CiclesController by inject()
     val familiacontroler: FamiliaController by inject()
 
     //TABS
     val Tb_grups: Tab by fxid("Tb_grups")
     val Tb_ufs: Tab by fxid("Tb_ufs")
+    val Tb_assignatures: Tab by fxid("Tb_assignatures")
     val Tb_cicles: Tab by fxid("Tb_cicles")
     val Tb_families: Tab by fxid("Tb_families")
     val Tb_alumnesvista: Tab by fxid("Tb_alumnesvista")
@@ -58,6 +61,7 @@ class Main : View() {
     //COMBOBOX
 
     val comboBoxAlumnes: ComboBox<String?> by fxid("alumnesCbGrupos")
+    val comboBoxCicles: ComboBox<String?> by fxid("ciclesCb")
     val comboBoxModuls: ComboBox<String?> by fxid("ufsCbGrupos")
 
     //TABLEVIEWS
@@ -65,8 +69,9 @@ class Main : View() {
     val Tv_alumne: javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes")
     val Tv_alumne2: javafx.scene.control.TableView<Alumne> by fxid("grupsTableAlumnes2")
     val Tv_ufs: javafx.scene.control.TableView<Ufs> by fxid("ufstableUFS")
+    val Tv_assignatures: javafx.scene.control.TableView<com.example.demo.app.model.Assignatura> by fxid("asignaturesTablaAsigna")
     val Tv_cicles: javafx.scene.control.TableView<com.example.demo.app.model.Cicle> by fxid("ciclestableCicles")
-    val Tv_families: javafx.scene.control.TableView<com.example.demo.app.Familia> by fxid("familiestableFAMILIES")
+    val Tv_families: javafx.scene.control.TableView<com.example.demo.app.model.Familia> by fxid("familiestableFAMILIES")
     val Tv_vistaalumne: javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
     val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
@@ -79,17 +84,20 @@ class Main : View() {
     var llistatUfs: MutableList<Ufs> = ArrayList()
     var llistatModuls: MutableList<Moduls> = ArrayList()
     var nomsModuls: MutableList<String> = ArrayList()
+    var llistatAssignatures: MutableList<com.example.demo.app.model.Assignatura> = ArrayList()
     var llistatCicles: MutableList<com.example.demo.app.model.Cicle> = ArrayList()
-    var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
+    var llistatFamilies: MutableList<com.example.demo.app.model.Familia> = ArrayList()
     var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
 
 
     //Variables canviants i aillades.
     var grupEscollit: Grups? = null
     var modulEscollit: Moduls? = null
+    var familiaEscollit: MutableList<com.example.demo.app.model.Cicle>? = null
     var ufEscollida: Ufs? = null
     var uf: Ufs? = null
     var nomModulSeleccionat: String? = null
+    var nomFamiliaSeleccionat: String? = null
     var item: Grups? = null
     var ufs: Ufs? = null
     var Gru: Grups? = null
@@ -107,6 +115,12 @@ class Main : View() {
     var indMod: Int? = null
     var modul: Moduls? = null
 
+    //Assignatures
+    var modelAssignatura: TableViewEditModel<com.example.demo.app.model.Assignatura> by singleAssign()
+    var itemAssignatura: com.example.demo.app.model.Assignatura? = null
+    var indAssignatura: Int? = null
+    var itemDirtyAssignatura: Boolean? = null
+    var Assi: com.example.demo.app.model.Assignatura? = null
 
     //Cicles
     var modelCicle: TableViewEditModel<com.example.demo.app.model.Cicle> by singleAssign()
@@ -116,7 +130,6 @@ class Main : View() {
     var Cic: com.example.demo.app.model.Cicle? = null
 
     //Familia
-    var familiaEscollida: Familia? = null
     var modelFamilia: TableViewEditModel<Familia> by singleAssign()
     var itemFamilia: Familia? = null
     var indFamilia: Int? = null
@@ -179,6 +192,10 @@ class Main : View() {
         var m = FXCollections.observableArrayList(nomsModuls.observable())
         var o = FXCollections.observableArrayList(llistatModuls.observable())
         var e = FXCollections.observableArrayList(llistatProfessor.observable())
+
+        //Assignatures
+        llistatAssignatures = assignaturesController.obteAssignatures()
+        var eAssignatures = FXCollections.observableArrayList(llistatAssignatures.observable())
 
         //Cicles
         llistatCicles = ciclesController.obteCicles()
@@ -560,12 +577,78 @@ class Main : View() {
                     }
                 }
             }
+
+            with(Tb_assignatures) {
+                with(Tv_assignatures) {
+                    Tv_assignatures.items = eAssignatures
+                    column("id_professor", com.example.demo.app.model.Assignatura::idProfessorProperty)
+                    column("id_modul", com.example.demo.app.model.Assignatura::idModulProperty)
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+                    isEditable = true
+
+                    modelAssignatura = editModel
+
+                    modelAssignatura.selectedItemDirtyState.onChange {
+
+                        var As: com.example.demo.app.model.Assignatura? = null
+                        As = Tv_assignatures?.selectedItem
+
+                        itemAssignatura = As!!.copy(
+                            id_professor = As.id_professor,
+                            id_modul = As.id_modul
+                        )
+
+                        indAssignatura = Tv_assignatures?.selectionModel?.selectedIndex
+                        println("\n\nitem actual: " + itemAssignatura)
+                        itemDirtyAssignatura = modelAssignatura.isDirty(As!!)
+                        println("L'objecte amb l'index " + indAssignatura + " Is dirty?--->" + itemDirtyAssignatura)
+
+                        As.id_professor = Tv_assignatures!!.selectedItem!!.idProfessorProperty.get()
+                        As.id_modul = Tv_assignatures!!.selectedItem!!.idModulProperty.get()
+
+                        Assi = As.copy(id_professor = As.id_professor, id_modul = As.id_modul)
+
+                        modelAssignatura.commit(Assi!!)
+
+                    }
+
+                    Tb_assignatures.whenSelected {
+
+                        workspace.createButton.setOnMouseClicked {
+                            var nouAssignatura: com.example.demo.app.model.Assignatura =
+                                com.example.demo.app.model.Assignatura(
+                                    assignaturesController.obteIdAssignaturaMesGran(),
+                                    1)
+                            assignaturesController.afegeixTaulaAssignatura(nouAssignatura)
+                            eAssignatures.add(nouAssignatura)
+                            modelAssignatura.commit()
+                            println("S'ha creat l'espai.")
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var As: com.example.demo.app.model.Assignatura? = null
+
+                            As = Tv_assignatures.selectedItem
+                            assignaturesController.esborraTaulaAssignatura(As!!)
+                            eAssignatures.remove(As!!)
+                            println("S'ha eliminat el cicle.")
+                            modelAssignatura.commit()
+
+                        }
+
+                    }
+                }
+            }
+
+
             //Jan
             with(Tb_cicles) {
                 with(Tv_cicles) {
                     Tv_cicles.items = eCicles
                     column("ID", com.example.demo.app.model.Cicle::idProperty)
-                    column("Id_Cicles", com.example.demo.app.model.Cicle::idFamiliaProperty)
+                    column("Familia ID", com.example.demo.app.model.Cicle::idFamiliaProperty)
                     column("Nom", com.example.demo.app.model.Cicle::nomProperty).makeEditable()
                     column("Descripció", com.example.demo.app.model.Cicle::descripcioProperty).makeEditable()
 
@@ -575,6 +658,25 @@ class Main : View() {
 
                     modelCicle = editModel
 
+                    /*
+                    comboBoxCicles.setOnMouseClicked {
+                        var familia: String? = null
+                        nomFamiliaSeleccionat = comboBoxCicles.selectionModel.selectedItem
+                        familia = nomFamiliaSeleccionat
+                        println("Itemw familia seleccionat: " + nomFamiliaSeleccionat)
+
+                        if (nomFamiliaSeleccionat != null) {
+                            Tv_cicles.items = null
+                            println("Familia seleccionada: " + familia)
+                            familiaEscollit = ciclesController.obteCiclesPerFamilia(familia!!)
+                            println("Familia obtingut: " + familiaEscollit)
+                            llistatCicles = ciclesController.obteCiclesPerFamilia(familiaEscollit!!)
+                            var aS = FXCollections.observableArrayList(llistatUfs!!.observable())
+                            Tv_ufs.items = aS
+                        }
+                    }
+*/
+
                     modelCicle.selectedItemDirtyState.onChange {
 
                         var Cs: com.example.demo.app.model.Cicle? = null
@@ -582,6 +684,7 @@ class Main : View() {
 
                         itemCicle = Cs!!.copy(
                             id = Cs.id,
+                            id_familia = Cs.id_familia,
                             nom = Cs.nom,
                             descripcio = Cs.descripcio
                         )
@@ -601,15 +704,57 @@ class Main : View() {
                         modelCicle.commit(Cic!!)
 
                     }
+
+                    Tb_cicles.whenSelected {
+                        println("Has seleccionat la tab de cicles")
+
+                        workspace.saveButton.setOnMouseClicked {
+                            var Cs: com.example.demo.app.model.Cicle? = null
+                            Cs = Tv_cicles.selectedItem
+                            ciclesController.actualitzarTaulaCicles(Cs!!)
+                            modelFamilia.commit()
+                            println("S'ha guardat el cicle.")
+                        }
+
+                        workspace.createButton.setOnMouseClicked {
+                            var nouCicle: com.example.demo.app.model.Cicle = com.example.demo.app.model.Cicle(ciclesController.obteIdCicleMesGran(), 1, "", "")
+                            ciclesController.afegeixTaulaCicles(nouCicle)
+                            eCicles.add(nouCicle)
+                            modelCicle.commit()
+                            println("S'ha creat l'espai del nou cicle.")
+                        }
+
+                        workspace.refreshButton.setOnMouseClicked {
+                            println("RefreshButton de la tab de Cicles.")
+                            Tv_cicles.items.clear()
+                            llistatCicles = ciclesController.obteCicles()
+                            var cc = FXCollections.observableArrayList(llistatCicles!!.observable())
+                            Tv_cicles.items = cc
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var Cs: com.example.demo.app.model.Cicle? = null
+
+                            Cs = Tv_cicles.selectedItem
+                            ciclesController.esborraTaulaCicles(Cs!!)
+                            eCicles.remove(Cs!!)
+                            println("S'ha eliminat el cicle.")
+                            modelCicle.commit()
+
+                        }
+
+                    }
+
+
                 }
             }
             //Xavi
             with(Tb_families) {
                 with(Tv_families) {
                     Tv_families.items = eFamilies
-                    column("ID", com.example.demo.app.Familia::idProperty)
-                    column("Nom", com.example.demo.app.Familia::nomProperty).makeEditable()
-                    column("Descripció", com.example.demo.app.Familia::descripcioProperty).makeEditable()
+                    column("ID", com.example.demo.app.model.Familia::idProperty)
+                    column("Nom", com.example.demo.app.model.Familia::nomProperty).makeEditable()
+                    column("Descripció", com.example.demo.app.model.Familia::descripcioProperty).makeEditable()
 
                     /*contextmenu{
                         item("Afegir familia").action { println("Has afegit una familia nova.")
