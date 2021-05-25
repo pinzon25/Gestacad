@@ -6,13 +6,13 @@ import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.ItemViewModel
 
-data class Notes(var id:Int, var id_alumne:Int, var id_uf: Int, var puntuacio: Float, var pes: Double, var description: String) {
+data class Notes(var id_notes:Int, var id_alumne:Int, var id_uf: Int, var puntuacio: Float, var pes: Int, var description: String) {
 
-    val idProperty = SimpleIntegerProperty(id);
+    val idProperty = SimpleIntegerProperty(id_notes);
     val id_alumneProperty = SimpleIntegerProperty(id_alumne);
     val id_ufProperty = SimpleIntegerProperty(id_uf);
     val puntuacioProperty = SimpleFloatProperty(puntuacio);
-    val pesProperty = SimpleDoubleProperty(pes);
+    val pesProperty = SimpleIntegerProperty(pes);
     val descriptionProperty = SimpleStringProperty(description);
 
 }
