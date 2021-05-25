@@ -77,7 +77,6 @@ fun obteUfs():MutableList<Ufs>{
     fun obteUfsPerModul(modul:com.example.demo.app.model.Moduls):MutableList<Ufs>{
         //var modul:com.example.demo.app.model.Moduls?=null
         var uf:Ufs?=null
-        var moduls:MutableList<com.example.demo.app.model.Moduls> = ArrayList()
         var ufs:MutableList<com.example.demo.app.model.Ufs> = ArrayList()
 
         /*for(row in dd!!.from(com.example.demo.app.Tables.Moduls).select().where(Moduls.nom eq nomModul)){
