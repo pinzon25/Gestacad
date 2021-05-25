@@ -1,9 +1,7 @@
 package com.example.demo.app
 
 import com.example.demo.app.Tables.Cicle
-import com.example.demo.app.model.Alumnes_grups
-import com.example.demo.app.model.Moduls
-import com.example.demo.app.model.Ufs
+import com.example.demo.app.model.*
 import com.example.demo.controllers.*
 import com.example.demo.view.Cicles
 import com.google.protobuf.TextFormat
@@ -21,6 +19,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.sin
 
 class Main : View() {
 
@@ -36,6 +35,8 @@ class Main : View() {
     val profesorscontroler: ProfesorsController by inject()
     val ciclesController: CiclesController by inject()
     val familiacontroler: FamiliaController by inject()
+    val notesController: NotesController by inject()
+    val matriculesController: MatriculesController by inject()
 
     //TABS
     val Tb_grups: Tab by fxid("Tb_grups")
@@ -45,6 +46,8 @@ class Main : View() {
     val Tb_alumnesvista: Tab by fxid("Tb_alumnesvista")
     val Tb_moduls: Tab by fxid("Tb_moduls")
     val Tb_professors: Tab by fxid("Tb_professors")
+    val Tb_notes: Tab by fxid("Tb_notes")
+    val Tb_matricules: Tab by fxid("Tb_matricules")
 
 
     //Buttons
@@ -70,6 +73,8 @@ class Main : View() {
     val Tv_vistaalumne: javafx.scene.control.TableView<Alumne> by fxid("alumnesTableAlumnes")
     val Tv_professors: javafx.scene.control.TableView<com.example.demo.app.Professor> by fxid("professorsTableProfesores")
     val Tv_moduls: javafx.scene.control.TableView<Moduls> by fxid("modulstableMODULS")
+    val Tv_notes: TableView<Notes> by fxid("notesTablaNotes")
+    val Tv_matricules: TableView<Matricula> by fxid("matriculesTablaMatricules")
 
     //COLLECTIONS
     var llistatAlumnes: MutableList<Alumne> = ArrayList()
@@ -82,6 +87,8 @@ class Main : View() {
     var llistatCicles: MutableList<com.example.demo.app.model.Cicle> = ArrayList()
     var llistatFamilies: MutableList<com.example.demo.app.Familia> = ArrayList()
     var llistatProfessor: MutableList<com.example.demo.app.Professor> = ArrayList()
+    var llistatNotes: MutableList<Notes> = ArrayList();
+    var llistatMatricules: MutableList<Matricula> = ArrayList();
 
 
     //Variables canviants i aillades.
@@ -123,6 +130,20 @@ class Main : View() {
     var itemDirtyFamilia: Boolean? = null
     var Fam: Familia? = null
     //var alumneVistaEscollit:Alumne?=null
+
+    //Notes
+    var modelNotes: TableViewEditModel<Notes> by singleAssign()
+    var itemNotes: Notes? = null
+    var indexNotes: Int? = null
+    var itemDirtyNotes: Boolean? = null
+    var Ntes: Notes? = null
+
+    //Matricules
+    var modelMatricula: TableViewEditModel<Matricula> by singleAssign()
+    var itemMatricula: Matricula? = null
+    var indexMatricula: Int? = null
+    var itemDirtyMatricula: Boolean? = null
+    var Mtri: Matricula? = null
 
     //Alumne
     var alumneEscollida: Alumne? = null
@@ -188,7 +209,13 @@ class Main : View() {
         llistatFamilies = familiacontroler.obteFamilies()
         var eFamilies = FXCollections.observableArrayList(llistatFamilies.observable())
 
+        //Notes
+        llistatNotes = notesController.obteNotes()
+        var eNotes = FXCollections.observableArrayList(llistatNotes.observable())
 
+        //Matricules
+        llistatMatricules = matriculesController.obteMatricules()
+        var eMatricula = FXCollections.observableArrayList(llistatMatricules.observable())
         //var aS = FXCollections.observableArrayList(alumnesSeleccionats.observable())
         with(root) {
             //Ricard
@@ -601,6 +628,194 @@ class Main : View() {
                         modelCicle.commit(Cic!!)
 
                     }
+                }
+            }
+            //Arnau
+            with(Tb_notes) {
+                with(Tv_notes) {
+                    Tv_notes.items = eNotes
+                    column("ID_Notes", Notes::idProperty)
+                    column("ID_Aumne", Notes::id_alumneProperty).makeEditable()
+                    column("ID_Uf", Notes::id_ufProperty).makeEditable()
+                    column("Puntuació", Notes::puntuacioProperty).makeEditable()
+                    column("Pes", Notes::pesProperty).makeEditable()
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+
+                    isEditable = true
+                    modelNotes = editModel
+
+                    modelNotes.selectedItemDirtyState.onChange {
+                        var nts: Notes? = null
+                        nts = Tv_notes?.selectedItem
+
+                        itemNotes = nts!!.copy(
+                            id_notes = nts.id_notes,
+                            id_alumne = nts.id_alumne,
+                            id_uf = nts.id_uf,
+                            puntuacio = nts.puntuacio,
+                            pes = nts.pes,
+                            description = nts.description
+                        )
+                        indexNotes = Tv_notes?.selectionModel?.selectedIndex
+                        println("Item selected " + itemNotes)
+                        itemDirtyNotes = modelNotes.isDirty(nts!!)
+                        println("L'objecte amb l'index " + indexNotes + " Is dirty?--->" + itemDirtyNotes)
+
+
+                        nts.id_notes = Tv_notes!!.selectedItem!!.idProperty.get()
+                        nts.id_alumne = Tv_notes!!.selectedItem!!.id_alumneProperty.get()
+                        nts.id_uf = Tv_notes!!.selectedItem!!.id_ufProperty.get()
+                        nts.puntuacio = Tv_notes!!.selectedItem!!.puntuacioProperty.get()
+                        nts.pes = Tv_notes!!.selectedItem!!.pesProperty.get()
+                        nts.description = Tv_notes!!.selectedItem!!.descriptionProperty.get()
+
+                        println("Nota modificada " + nts)
+
+                        Ntes = nts.copy(
+                            id_notes = nts.id_notes, id_alumne = nts.id_alumne, id_uf = nts.id_uf,
+                            puntuacio = nts.puntuacio, pes = nts.pes, description = nts.description
+                        )
+
+                        modelNotes.commit(Ntes!!)
+
+                    }
+
+                    Tb_notes.whenSelected {
+                      println("Has seleccionat la tab de notes")
+
+                        workspace.saveButton.setOnMouseClicked {
+                            var nt: Notes? = null
+                            nt = Tv_notes.selectedItem
+
+                            notesController.actualitzarTaulaNotes(nt!!)
+                            modelNotes.commit()
+                            kotlin.io.println("S'ha guardat les notes.")
+                        }
+
+                        workspace.createButton.setOnMouseClicked {
+                            var novaNota: Notes =
+                                com.example.demo.app.model.Notes(notesController.obteIdNotaMesGran(), 0, 0, 0.0f, 0, "")
+                            notesController.afegeixNotaTaula(novaNota)
+                            eNotes.add(novaNota)
+                            modelNotes.commit()
+                            kotlin.io.println("Nota creada")
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var nt: Notes? = null
+                            nt = Tv_notes.selectedItem
+                            notesController.eliminaNotaTaula(nt!!)
+                            eNotes.remove(nt!!)
+                            kotlin.io.println("Nota eliminada")
+                            modelNotes.commit()
+                        }
+
+                        workspace.refreshButton.setOnMouseClicked {
+
+                            kotlin.io.println("Refresh notes tab")
+                            Tv_notes.items.clear()
+                            llistatNotes = notesController.obteNotes()
+                            var notesarray =
+                                javafx.collections.FXCollections.observableArrayList(llistatNotes!!.observable())
+                            Tv_notes.items = notesarray
+                        }
+                    }
+
+
+
+                }
+            }
+            //Arnau
+            with(Tb_matricules) {
+                with(Tv_matricules) {
+
+                    Tv_matricules.items = eMatricula
+                    column("ID_Matricula", Matricula::id_matriculaProperty)
+                    column("ID_Alumne", Matricula::id_alumneProperty).makeEditable()
+                    column("ID_Uf", Matricula::id_ufProperty).makeEditable()
+                    column("Curs", Matricula::cursProperty).makeEditable()
+
+                    enableCellEditing()
+                    enableDirtyTracking()
+
+                    isEditable = true
+                    modelMatricula = editModel
+
+                    modelMatricula.selectedItemDirtyState.onChange {
+                        var mtr: Matricula? = null
+                        mtr = Tv_matricules?.selectedItem
+
+                        itemMatricula = mtr!!.copy(
+                            id_matricula = mtr.id_matricula,
+                            id_alumne = mtr.id_alumne,
+                            id_uf = mtr.id_uf,
+                            curs = mtr.curs
+                        )
+
+                        indexMatricula = Tv_matricules?.selectionModel.selectedIndex
+                        println("Item selected " + itemMatricula)
+                        itemDirtyMatricula = modelMatricula.isDirty(mtr!!)
+                        println("L'objecte amb l'index " + indexMatricula + " Is dirty?--->" + itemDirtyMatricula)
+
+                        mtr.id_matricula = Tv_matricules!!.selectedItem!!.id_matriculaProperty.get()
+                        mtr.id_alumne = Tv_matricules!!.selectedItem!!.id_alumneProperty.get()
+                        mtr.id_uf = Tv_matricules!!.selectedItem!!.id_ufProperty.get()
+                        mtr.curs = Tv_matricules!!.selectedItem!!.cursProperty.get()
+
+                        println("MAtricula modificada " + mtr)
+
+                        Mtri = mtr.copy(
+                            id_matricula = mtr.id_matricula,
+                            id_alumne = mtr.id_alumne,
+                            id_uf = mtr.id_uf,
+                            curs = mtr.curs
+                        )
+                        modelMatricula.commit(Mtri!!)
+                    }
+
+                    Tb_matricules.whenSelected {
+                        println("Has seleccionat la tab de matricules")
+
+                        workspace.saveButton.setOnMouseClicked {
+                            var mt: Matricula? = null
+                            mt = Tv_matricules.selectedItem
+                            matriculesController.actualitzarTaulaMatricules(mt!!)
+                            modelMatricula.commit(mt)
+                            println("S'ha guardat la matricula")
+                        }
+
+                        workspace.createButton.setOnMouseClicked {
+                            var novaMatricula: Matricula = Matricula(matriculesController.obteIdMatriculaMesGran(), 0, 0, matriculesController.setCursActual())
+                            matriculesController.afegeixMatriculaTaula(novaMatricula)
+                            eMatricula.add(novaMatricula)
+                            modelMatricula.commit()
+                            println("Matricula creada")
+
+                        }
+
+                        workspace.deleteButton.setOnMouseClicked {
+                            var mt: Matricula?=null
+                            mt= Tv_matricules.selectedItem
+                            matriculesController.eliminaNotaTaula(mt!!)
+                            eMatricula.remove(mt!!)
+                            modelMatricula.commit()
+                            println("Matricula eliminada")
+                        }
+
+                        workspace.refreshButton.setOnMouseClicked {
+
+                            println("Refresh matricules tab")
+                            Tv_matricules.items.clear()
+                            llistatMatricules = matriculesController.obteMatricules()
+                            var matriculaarray = FXCollections.observableArrayList(llistatMatricules!!.observable())
+                            Tv_matricules.items = matriculaarray
+                        }
+                    }
+
+
+
                 }
             }
             //Xavi
@@ -1154,16 +1369,19 @@ class Main : View() {
 
         }*/
     }
+
     fun netejaTableview(): Unit {
         for (i in Tv_alumne2.items.indices) {
             Tv_alumne2.items.remove(0, Tv_alumne2.items.lastIndex + 1)
         }
     }
+
     fun refrescaTableviewGrups(): Unit {
         llistatGrups = grupcontroler.obteGrups()
         var g = FXCollections.observableArrayList(llistatGrups.observable())
         Tv_grups.items = g
     }
+
     fun refrescaTableViewUfs(): Unit {
         Tv_ufs.items.clear()
         llistatUfs = ufscontroler.obteUfs()
