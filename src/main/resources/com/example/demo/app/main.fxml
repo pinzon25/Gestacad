@@ -495,7 +495,7 @@
                     </graphic>
                 </Tab>
                 <!--Asignatures-->
-                <Tab closable="false">
+                <Tab fx:id="Tb_assignatures" closable="false">
                     <content>
                         <BorderPane>
                             <left>
@@ -526,9 +526,6 @@
                            <children>
                               <TableView fx:id="asignaturesTablaAsigna" prefHeight="311.0" prefWidth="292.0">
                                 <columns>
-                                    <TableColumn prefWidth="95.0" text="Nom" />
-                                    <TableColumn prefWidth="119.0" text="Cognom" />
-                                    <TableColumn prefWidth="77.0" text="Modul" />
                                 </columns>
                               </TableView>
                                <VBox prefHeight="311.0" prefWidth="446.0">
@@ -567,7 +564,7 @@
 
                                        <Button fx:id="assignaturesBtnAssignar" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Assignar Modul" textAlignment="CENTER">
                                            <VBox.margin>
-                                               <Insets left="4.0" right="4.0" top="225.0" />
+                                               <Insets left="4.0" right="4.0" top="250.0" />
                                            </VBox.margin>
                                        </Button>
                                    </children>
@@ -729,7 +726,7 @@
                                         <VBox prefHeight="311.0" prefWidth="192.0">
                                             <children>
                                                 <Label text="Filtra per familia;" />
-                                                <ComboBox fx:id="ciclesCbGrupos" prefWidth="150.0">
+                                                <ComboBox fx:id="ciclesCb" prefWidth="150.0">
                                                     <VBox.margin>
                                                         <Insets top="3.0" />
                                                     </VBox.margin>
